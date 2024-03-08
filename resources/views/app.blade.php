@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+<<<<<<< HEAD
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
@@ -20,3 +21,14 @@
         @inertia
     </body>
 </html>
+=======
+        <title>Laravel</title>
+        @viteReactRefresh
+        @vite(['resources/css/app.css', 'resources/js/app.jsx'])
+        @inertiaHead
+    </head>
+    <body>
+        @inertia
+    </body>
+</html>
+>>>>>>> e6bf6b1e4c33468f7ed863828ccc1c8f70e696f7
