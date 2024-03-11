@@ -17,16 +17,12 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-<<<<<<< HEAD
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-=======
-    return Inertia::render('Test');
->>>>>>> e6bf6b1e4c33468f7ed863828ccc1c8f70e696f7
 });
 
 Route::get('/dashboard', function () {
