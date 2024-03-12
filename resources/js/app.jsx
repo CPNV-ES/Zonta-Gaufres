@@ -13,7 +13,14 @@ createInertiaApp({
     setup({ el, App, props }) {
         const root = createRoot(el);
 
-        root.render(<><Navbar/><App {...props} /></>);
+        root.render(
+            <>
+                <Navbar />
+                <div className='h-full rounded-xl w-full border-2 border-gray-300 shadow-offset'>
+                    <App {...props} />
+                </div>
+            </>
+        );
     },
     progress: {
         color: '#4B5563',
