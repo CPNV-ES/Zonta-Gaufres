@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
  
+#app {
+  @apply flex h-full p-4;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
