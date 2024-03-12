@@ -3,7 +3,7 @@
 @tailwind utilities;
  
 #app {
-  @apply flex h-full p-4;
+  @apply flex h-full p-4 gap-4;
 }
 
 @layer base {
