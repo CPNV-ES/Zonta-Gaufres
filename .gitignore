@@ -5,6 +5,7 @@
 /public/storage
 /storage/*.key
 /vendor
+/resources/css/output.css
 .env
 .env.backup
 .env.production

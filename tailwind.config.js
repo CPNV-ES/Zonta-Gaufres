@@ -3,6 +3,7 @@ module.exports = {
   darkMode: ["class"],
   content: [
     './resources/js/**/*.{js,jsx}',
+    './resources/views/*.blade.php',
   ],
   prefix: "",
   theme: {
