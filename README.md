@@ -24,55 +24,108 @@
   </p>
 </div>
 
-## About The Project
+# About The Project
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Built With
+## Built With
 
 [![Laravel][Laravel.com]][Laravel-url]
 [![React][React.js]][React-url]
 [![Shadcn][ShadCn.com]][ShadCn-url]
+[![Docker][Docker.com]][Docker-url]
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Getting Started
+## Environment
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+<!-- TODO -->
+
+# Getting Started
+
+## Development
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-
-  ```sh
-  npm install npm@latest -g
-  ```
+[![Docker][Docker.com]][Docker-url]
+[![npm][npm]][npm-url]
+[![composer][composer]][composer-url]
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
 
    ```sh
    git clone https://github.com/CPNV-ES/Zonta-Gaufres.git
    ```
 
-3. Install NPM packages
+2. Install npm and composer dependencies (`not required` if you're planning to use `devcontainer`)
 
-   ```sh
-   npm install
-   ```
+    ```sh
+    npm install
+    composer install
+    #or
+    npm run dep
+    ```
 
-4. Enter your API in `config.js`
+> The `dep` script is a custom script that will install both npm and composer dependencies at once.
 
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+3. Create the `.env` file based on the `.env.example` file
+
+    ```sh
+     cp .env.example .env
+     ```
+
+4. Build docker containers (optional)
+
+    ```sh
+    docker compose build
+    ```
+
+### Runnning the project
+
+#### Using Docker and devcontainer
+
+As the project is using Docker container with a devcontainer, you can simply run the dev container using the `vscode` extension `ms-vscode-remote.remote-containers`.
+
+Open the project in vscode. It should ask you to reopen in the container. If it doesn't, you can click on `ctrl + shit + p` and type `reopen in container` then press enter.
+
+The devcontainer contains extensions to allow any dev to work with the same formatting and have a better collaboration.
+
+##### Not using VSCode ?
+
+If you are using another IDE which has a `limited support for devcontainers`, you might no be able to run the devcontainer at its current state. Therefore, you can still run the container with the following command.
+
+```sh
+docker compose up -d
+```
+
+> `-d` stands for detached mode, meaning that the container will run in the background.
+
+#### Install dependencies
+
+Now that you are in the container, you can run the following command to install all the dependencies at once.
+
+```sh
+npm run dep
+```
+
+#### Run the servers
+
+There are two servers that must be started. One which serves the frontend and one which serves the backend.
+
+```sh
+npm run dev
+php artisan serve
+# or
+npm run dev-all
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- TODO -->
 
 ## Usage
 
@@ -128,3 +181,9 @@ Project Link: [https://github.com/CPNV-ES/Zonta-Gaufres](https://github.com/CPNV
 [Laravel-url]: https://laravel.com
 [ShadCn.com]: https://img.shields.io/badge/shadcn/ui-20232A?style=for-the-badge&logo=shadcnui&logoColor=shadcnui
 [ShadCn-url]: https://shadcn.com
+[Docker.com]: https://img.shields.io/badge/Docker-20232A?style=for-the-badge&logo=docker&logoColor=docker
+[Docker-url]: https://www.docker.com/
+[npm]: https://img.shields.io/badge/npm-20232A?style=for-the-badge&logo=npm&logoColor=npm
+[npm-url]: https://www.npmjs.com/
+[composer]: https://img.shields.io/badge/composer-20232A?style=for-the-badge&logo=composer&logoColor=composer
+[composer-url]: https://getcomposer.org/
