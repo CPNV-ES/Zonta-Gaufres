@@ -76,6 +76,15 @@ module.exports = {
       },
     },
   },
+  safelist: [
+    "icon-[mdi--chevron-right]",
+    "icon-[material-symbols--search-rounded]",
+    "icon-[material-symbols--article-outline]",
+    "icon-[mdi--truck-outline]",
+    "icon-[ic--outline-people]",
+    "icon-[gravity-ui--file-dollar]",
+    "icon-[mdi--cog]"
+  ],
   plugins: [
     require("tailwindcss-animate"),
     addDynamicIconSelectors(),
