@@ -16,7 +16,7 @@ createInertiaApp({
         root.render(
             <>
                 <Navbar />
-                <div className='h-full rounded-xl w-full border-2 border-gray-300 shadow-offset'>
+                <div className='h-full rounded-xl w-full border-2 border-gray-300 shadow-offset overflow-auto'>
                     <App {...props} />
                 </div>
             </>
