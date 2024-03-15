@@ -1,0 +1,53 @@
+// https://aka.ms/devcontainer.json
+{
+    "name": "Zonta-gaufres",
+    "dockerComposeFile": ["../docker-compose.yml"],
+    "service": "laravel",
+    "workspaceFolder": "/var/www/html",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "GitHub.copilot",
+                "bierner.github-markdown-preview",
+                "heybourn.headwind",
+                "DavidAnson.vscode-markdownlint",
+                "esbenp.prettier-vscode",
+                "bradlc.vscode-tailwindcss",
+                "amiralizadeh9480.laravel-extra-intellisense"
+            ],
+            "settings": {
+                "markdownlint.config": {
+                    "MD041": false,
+                    "MD013": false,
+                    "MD025": false,
+                    "MD009": false,
+                    "MD032": false,
+                    "MD033": false,
+                    "MD024": false
+                },
+                "editor.inlineSuggest.enabled": true,
+                "github.copilot.enable": {
+                    "*": true,
+                    "plaintext": true,
+                    "markdown": true,
+                    "scminput": false,
+                    "yaml": false
+                },
+                "prettier.tabWidth": 4,
+                "prettier.useTabs": true,
+                "prettier.bracketSameLine": true,
+                "[css]": {
+                    "editor.defaultFormatter": "esbenp.prettier-vscode"
+                },
+                "[json]": {
+                    "editor.defaultFormatter": "esbenp.prettier-vscode"
+                }
+            }
+        }
+    },
+    "remoteUser": "sail",
+    "postCreateCommand": "chown -R 1000:1000 /var/www/html 2>/dev/null || true"
+    // "forwardPorts": [],
+    // "runServices": [],
+    // "shutdownAction": "none",
+}
