@@ -27,12 +27,12 @@ const Navbar = () => {
 
             <div className='transition-all ease-in-out duration-700 flex flex-col items-start justify-start gap-6 overflow-hidden' style={{maxWidth:`${maxNavWidth}px`}}>
                 <img className='w-10' src="./images/zonta.png" alt="Zonta"></img>
-                <NavIcon name="Recherche" icon="[material-symbols--search-rounded]" />
+                <NavIcon name="Recherche" icon="[material-symbols--search-rounded]"/>
                 <hr className='w-full rotate-[2] border border-gray-400'></hr>
-                <NavIcon name="Commandes" icon="[material-symbols--article-outline]" />
-                <NavIcon name="Livraisons" icon="[mdi--truck-outline]" />
-                <NavIcon name="Personnel" icon="[ic--outline-people]" />
-                <NavIcon name="Factures" icon="[gravity-ui--file-dollar]" />
+                <NavIcon name="Commandes" icon="[material-symbols--article-outline]" color='green'/>
+                <NavIcon name="Livraisons" icon="[mdi--truck-outline]" color='blue'/>
+                <NavIcon name="Personnel" icon="[ic--outline-people]" color='yellow'/>
+                <NavIcon name="Factures" icon="[gravity-ui--file-dollar]" color='red'/>
             </div>
 
             <div className='transition-all ease-in-out duration-700 flex flex-col items-start justify-start gap-6 overflow-hidden' style={{maxWidth: `${maxNavWidth}px`}}>
