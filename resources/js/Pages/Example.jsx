@@ -3,7 +3,7 @@ import MainLayout from '../Layouts/MainLayout'
 
 const Example = () => {
   return (
-    <MainLayout>
+    <MainLayout color='green'>
     </MainLayout>
   )
 }
