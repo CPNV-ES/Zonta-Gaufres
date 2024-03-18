@@ -77,6 +77,11 @@ module.exports = {
     },
   },
   safelist: [
+    "hover:bg-red-200",
+    "hover:bg-green-200",
+    "hover:bg-yellow-200",
+    "hover:bg-blue-200",
+    "hover:bg-gray-200",
     "icon-[mdi--chevron-right]",
     "icon-[material-symbols--search-rounded]",
     "icon-[material-symbols--article-outline]",
