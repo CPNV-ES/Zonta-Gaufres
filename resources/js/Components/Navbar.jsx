@@ -16,7 +16,7 @@ const Navbar = () => {
     }, [opened])
 
     return (
-        <nav className='relative h-full p-4 flex flex-col justify-between border-2 border-gray-300 rounded-xl shadow-offset'>
+        <nav className='relative h-full p-4 flex flex-col justify-between border-2 border-gray-300 rounded-xl shadow-offset bg-white'>
 
             <button 
             className="absolute translate-x-1/2 rounded-full right-0 h-6 w-6 flex justify-center items-center border-2 border-gray-300 shadow-offset bg-white hover:bg-gray-200"

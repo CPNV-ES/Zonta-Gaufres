@@ -4,7 +4,7 @@ const MainLayout = ({ children }) => {
     return (
         <section id="main-layout">
             <Navbar />
-            <section className='h-full rounded-xl w-full border-2 border-gray-300 shadow-offset overflow-auto'>
+            <section className='h-full rounded-xl w-full border-2 border-gray-300 shadow-offset overflow-auto bg-white'>
                 {children}
             </section>
         </section>
