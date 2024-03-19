@@ -1,9 +1,15 @@
 {
+    "name": "zonta-gaufres",
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "vite",
         "build": "vite build",
+        "dep": "concurrently  \"npm run install-npm-pkg\" \"npm run install-composer-pkg\"",
+        "dev": "vite",
+        "dev-all": "conc -c cyan \"npm run dev\" \"npm run php\"",
+        "install-npm-pkg": "npm install",
+        "install-composer-pkg": "composer install",
+        "php": "php artisan serve",
         "tailwind": "tailwindcss -i resources/css/app.css -o resources/css/output.css --minify --watch"
     },
     "devDependencies": {
@@ -14,6 +20,7 @@
         "@vitejs/plugin-react": "^4.2.0",
         "autoprefixer": "^10.4.12",
         "axios": "^1.6.4",
+        "concurrently": "^8.2.2",
         "laravel-vite-plugin": "^1.0.0",
         "postcss": "^8.4.31",
         "react": "^18.2.0",
