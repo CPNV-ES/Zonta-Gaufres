@@ -11,6 +11,11 @@
   @apply flex h-full p-4 gap-4;
 }
 
+.main-layout-section{
+  @apply h-full rounded-xl border-2 shadow-offset bg-white;
+
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
