@@ -3,14 +3,14 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "vite",
-        "tailwind": "tailwindcss -i resources/css/app.css -o resources/css/output.css --minify --watch"
         "build": "vite build",
         "dep": "concurrently  \"npm run install-npm-pkg\" \"npm run install-composer-pkg\"",
+        "dev": "vite",
+        "dev-all": "conc -c cyan \"npm run dev\" \"npm run php\"",
         "install-npm-pkg": "npm install",
         "install-composer-pkg": "composer install",
         "php": "php artisan serve",
-        "dev-all": "conc -c cyan \"npm run dev\" \"npm run php\""
+        "tailwind": "tailwindcss -i resources/css/app.css -o resources/css/output.css --minify --watch"
     },
     "devDependencies": {
         "@headlessui/react": "^1.4.2",
