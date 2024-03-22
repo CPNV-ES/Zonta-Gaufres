@@ -3,9 +3,10 @@ import MainLayout from '../Layouts/MainLayout'
 
 const Example = () => {
   const subject = "Commandes"
+  const color = "green"
 
   return (
-    <MainLayout color='green' subject={subject}>
+    <MainLayout color={color} subject={subject}>
     </MainLayout>
   )
 }
