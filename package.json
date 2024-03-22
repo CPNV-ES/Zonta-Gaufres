@@ -33,6 +33,7 @@
         "@iconify-json/ic": "^1.1.17",
         "@iconify-json/material-symbols": "^1.1.74",
         "@iconify-json/mdi": "^1.1.64",
+        "@tanstack/react-table": "^8.13.2",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.0",
         "lucide-react": "^0.350.0",
