@@ -2,7 +2,6 @@ import React from 'react'
 
 const NavIcon = ({ icon, name, destination, selected, color='gray' }) => {
 
-    console.log(selected)
     return (
         <a className={`relative h-10 w-full flex text-lg overflow-hidden cursor-pointer rounded hover:bg-${color}-200`} href={destination}>
             <span className={`absolute text-4xl h-full text-center w-10 icon-${icon} ${selected ? 'text-'+color+'-600' : 'text-gray-400'}`}>{name[0]}</span>
