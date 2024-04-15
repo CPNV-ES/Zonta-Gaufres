@@ -14,6 +14,7 @@ export class ColumnBuilder {
                     id: colDef.id ?? null,
                     cell: colDef.cell ?? ((info) => info.renderValue()),
                     footer: colDef.footer ?? ((info) => info.column.id),
+                    size: colDef.size ?? null
                 })
             );
         });
