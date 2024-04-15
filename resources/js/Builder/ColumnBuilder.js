@@ -12,6 +12,9 @@ export class ColumnBuilder {
             this.columns.push(
                 this.columnHelper.accessor(colDef.accessor, {
                     id: colDef.accessor,
+                    header:
+                        colDef.header.toUpperCase() ??
+                        colDef.accessor.toUpperCase(),
                     cell: colDef.cell ?? ((info) => info.renderValue()),
                     footer: colDef.footer ?? ((info) => info.column.id),
                     size: colDef.size ?? null
