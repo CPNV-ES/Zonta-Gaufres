@@ -10,10 +10,14 @@ export class ColumnBuilder {
         this.checkRequiredValues(columnsDefinitions);
         columnsDefinitions.forEach((colDef) => {
             this.columns.push(
-                this.columnHelper.accessor(colDef.name, {
-                    id: colDef.id ?? null,
+                this.columnHelper.accessor(colDef.accessor, {
+                    id: colDef.accessor,
+                    header:
+                        colDef.header.toUpperCase() ??
+                        colDef.accessor.toUpperCase(),
                     cell: colDef.cell ?? ((info) => info.renderValue()),
                     footer: colDef.footer ?? ((info) => info.column.id),
+                    size: colDef.size ?? null,
                 })
             );
         });
@@ -22,8 +26,8 @@ export class ColumnBuilder {
 
     checkRequiredValues(columnsDefinitions) {
         columnsDefinitions.forEach((colDef) => {
-            if (!colDef.name) {
-                throw new Error("Column name is required");
+            if (!colDef.accessor) {
+                throw new Error("Column accessor is required");
             }
         });
     }

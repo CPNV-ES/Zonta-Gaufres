@@ -22,16 +22,30 @@ const DataTable = ({ inputData, columns }) => {
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        defaultColumn: {
+            size: 150,
+        },
     });
 
     return (
         <div className="p-2">
-            <Table>
+            <Table
+                {...{
+                    style: {
+                        width: table.getCenterTotalSize(),
+                    },
+                }}
+            >
                 <TableHeader>
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow key={headerGroup.id}>
                             {headerGroup.headers.map((header) => (
-                                <TableHead key={header.id}>
+                                <TableHead
+                                    key={header.id}
+                                    style={{
+                                        width: header.column.size,
+                                    }}
+                                >
                                     {header.isPlaceholder
                                         ? null
                                         : flexRender(
