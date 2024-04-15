@@ -2,6 +2,7 @@ import React from 'react';
 
 const DeliveryguysCard = ({
                               name,
+                              surname,
                               city,
                               orders,
                               trips,
@@ -10,10 +11,10 @@ const DeliveryguysCard = ({
     return (
         <>
             <div
-                className="group min-w-72 shadow-md pl-2 pr-2 m-2 flex flex-col justify-between h-28 w-1/3 bg-white rounded overflow-hidden">
+                className="m-2 flex h-28 w-1/3 flex-col justify-between overflow-hidden rounded bg-white pr-2 pl-2 shadow-md group min-w-72">
                 <div>
                     <div
-                        className="hours-container flex w-full gap-2 transition-transform transform -translate-y-3/4 group-hover:translate-y-0 duration-500">
+                        className="flex w-full -translate-y-3/4 transform gap-2 transition-transform duration-500 hours-container group-hover:translate-y-0">
                         {timetable.map((day, index) => {
                             return (
                                 <span
@@ -25,9 +26,9 @@ const DeliveryguysCard = ({
                             );
                         })}
                     </div>
-                    <h1 className="ml-3 mt-2 text-2xl">{name}</h1>
+                    <h1 className="mt-2 ml-3 text-2xl truncate">{name} {surname}</h1>
                 </div>
-                <div className="flex justify-between mb-2 m-3">
+                <div className="m-3 mb-2 flex justify-between">
                     <div className="flex gap-2 max-w-40">
                         <span className="material-symbols-outlined">location_on</span>
                         <span className="truncate">{city}</span>
