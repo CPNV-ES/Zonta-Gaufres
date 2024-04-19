@@ -12,3 +12,4 @@ const MainLayout = ({ children, subject, color='gray' }) => {
 }
 
 export default MainLayout
+
