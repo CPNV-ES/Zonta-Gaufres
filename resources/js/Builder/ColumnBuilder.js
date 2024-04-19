@@ -13,8 +13,10 @@ export class ColumnBuilder {
                 this.columnHelper.accessor(colDef.accessor, {
                     id: colDef.accessor,
                     header:
-                        colDef.header?.toUpperCase() ??
-                        colDef.accessor.toUpperCase(),
+                        typeof colDef.header == "function"
+                            ? (colDef.header)
+                            : colDef.header?.toUpperCase() ??
+                              colDef.accessor.toUpperCase(),
                     cell: colDef.cell ?? ((info) => info.renderValue()),
                     footer: colDef.footer ?? ((info) => info.column.id),
                     size: colDef.size ?? null,
