@@ -23,19 +23,13 @@ const DataTable = ({ inputData, columns }) => {
         columns,
         getCoreRowModel: getCoreRowModel(),
         defaultColumn: {
-            size: 150,
+            minSize: 50,
         },
     });
 
     return (
-        <div className="p-2">
-            <Table
-                {...{
-                    style: {
-                        width: table.getCenterTotalSize(),
-                    },
-                }}
-            >
+        <div className="w-full p-2">
+            <Table>
                 <TableHeader>
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow key={headerGroup.id}>
