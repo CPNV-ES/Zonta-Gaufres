@@ -3,10 +3,33 @@ import MainLayout from "../Layouts/MainLayout";
 import DataTable from "@/Components/DataTable";
 
 import { ColumnBuilder } from "@/Builder/ColumnBuilder";
+import { Checkbox } from "@/Components/ui/checkbox";
 
 const builder = new ColumnBuilder();
 
 const columnHeaders = [
+    {
+        accessor: "select",
+        header: ({ table }) => (
+            <Checkbox
+                {...{
+                    checked:
+                        table.getIsAllRowsSelected() ||
+                        (table.getIsSomePageRowsSelected() && "indeterminate"),
+                    onCheckedChange: (value) =>
+                        table.toggleAllPageRowsSelected(!!value),
+                }}
+            />
+        ),
+        cell: ({ row }) => (
+            <Checkbox
+                {...{
+                    checked: row.getIsSelected(),
+                    onCheckedChange: row.getToggleSelectedHandler(),
+                }}
+            />
+        ),
+    },
     { accessor: "invoice_id", header: "#" },
     { accessor: "company", header: "Entreprise" },
     { accessor: "client", header: "Client" },
@@ -31,6 +54,26 @@ const inputData = [
         invoice_id: 1,
         company: "Company 1",
         client: "Client 1",
+        creation_date: "2021-01-01",
+        payment_date: "2021-01-01",
+        status: "Paid",
+        contact: "John Doe",
+        total: 100,
+    },
+    {
+        invoice_id: 2,
+        company: "Company 2",
+        client: "Client 2",
+        creation_date: "2021-01-01",
+        payment_date: "2021-01-01",
+        status: "Paid",
+        contact: "John Doe",
+        total: 100,
+    },
+    {
+        invoice_id: 3,
+        company: "Company 3",
+        client: "Client 3",
         creation_date: "2021-01-01",
         payment_date: "2021-01-01",
         status: "Paid",
