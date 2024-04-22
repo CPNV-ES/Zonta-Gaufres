@@ -17,7 +17,7 @@ import {
 
 import { Button } from "@/Components/ui/button";
 
-import Icon from "@/Components/Icon"
+import Icon from "@/Components/Icon";
 
 const DataTable = ({ inputData, columns, buttonOptions }) => {
     const [data, setData] = useState([...inputData]);
@@ -89,7 +89,6 @@ const DataTable = ({ inputData, columns, buttonOptions }) => {
                 <Button className="flex gap-2" variant={buttonOptions.variant}>
                     <Icon name={buttonOptions.icon} />
                     {buttonOptions.action} {Object.keys(rowSelection).length}
-                    {console.log(table.getSelectedRowModel().rows.length > 1)}
                     {table.getSelectedRowModel().rows.length > 1
                         ? " " + buttonOptions.item + "s"
                         : " " + buttonOptions.item}
