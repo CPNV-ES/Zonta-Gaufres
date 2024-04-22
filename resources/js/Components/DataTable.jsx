@@ -15,8 +15,14 @@ import {
     TableRow,
 } from "@/Components/ui/table";
 
-const DataTable = ({ inputData, columns }) => {
+import { Button } from "@/Components/ui/button";
+
+import Icon from "@/Components/Icon"
+
+const DataTable = ({ inputData, columns, buttonOptions }) => {
     const [data, setData] = useState([...inputData]);
+
+    const [rowSelection, setRowSelection] = useState({});
 
     const table = useReactTable({
         data,
@@ -25,10 +31,14 @@ const DataTable = ({ inputData, columns }) => {
         defaultColumn: {
             minSize: 50,
         },
+        state: {
+            rowSelection,
+        },
+        onRowSelectionChange: setRowSelection,
     });
 
     return (
-        <div className="w-full p-2">
+        <div className="flex flex-col justify-between w-full h-full p-2">
             <Table>
                 <TableHeader>
                     {table.getHeaderGroups().map((headerGroup) => (
@@ -66,6 +76,22 @@ const DataTable = ({ inputData, columns }) => {
                     ))}
                 </TableBody>
             </Table>
+            <div className="flex justify-between p-2">
+                <span className="flex items-center">
+                    {table.getPreFilteredRowModel().rows.length}
+                    {table.getPreFilteredRowModel().rows.length > 1
+                        ? " résultats"
+                        : " résultat"}
+                </span>
+                <Button className="flex gap-2" variant={buttonOptions.variant}>
+                    <Icon name={buttonOptions.icon} />
+                    {buttonOptions.action} {Object.keys(rowSelection).length}
+                    {console.log(table.getSelectedRowModel().rows.length > 1)}
+                    {table.getSelectedRowModel().rows.length > 1
+                        ? " " + buttonOptions.item + "s"
+                        : " " + buttonOptions.item}
+                </Button>
+            </div>
         </div>
     );
 };
