@@ -53,6 +53,7 @@ const DataTable = ({ inputData, columns, buttonOptions }) => {
                                         style={{
                                             width: header.column.size,
                                         }}
+                                        className="text-nowrap"
                                     >
                                         {header.isPlaceholder
                                             ? null
@@ -70,7 +71,7 @@ const DataTable = ({ inputData, columns, buttonOptions }) => {
                         {table.getRowModel().rows.map((row) => (
                             <TableRow key={row.id}>
                                 {row.getVisibleCells().map((cell) => (
-                                    <TableCell key={cell.id}>
+                                    <TableCell key={cell.id} className="text-nowrap">
                                         {flexRender(
                                             cell.column.columnDef.cell,
                                             cell.getContext()
