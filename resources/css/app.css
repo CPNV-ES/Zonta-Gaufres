@@ -8,12 +8,38 @@
 }
 
 #main-layout {
-  @apply flex h-full p-4 gap-4;
+  @apply flex h-full gap-4 p-4;
+}
+
+.slide-container-hover {
+  @apply flex w-full overflow-hidden;
+
+  &:hover {
+    .slide {
+      @apply overflow-visible;
+      animation-name: slide;
+    }
+  }
+}
+
+.slide {
+  @apply truncate;
 }
 
 .main-layout-section{
-  @apply h-full rounded-xl border-2 shadow-offset bg-white;
+  @apply h-full bg-white border-2 rounded-xl shadow-offset;
+}
 
+@keyframes slide {
+  0%, 20% {
+    margin-left: 0;
+    translate: 0 0;
+  }
+  
+  80%, 100% {
+    margin-left: 100%;
+    translate: -100% 0;
+  }
 }
 
 @layer base {
