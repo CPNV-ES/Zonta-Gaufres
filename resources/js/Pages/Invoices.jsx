@@ -4,6 +4,7 @@ import DataTable from "@/Components/DataTable";
 
 import { ColumnBuilder } from "@/Builder/ColumnBuilder";
 import { Checkbox } from "@/Components/ui/checkbox";
+import Icon from "@/Components/Icon";
 
 const builder = new ColumnBuilder();
 
@@ -40,8 +41,16 @@ const columnHeaders = [
     { accessor: "total" },
     {
         accessor: "actions",
-        cell: (info) => (
-            <a href={`/invoices/${info.row.original.invoice_id}`}>Delete</a>
+        cell: (
+            <div className="flex gap-3">
+                <button>
+                    <Icon name="archive" />
+                </button>
+                <button>
+                    <Icon name="download" />
+                </button>
+
+            </div>
         ),
     },
 ];
