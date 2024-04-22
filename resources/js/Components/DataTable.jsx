@@ -43,14 +43,16 @@ const DataTable = ({ inputData, columns, buttonOptions }) => {
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id}>
+                            <TableRow
+                                key={headerGroup.id}
+                                className="sticky top-0 bg-white shadow-lg"
+                            >
                                 {headerGroup.headers.map((header) => (
                                     <TableHead
                                         key={header.id}
                                         style={{
                                             width: header.column.size,
                                         }}
-                                        className="sticky top-0 bg-white"
                                     >
                                         {header.isPlaceholder
                                             ? null
