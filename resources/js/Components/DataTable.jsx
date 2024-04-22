@@ -39,7 +39,7 @@ const DataTable = ({ inputData, columns, buttonOptions }) => {
 
     return (
         <>
-            <div className="flex flex-col justify-between w-full h-full p-2 pb-12 overflow-auto">
+            <div className="flex flex-col justify-between w-full h-full pb-12 overflow-auto">
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
@@ -50,6 +50,7 @@ const DataTable = ({ inputData, columns, buttonOptions }) => {
                                         style={{
                                             width: header.column.size,
                                         }}
+                                        className="sticky top-0 bg-white"
                                     >
                                         {header.isPlaceholder
                                             ? null
