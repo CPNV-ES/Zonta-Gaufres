@@ -84,8 +84,17 @@ const inputData = [
 
 const MainPage = () => {
     return (
-        <MainLayout color="green" subject="Commandes">
-            <DataTable columns={columns} inputData={inputData} />
+        <MainLayout color="red" subject="Factures">
+            <DataTable
+                columns={columns}
+                inputData={inputData}
+                buttonOptions={{
+                    icon: "download",
+                    action: "Télécharger",
+                    item: "Facture",
+                    variant: "red"
+                }}
+            />
         </MainLayout>
     );
 };
