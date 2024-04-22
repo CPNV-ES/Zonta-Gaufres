@@ -90,13 +90,26 @@ const DataTable = ({ inputData, columns, buttonOptions }) => {
                         ? " résultats"
                         : " résultat"}
                 </span>
-                <Button className="flex gap-2" variant={buttonOptions.variant}>
-                    <Icon name={buttonOptions.icon} />
-                    {buttonOptions.action} {Object.keys(rowSelection).length}
-                    {table.getSelectedRowModel().rows.length > 1
-                        ? " " + buttonOptions.item + "s"
-                        : " " + buttonOptions.item}
-                </Button>
+                {buttonOptions ? (
+                    <Button
+                        className="flex gap-2"
+                        variant={buttonOptions?.variant || "default"}
+                    >
+                        {buttonOptions?.icon ? (
+                            <Icon name={buttonOptions.icon} />
+                        ) : null}
+                        {buttonOptions?.action
+                            ? buttonOptions.action + " "
+                            : null}
+                        {buttonOptions?.item
+                            ? Object.keys(rowSelection).length +
+                                  table.getSelectedRowModel().rows.length >
+                              1
+                                ? " " + buttonOptions.item + "s"
+                                : " " + buttonOptions.item
+                            : null}
+                    </Button>
+                ) : null}
             </div>
         </>
     );
