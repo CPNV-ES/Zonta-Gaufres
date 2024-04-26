@@ -19,6 +19,26 @@ import { Button } from "@/Components/ui/button";
 
 import Icon from "@/Components/Icon";
 
+/**
+ * @typedef {Object} ButtonOptions
+ * @property {string} variant - The variant of the button
+ * @property {string} icon - The Lucide icon name of the button icon
+ * @property {string} action - The action label of the button
+ * @property {string} item - The item label of the button
+ * @property {function} handler - The handler of the button click event
+ */
+
+/**
+ * The DataTable component is a reusable component that renders a table with the given data.
+ * You have to use the ColumnBuilder() to build the columns and pass them as props to the DataTable component.
+ * You have to know that the columns will pull the data from the inputData object and will search for the acessor object passed in the columns.
+ *
+ * @param {array} inputData - Array of object to be displayed in the table
+ * @param {array} columns - Array of object built by the ColumnBuilder class to define the columns of the table
+ * @param {ButtonOptions} buttonOptions - The options for the button displayed at the bottom of the table
+ * @param {function} onClickHandler - The function to be called when a row is clicked
+ * @returns
+ */
 const DataTable = ({ inputData, columns, buttonOptions, onClickHandler }) => {
     const [data, setData] = useState([...inputData]);
 
@@ -71,8 +91,14 @@ const DataTable = ({ inputData, columns, buttonOptions, onClickHandler }) => {
                         {table.getRowModel().rows.map((row) => (
                             <TableRow
                                 key={row.id}
-                                onClick={onClickHandler ? () => onClickHandler(row) : null}
-                                className={onClickHandler ? "cursor-pointer" : ""}
+                                onClick={
+                                    onClickHandler
+                                        ? () => onClickHandler(row)
+                                        : null
+                                }
+                                className={
+                                    onClickHandler ? "cursor-pointer" : ""
+                                }
                             >
                                 {row.getVisibleCells().map((cell) => (
                                     <TableCell
