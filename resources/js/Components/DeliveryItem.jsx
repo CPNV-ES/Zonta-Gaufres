@@ -1,8 +1,8 @@
 const DeliveryItem = ({ time, orders, city }) => {
     return (
         <>
-            <div className="m-2 flex w-1/4 cursor-pointer flex-row overflow-hidden rounded bg-gray-200 hover:shadow">
-                <div className="flex border-r-2 border-black p-3">
+            <div className="flex flex-row w-full overflow-hidden bg-white rounded shadow-md cursor-pointer hover:shadow">
+                <div className="flex p-3 border-r-2 border-black">
                     <span>{time}</span>
                 </div>
                 <div className="flex flex-1 p-3">
@@ -13,7 +13,7 @@ const DeliveryItem = ({ time, orders, city }) => {
                 </div>
                 <div className="flex flex-1 p-3 max-w-40">
                     <span className="material-symbols-outlined">location_on</span>
-                    <span className="truncate">{city}</span>
+                    <span className="truncate" title={city}>{city}</span>
                 </div>
             </div>
         </>)

@@ -1,20 +1,10 @@
-const OrderCard = ({
-                       street,
-                       streetNumber,
-                       postalCode,
-                       city,
-                       enterprise,
-                       deliveryGuy,
-                       orders,
-                       startDelivery,
-                       EndDelivery
-                   }) => {
+const OrderCard = ({ street, streetNumber, postalCode, city, enterprise, deliveryGuy, orders, startDelivery, EndDelivery }) => {
     return (
         <>
-            <div className="rounded shadow w-1/3 m-2 p-2 flex flex-row justify-between">
+            <div className="flex flex-row justify-between w-full p-2 bg-white rounded shadow-md">
                 <div className="flex items-center gap-2">
                     <span className="material-symbols-outlined">location_on</span>
-                    <div className="flex flex-1 flex-col overflow-hidden">
+                    <div className="flex flex-col flex-1 overflow-hidden">
                         <span>{enterprise}</span>
                         <span className="truncate">{street} {streetNumber}</span>
                         <p className="w-full truncate">
@@ -36,7 +26,7 @@ const OrderCard = ({
                     <div className="flex gap-2">
                         <span className="material-symbols-outlined">schedule</span>
                         <span>{startDelivery}</span>
-                        <span className="material-symbols-outlined text-gray-400">arrow_forward</span>
+                        <span className="text-gray-400 material-symbols-outlined">arrow_forward</span>
                         <span>{EndDelivery}</span>
                     </div>
                 </div>
