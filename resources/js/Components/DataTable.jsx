@@ -19,7 +19,7 @@ import { Button } from "@/Components/ui/button";
 
 import Icon from "@/Components/Icon";
 
-const DataTable = ({ inputData, columns, buttonOptions }) => {
+const DataTable = ({ inputData, columns, buttonOptions, onClickHandler }) => {
     const [data, setData] = useState([...inputData]);
 
     const [rowSelection, setRowSelection] = useState({});
@@ -69,9 +69,16 @@ const DataTable = ({ inputData, columns, buttonOptions }) => {
                     </TableHeader>
                     <TableBody>
                         {table.getRowModel().rows.map((row) => (
-                            <TableRow key={row.id}>
+                            <TableRow
+                                key={row.id}
+                                onClick={onClickHandler ? () => onClickHandler(row) : null}
+                                className={onClickHandler ? "cursor-pointer" : ""}
+                            >
                                 {row.getVisibleCells().map((cell) => (
-                                    <TableCell key={cell.id} className="text-nowrap">
+                                    <TableCell
+                                        key={cell.id}
+                                        className="text-nowrap"
+                                    >
                                         {flexRender(
                                             cell.column.columnDef.cell,
                                             cell.getContext()

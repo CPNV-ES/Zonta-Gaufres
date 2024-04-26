@@ -91,6 +91,7 @@ const MainPage = () => {
                     variant: "green"
                 }
             }/>
+                onClickHandler={(row) => console.log(row.id)}
         </MainLayout>
     );
 };
