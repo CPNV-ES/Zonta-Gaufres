@@ -17,15 +17,15 @@ const DeliveryguysBigCard = ({name, surname, city, postalCode, street, streetNum
                     <div className="flex items-center justify-center w-32 h-32 text-6xl text-white bg-gray-300 rounded-full">
                         <span>{`${name.charAt(0)}${surname.charAt(0)}`}</span>
                     </div>
-                    <h1 className="mt-4 text-2xl truncate">{name} {surname}</h1>
+                    <h1 className="mt-4 text-2xl truncate" title={`${name} ${surname}`}>{name} {surname}</h1>
                 </div>
                 <div className="flex flex-col w-1/2 h-full py-4 justify-evenly">
                     <div className="flex items-center gap-2">
                         <span className="material-symbols-outlined">location_on</span>
                         <div className="flex flex-col flex-1 overflow-hidden">
-                            <span className="truncate">{street} {streetNumber}</span>
+                            <span className="truncate" title={`${street} ${streetNumber}`}>{street} {streetNumber}</span>
                             <p className="w-full truncate">
-                                {postalCode} <span className="font-bold">{city}</span>
+                                {postalCode} <span className="font-bold" title={city}>{city}</span>
                             </p>
                         </div>
 
