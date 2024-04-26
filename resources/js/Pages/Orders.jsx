@@ -3,25 +3,34 @@ import MainLayout from "../Layouts/MainLayout";
 import DataTable from "@/Components/DataTable";
 
 import { ColumnBuilder } from "@/Builder/ColumnBuilder";
+import { Badge } from "@/Components/ui/badge";
 
 const builder = new ColumnBuilder();
 
 const columnHeaders = [
     { accessor: "invoice_id", header: "#" },
-    { accessor: "company", header: "Entreprise"},
-    { accessor: "client", header: "Client"},
-    { accessor: "address", header: "Adresse"},
-    { accessor: "zip_code", header: "NPA"},
-    { accessor: "city", header: "Localité"},
-    { accessor: "note", header: "Remarque"},
-    { accessor: "offered_by", header: "Offert par"},
-    { accessor: "delivery", header: "Livreur"},
-    { accessor: "time_slot", header: "Plage horaire"},
-    { accessor: "contact", header: "Contact année passée"},
-    { accessor: "waffles_number", header: "Nombre de gaufres"},
-    { accessor: "total", header: "Total", cell: (info) => `${info.renderValue()} CHF`},
-    { accessor: "status", header: "Statut facture"},
-    { accessor: "payment_type", header: "Encaissement"},
+    { accessor: "company", header: "Entreprise" },
+    { accessor: "client", header: "Client" },
+    { accessor: "address", header: "Adresse" },
+    { accessor: "zip_code", header: "NPA" },
+    { accessor: "city", header: "Localité" },
+    { accessor: "note", header: "Remarque" },
+    { accessor: "offered_by", header: "Offert par" },
+    { accessor: "delivery", header: "Livreur" },
+    { accessor: "time_slot", header: "Plage horaire" },
+    { accessor: "contact", header: "Contact année passée" },
+    { accessor: "waffles_number", header: "Nombre de gaufres" },
+    {
+        accessor: "total",
+        header: "Total",
+        cell: (info) => `${info.renderValue()} CHF`,
+    },
+    {
+        accessor: "status",
+        header: "Statut facture",
+        cell: (row) => <Badge variant={row.renderValue().key}>{row.renderValue().name}</Badge>,
+    },
+    { accessor: "payment_type", header: "Encaissement" },
 ];
 
 const columns = builder.buildColumns(columnHeaders);
@@ -42,7 +51,7 @@ const inputData = [
         contact: "Salomé",
         waffles_number: 10,
         total: 100.0,
-        status: "Payée",
+        status: { key:"invoice", name: "Facture" },
         payment_type: "Livraison",
     },
     {
@@ -59,7 +68,7 @@ const inputData = [
         contact: "Salomé",
         waffles_number: 10,
         total: 100.0,
-        status: "Payée",
+        status: { key: "delivery", name: "Livraison" },
         payment_type: "Livraison",
     },
     {
@@ -76,7 +85,7 @@ const inputData = [
         contact: "Salomé",
         waffles_number: 10,
         total: 100.0,
-        status: "Payée",
+        status: { key: "upstream", name: "En amont" },
         payment_type: "Livraison",
     },
 ];
