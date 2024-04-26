@@ -11,10 +11,10 @@ const DeliveryguysCard = ({
     return (
         <>
             <div
-                className="m-2 flex h-28 w-1/3 flex-col justify-between overflow-hidden rounded bg-white pr-2 pl-2 shadow-md group min-w-72">
+                className="flex flex-col justify-between w-1/3 pl-2 pr-2 m-2 overflow-hidden bg-white rounded shadow-md h-28 group min-w-72">
                 <div>
                     <div
-                        className="flex w-full -translate-y-3/4 transform gap-2 transition-transform duration-500 hours-container group-hover:translate-y-0">
+                        className="flex w-full gap-2 transition-transform duration-500 transform -translate-y-3/4 hours-container group-hover:translate-y-0">
                         {timetable.map((day, index) => {
                             return (
                                 <span
@@ -26,12 +26,12 @@ const DeliveryguysCard = ({
                             );
                         })}
                     </div>
-                    <h1 className="mt-2 ml-3 text-2xl truncate">{name} {surname}</h1>
+                    <h1 className="mt-2 ml-3 text-2xl truncate" title={`${name} ${surname}`}>{name} {surname}</h1>
                 </div>
-                <div className="m-3 mb-2 flex justify-between">
+                <div className="flex justify-between m-3 mb-2">
                     <div className="flex gap-2 max-w-40">
                         <span className="material-symbols-outlined">location_on</span>
-                        <span className="truncate">{city}</span>
+                        <span className="truncate" title={city}>{city}</span>
                     </div>
                     <div className="flex flex-row gap-4">
                         <div className="flex gap-2">

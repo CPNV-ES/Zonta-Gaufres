@@ -26,13 +26,13 @@ const Navbar = ({ color, subject }) => {
         <nav className={`main-layout-section relative p-4 flex flex-col justify-between border-${color}-400`}>
 
             <button
-                className="absolute translate-x-1/2 rounded-full right-0 h-6 w-6 flex justify-center items-center border-2 border-gray-300 shadow-offset bg-white hover:bg-gray-200"
+                className="absolute right-0 flex items-center justify-center w-6 h-6 translate-x-1/2 bg-white border-2 border-gray-300 rounded-full shadow-offset hover:bg-gray-200"
                 onClick={() => setOpened(!opened)}
             >
                 <span className='transition-all ease-in-out duration-700 icon-[mdi--chevron-right]' style={{ rotate: `${-180 * opened}deg` }}>&gt;</span>
             </button>
 
-            <div className='transition-all ease-in-out duration-700 flex flex-col items-start justify-start gap-6 overflow-hidden' style={{ maxWidth: `${maxNavWidth}px` }}>
+            <div className='flex flex-col items-start justify-start gap-6 overflow-hidden transition-all duration-700 ease-in-out' style={{ maxWidth: `${maxNavWidth}px` }}>
                 <img className='w-10' src="./images/zonta.png" alt="Zonta"></img>
                 <NavIcon name="Recherche" icon="[material-symbols--search-rounded]" />
                 <hr className='w-full rotate-[2] border border-gray-400'></hr>
@@ -43,7 +43,7 @@ const Navbar = ({ color, subject }) => {
 
             </div>
 
-            <div className='transition-all ease-in-out duration-700 flex flex-col items-start justify-start gap-6 overflow-hidden' style={{ maxWidth: `${maxNavWidth}px` }}>
+            <div className='flex flex-col items-start justify-start gap-6 overflow-hidden transition-all duration-700 ease-in-out' style={{ maxWidth: `${maxNavWidth}px` }}>
                 <NavIcon name="Paramètres" icon="[mdi--cog]" />
             </div>
         </nav>

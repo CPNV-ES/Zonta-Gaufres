@@ -17,7 +17,7 @@
   &:hover {
     .slide {
       @apply overflow-visible;
-      animation-name: slide;
+      /* animation-name: slide; */
     }
   }
 }
