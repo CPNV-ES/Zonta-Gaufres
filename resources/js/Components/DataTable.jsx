@@ -101,6 +101,7 @@ const DataTable = ({ inputData, columns, buttonOptions, onClickHandler }) => {
                     <Button
                         className="flex gap-2"
                         variant={buttonOptions?.variant || "default"}
+                        onClick={() => buttonOptions.handler(rowSelection)}
                     >
                         {buttonOptions?.icon ? (
                             <Icon name={buttonOptions.icon} />

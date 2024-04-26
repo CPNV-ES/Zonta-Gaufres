@@ -84,14 +84,17 @@ const inputData = [
 const MainPage = () => {
     return (
         <MainLayout color="green" subject="Commandes">
-            <DataTable columns={columns} inputData={inputData} buttonOptions={
-                {
+            <DataTable
+                columns={columns}
+                inputData={inputData}
+                buttonOptions={{
                     icon: "plus",
                     action: "Créer une commande",
-                    variant: "green"
-                }
-            }/>
+                    variant: "green",
+                    handler: (a) => console.log(a),
+                }}
                 onClickHandler={(row) => console.log(row.id)}
+            />
         </MainLayout>
     );
 };
