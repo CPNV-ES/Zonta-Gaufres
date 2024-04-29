@@ -124,9 +124,7 @@ const Delivery = () => {
                     {
                         id: "print_delivery_sheet",
                         icon: "printer",
-                        action: "Imprimer",
-                        item: "fiche de livraison",
-                        itemPlural: "fiches de livraison",
+                        action: "Imprimer des fiches de livraions",
                         variant: "blue",
                     },
                 ]}
