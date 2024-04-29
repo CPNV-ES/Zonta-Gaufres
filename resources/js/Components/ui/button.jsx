@@ -22,6 +22,7 @@ const buttonVariants = cva(
                 red: "bg-red-400 text-primary-foreground hover:bg-red-400/90",
                 green: "bg-green-400 text-primary-foreground hover:bg-green-400/90",
                 yellow: "bg-yellow-400 text-primary-foreground hover:bg-yellow-400/90",
+                blue: "bg-blue-400 text-primary-foreground hover:bg-blue-400/90",
             },
             size: {
                 default: "h-10 px-4 py-2",
