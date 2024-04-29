@@ -25,6 +25,7 @@ import Icon from "@/Components/Icon";
  * @property {string} icon - The Lucide icon name of the button icon
  * @property {string} action - The action label of the button
  * @property {string} item - The item label of the button
+ * @property {string} itemPlural - The plural item label of the button
  * @property {function} handler - The handler of the button click event
  */
 
@@ -137,10 +138,9 @@ const DataTable = ({ inputData, columns, buttonOptions, onClickHandler }) => {
                             : null}
                         {buttonOptions?.item
                             ? Object.keys(rowSelection).length +
-                                  table.getSelectedRowModel().rows.length >
-                              1
-                                ? " " + buttonOptions.item + "s"
-                                : " " + buttonOptions.item
+                              (table.getSelectedRowModel().rows.length > 1
+                                  ? " " + (buttonOptions.itemPlural ? buttonOptions.itemPlural : buttonOptions.item + "s")
+                                  : " " + buttonOptions.item)
                             : null}
                     </Button>
                 ) : null}
