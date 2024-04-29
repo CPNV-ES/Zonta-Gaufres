@@ -1,7 +1,7 @@
 const DeliveryItem = ({ time, orders, city }) => {
     return (
         <>
-            <div className="flex flex-row w-full overflow-hidden bg-white rounded shadow-md cursor-pointer hover:shadow">
+            <div className="flex flex-row w-full bg-white rounded shadow-md cursor-pointer hover:shadow">
                 <div className="flex p-3 border-r-2 border-black">
                     <span>{time}</span>
                 </div>
