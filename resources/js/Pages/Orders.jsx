@@ -108,7 +108,7 @@ const Orders = () => {
             <DataTable
                 columns={columns}
                 inputData={inputData}
-                buttonOptions={{
+                buttonsOptions={{
                     icon: "plus",
                     action: "Créer une commande",
                     variant: "green",

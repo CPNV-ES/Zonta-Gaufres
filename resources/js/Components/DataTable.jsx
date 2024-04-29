@@ -62,6 +62,8 @@ const DataTable = ({ inputData, columns, buttonsOptions, onClickHandler }) => {
         onRowSelectionChange: setRowSelection,
     });
 
+    Array.isArray(buttonsOptions) ? null : (buttonsOptions = [{...buttonsOptions, id:"default"}]);
+
     const footer_buttons = buttonsOptions.map((buttonOptions) => (
         <Button
             key={buttonOptions?.id}

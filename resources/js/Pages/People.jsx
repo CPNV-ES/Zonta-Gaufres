@@ -93,7 +93,7 @@ const People = () => {
             <DataTable
                 columns={columns}
                 inputData={inputData}
-                buttonOptions={{
+                buttonsOptions={{
                     icon: "plus",
                     action: "Ajouter une personne",
                     variant: "yellow",

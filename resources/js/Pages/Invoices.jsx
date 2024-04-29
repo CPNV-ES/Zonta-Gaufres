@@ -97,7 +97,7 @@ const Invoices = () => {
             <DataTable
                 columns={columns}
                 inputData={inputData}
-                buttonOptions={{
+                buttonsOptions={{
                     icon: "download",
                     action: "Télécharger",
                     item: "Facture",
