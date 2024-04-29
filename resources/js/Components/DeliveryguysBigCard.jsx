@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DeliveryguysBigCard = ({name, surname, city, postalCode, street, streetNumber, phone, orders, trips,
+const DeliveryguysBigCard = ({name, surname, address, phone, orders, trips,
     timetable = Array.from({ length: 12 }, () => ({ available: true })) // Simplified timetable generation
 }) => {
     return (<>
@@ -23,9 +23,9 @@ const DeliveryguysBigCard = ({name, surname, city, postalCode, street, streetNum
                     <div className="flex items-center gap-2">
                         <span className="material-symbols-outlined">location_on</span>
                         <div className="flex flex-col flex-1 overflow-hidden">
-                            <span className="truncate" title={`${street} ${streetNumber}`}>{street} {streetNumber}</span>
+                            <span className="truncate" title={`${address.street} ${address.streetNumber}`}>{address.street} {address.streetNumber}</span>
                             <p className="w-full truncate">
-                                {postalCode} <span className="font-bold" title={city}>{city}</span>
+                                {address.postalCode} <span className="font-bold" title={address.city}>{address.city}</span>
                             </p>
                         </div>
 

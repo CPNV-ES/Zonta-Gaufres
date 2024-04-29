@@ -1,4 +1,4 @@
-const OrderCard = ({ street, streetNumber, postalCode, city, enterprise, deliveryGuy, orders, startDelivery, EndDelivery }) => {
+const OrderCard = ({ address, enterprise, deliveryGuy, orders, startDelivery, EndDelivery }) => {
     return (
         <>
             <div className="flex flex-row justify-between w-full p-2 bg-white rounded shadow-md">
@@ -6,9 +6,9 @@ const OrderCard = ({ street, streetNumber, postalCode, city, enterprise, deliver
                     <span className="material-symbols-outlined">location_on</span>
                     <div className="flex flex-col flex-1 overflow-hidden">
                         <span>{enterprise}</span>
-                        <span className="truncate">{street} {streetNumber}</span>
+                        <span className="truncate">{address.street} {address.streetNumber}</span>
                         <p className="w-full truncate">
-                            {postalCode} <span className="font-bold">{city}</span>
+                            {address.postalCode} <span className="font-bold">{address.city}</span>
                         </p>
                     </div>
                 </div>
