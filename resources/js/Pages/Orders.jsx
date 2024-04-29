@@ -28,9 +28,21 @@ const columnHeaders = [
     {
         accessor: "status",
         header: "Statut facture",
-        cell: (row) => <Badge variant={row.renderValue().key}>{row.renderValue().name}</Badge>,
+        cell: (row) => (
+            <Badge variant={row.renderValue().key}>
+                {row.renderValue().name}
+            </Badge>
+        ),
     },
-    { accessor: "payment_type", header: "Encaissement" },
+    {
+        accessor: "payment_type",
+        header: "Encaissement",
+        cell: (row) => (
+            <Badge variant={row.renderValue().key}>
+                {row.renderValue().name}
+            </Badge>
+        ),
+    },
 ];
 
 const columns = builder.buildColumns(columnHeaders);
@@ -51,8 +63,8 @@ const inputData = [
         contact: "Salomé",
         waffles_number: 10,
         total: 100.0,
-        status: { key:"invoice", name: "Facture" },
-        payment_type: "Livraison",
+        status: { key: "paid", name: "Payée" },
+        payment_type: { key: "upstream", name: "En amont" },
     },
     {
         invoice_id: 2,
@@ -68,8 +80,8 @@ const inputData = [
         contact: "Salomé",
         waffles_number: 10,
         total: 100.0,
-        status: { key: "delivery", name: "Livraison" },
-        payment_type: "Livraison",
+        status: { key: "pending", name: "En cours" },
+        payment_type: { key: "delivery", name: "Livraison" },
     },
     {
         invoice_id: 3,
@@ -85,8 +97,8 @@ const inputData = [
         contact: "Salomé",
         waffles_number: 10,
         total: 100.0,
-        status: { key: "upstream", name: "En amont" },
-        payment_type: "Livraison",
+        status: { key: "cancelled", name: "Annulée" },
+        payment_type: { key: "upstream", name: "En amont" },
     },
 ];
 
