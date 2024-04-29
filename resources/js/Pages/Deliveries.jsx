@@ -100,7 +100,7 @@ const inputData = [
     },
 ];
 
-const Delivery = () => {
+const Deliveries = () => {
     return (
         <MainLayout color="blue" subject="Livraisons">
             <DataTable
@@ -133,4 +133,4 @@ const Delivery = () => {
     );
 };
 
-export default Delivery;
+export default Deliveries;
