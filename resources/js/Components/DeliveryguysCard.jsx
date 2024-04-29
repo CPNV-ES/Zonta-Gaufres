@@ -11,8 +11,8 @@ const DeliveryguysCard = ({
     return (
         <>
             <div
-                className="flex flex-col justify-between w-full pl-2 pr-2 overflow-hidden bg-white rounded shadow-md h-28 group min-w-72">
-                <div>
+                className="flex flex-col justify-between w-full pl-2 pr-2 bg-white rounded shadow-md h-28 group min-w-72">
+                <div className='overflow-hidden'>
                     <div
                         className="flex w-full gap-2 transition-transform duration-500 transform -translate-y-3/4 hours-container group-hover:translate-y-0">
                         {timetable.map((day, index) => {
