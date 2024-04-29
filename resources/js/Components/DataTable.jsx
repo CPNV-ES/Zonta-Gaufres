@@ -30,17 +30,21 @@ import Icon from "@/Components/Icon";
  */
 
 /**
+ * @typedef {Array} ButtonsOptions
+ */
+
+/**
  * The DataTable component is a reusable component that renders a table with the given data.
  * You have to use the ColumnBuilder() to build the columns and pass them as props to the DataTable component.
  * You have to know that the columns will pull the data from the inputData object and will search for the acessor object passed in the columns.
  *
  * @param {array} inputData - Array of object to be displayed in the table
  * @param {array} columns - Array of object built by the ColumnBuilder class to define the columns of the table
- * @param {ButtonOptions} buttonOptions - The options for the button displayed at the bottom of the table
+ * @param {ButtonsOptions} buttonsOptions - The array of ButtonOptions for the buttons displayed at the bottom of the table
  * @param {function} onClickHandler - The function to be called when a row is clicked
  * @returns
  */
-const DataTable = ({ inputData, columns, buttonOptions, onClickHandler }) => {
+const DataTable = ({ inputData, columns, buttonsOptions, onClickHandler }) => {
     const [data, setData] = useState([...inputData]);
 
     const [rowSelection, setRowSelection] = useState({});
@@ -57,6 +61,27 @@ const DataTable = ({ inputData, columns, buttonOptions, onClickHandler }) => {
         },
         onRowSelectionChange: setRowSelection,
     });
+
+    const footer_buttons = buttonsOptions.map((buttonOptions) => (
+        <Button
+            key={buttonOptions?.id}
+            className="flex gap-2"
+            variant={buttonOptions?.variant || "default"}
+            onClick={() => buttonOptions.handler(rowSelection)}
+        >
+            {buttonOptions?.icon ? <Icon name={buttonOptions.icon} /> : null}
+            {buttonOptions?.action ? buttonOptions.action + " " : null}
+            {buttonOptions?.item
+                ? Object.keys(rowSelection).length +
+                  (table.getSelectedRowModel().rows.length > 1
+                      ? " " +
+                        (buttonOptions.itemPlural
+                            ? buttonOptions.itemPlural
+                            : buttonOptions.item + "s")
+                      : " " + buttonOptions.item)
+                : null}
+        </Button>
+    ));
 
     return (
         <>
@@ -124,26 +149,7 @@ const DataTable = ({ inputData, columns, buttonOptions, onClickHandler }) => {
                         ? " résultats"
                         : " résultat"}
                 </span>
-                {buttonOptions ? (
-                    <Button
-                        className="flex gap-2"
-                        variant={buttonOptions?.variant || "default"}
-                        onClick={() => buttonOptions.handler(rowSelection)}
-                    >
-                        {buttonOptions?.icon ? (
-                            <Icon name={buttonOptions.icon} />
-                        ) : null}
-                        {buttonOptions?.action
-                            ? buttonOptions.action + " "
-                            : null}
-                        {buttonOptions?.item
-                            ? Object.keys(rowSelection).length +
-                              (table.getSelectedRowModel().rows.length > 1
-                                  ? " " + (buttonOptions.itemPlural ? buttonOptions.itemPlural : buttonOptions.item + "s")
-                                  : " " + buttonOptions.item)
-                            : null}
-                    </Button>
-                ) : null}
+                <div className="flex gap-2">{footer_buttons}</div>
             </div>
         </>
     );
