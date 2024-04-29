@@ -102,7 +102,7 @@ const inputData = [
     },
 ];
 
-const MainPage = () => {
+const Orders = () => {
     return (
         <MainLayout color="green" subject="Commandes">
             <DataTable
@@ -120,4 +120,4 @@ const MainPage = () => {
     );
 };
 
-export default MainPage;
+export default Orders;

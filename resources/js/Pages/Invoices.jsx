@@ -91,7 +91,7 @@ const inputData = [
     },
 ];
 
-const MainPage = () => {
+const Invoices = () => {
     return (
         <MainLayout color="red" subject="Factures">
             <DataTable
@@ -108,4 +108,4 @@ const MainPage = () => {
     );
 };
 
-export default MainPage;
+export default Invoices;
