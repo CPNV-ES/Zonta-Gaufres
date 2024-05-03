@@ -1,13 +1,13 @@
 import React from 'react';
 
 const DeliveryguysCard = ({
-                              name,
-                              surname,
-                              city,
-                              orders,
-                              trips,
-                              timetable = Array.from({length: 12}, () => ({available: true})) // Simplified timetable generation
-                          }) => {
+    name,
+    surname,
+    city,
+    orders,
+    trips,
+    timetable = Array.from({ length: 12 }, () => ({ available: true })) // Simplified timetable generation
+}) => {
     return (
         <>
             <div
@@ -21,8 +21,8 @@ const DeliveryguysCard = ({
                                     key={index}
                                     className={`flex-1 rounded-b text-center pb-1 ${day.available ? 'bg-green-300' : 'bg-red-300'}`}
                                 >
-                                {index + 1}
-                            </span>
+                                    {index + 1}
+                                </span>
                             );
                         })}
                     </div>
@@ -31,7 +31,7 @@ const DeliveryguysCard = ({
                 <div className="flex justify-between m-3 mb-2">
                     <div className="flex gap-2 max-w-40">
                         <span className="material-symbols-outlined">location_on</span>
-                        <span className="truncate">{city}</span>
+                        <span className="truncate" title={city}>{city}</span>
                     </div>
                     <div className="flex flex-row gap-4">
                         <div className="flex gap-2">
