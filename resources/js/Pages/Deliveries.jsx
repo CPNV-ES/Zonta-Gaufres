@@ -1,13 +1,55 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import MainLayout from '../Layouts/MainLayout'
 import DeliveryguysCard from '@/Components/DeliveryguysCard.jsx'
 import DeliveryguysBigCard from '@/Components/DeliveryguysBigCard.jsx'
 import OrderCard from '@/Components/OrderCard'
 import DeliveryItem from '@/Components/DeliveryItem.jsx'
+import Draggarble from '@/Components/Draggarble.jsx'
 
 const Deliveries = () => {
     const subject = 'Livraisons'
     const color = 'blue'
+    const [deliveryGuys, setDeliveryGuys] = useState([])
+    const [deliveries, setDeliveries] = useState([])
+    const [orders, setOrders] = useState([])
+
+    const [selectedDeliveryGuy, setSelectedDeliveryGuy] = useState()
+
+    const [draggedOrder, setDraggedOrder] = useState(null)
+
+
+    const dragOver = (event) => {
+        event.preventDefault();
+        if (!event.target.classList.contains('drop-area')) return
+        event.target.classList.add("border-gray-400", "border-2");
+    }
+
+    const drop = (event) => {
+        event.target.classList.remove("border-gray-400", "border-2");
+
+        setDeliveries([...deliveries, { order: draggedOrder, deliveryGuy: selectedDeliveryGuy }])
+        setOrders(orders.filter(order => order !== draggedOrder))
+        setDraggedOrder(null)
+    }
+
+    const dragStart = (order) => {
+        setDraggedOrder(order)
+    }
+
+    // --- Hardcoded data --- //
+
+    // useEffect(() => {
+    //     const TESTORDER = { id:1, address: { streetNumber: '19', city: 'Yvonand', postalCode: '1462', street: 'Priales' }, orders: '30', deliveryGuy: 'Jean Paul', EndDelivery: '14:00', startDelivery: '09:00', enterprise: 'Vaudoise' }
+    //     const TESTORDER2 = { id:2, address: { streetNumber: '19', city: 'Yvonand', postalCode: '1462', street: 'Priales' }, orders: '30', deliveryGuy: 'Jean Paul', EndDelivery: '14:00', startDelivery: '09:00', enterprise: 'Vaudoise' }
+    //     const TESTDELIVERY = {order:{ id:1, address: { streetNumber: '19', city: 'Yvonand', postalCode: '1462', street: 'Priales' }, orders: '30', deliveryGuy: 'Jean Paul', EndDelivery: '14:00', startDelivery: '09:00', enterprise: 'Vaudoise', deliveryHour: '12:00' }, deliveryGuy: selectedDeliveryGuy}
+    //     const TESTGUY = { id:1, name: 'Jean', surname: 'Paul', city: 'Yvonand', orders: 30, trips: 5, timetable: Array.from({ length: 12 }, () => ({ available: true })) }
+
+    //     setSelectedDeliveryGuy(TESTGUY)
+    //     setOrders([TESTORDER, TESTORDER2])
+    //     setDeliveryGuys([TESTGUY])
+    //     setDeliveries([TESTDELIVERY])
+    //     }
+    //     , [])
 
     return (
         <MainLayout color={color} subject={subject}>
@@ -16,21 +58,40 @@ const Deliveries = () => {
                     <h1 className='text-xl font-semibold text-gray-500'>Livreurs</h1>
                     <div className='flex flex-col flex-1 gap-4 pr-2 overflow-y-auto'>
 
+                        {deliveryGuys.map((person, index) => {
+                            return <DeliveryguysCard key={index} {...person} />
+                        })}
+
                     </div>
                 </section>
                 <section className='flex flex-col flex-1 h-full gap-4 p-4 border-2 rounded-lg bg-slate-200'>
-                   
-                    <div className='flex flex-col flex-1 gap-4 pr-2 overflow-y-auto'>
-                        <div className='relative flex items-center justify-center text-gray-500 border-gray-300 border-b-1'>
+                    {selectedDeliveryGuy ? <DeliveryguysBigCard {...selectedDeliveryGuy} /> : null}
+                    <div onDrop={(event) => drop(event)} onDragOver={(event) => dragOver(event)} className='flex flex-col flex-1 gap-4 pr-2 overflow-y-auto drop-area'>
+
+
+                        <div className='relative flex items-center justify-center text-gray-500 border-gray-300 pointer-events-none border-b-1'>
                             <i className='absolute left-0 w-full h-[2px] bg-gray-300' />
                             <span className='z-10 px-4 bg-slate-200'>8:00</span>
                         </div>
+
+                        {deliveries.map((delivery, index) => {
+                            return <DeliveryItem key={index} {...delivery} />
+                        })}
+
                     </div>
-                    
                 </section>
                 <section className='flex flex-col flex-1 h-full gap-4 p-4 border-2 rounded-lg bg-slate-200'>
                     <h1 className='text-xl font-semibold text-gray-500'>Commandes</h1>
-                    <div className='flex flex-col flex-1 gap-4 pr-2 overflow-y-auto'>
+                    <div className='flex flex-col flex-1 gap-4 pr-2 overflow-y-auto transition-all duration-500'>
+
+                        {orders.map((order, index) => {
+                            return (
+                                <Draggarble key={index} onDragStart={() => dragStart(order)}> {/* TODO, send the ID of the object to manage it from the controller */}
+                                    <OrderCard {...order}>
+                                    </OrderCard>
+                                </Draggarble>
+                            )
+                        })}
 
                     </div>
                 </section>
