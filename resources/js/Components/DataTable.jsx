@@ -21,6 +21,7 @@ import Icon from "@/Components/Icon";
 
 /**
  * @typedef {Object} ButtonOptions
+ * @property {string} id - The id used for the key of the button
  * @property {string} variant - The variant of the button
  * @property {string} icon - The Lucide icon name of the button icon
  * @property {string} action - The action label of the button
@@ -64,7 +65,7 @@ const DataTable = ({ inputData, columns, buttonsOptions, onClickHandler }) => {
 
     Array.isArray(buttonsOptions)
         ? null
-        : (buttonsOptions = [{ ...buttonsOptions, id: "default" }]);
+        : (buttonsOptions = [{ ...buttonsOptions, id: buttonsOptions?.id || "default"}]);
 
     const footer_buttons = buttonsOptions.map((buttonOptions) => (
         <Button
