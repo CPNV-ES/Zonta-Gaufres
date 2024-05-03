@@ -3,7 +3,7 @@ import React from 'react'
 const Draggarble = ({ children, onDragStart, draggarble = true }) => {
     return (
         <div
-            onDragStart={(event) => onDragStart(event)}
+            onDragStart={onDragStart}
             draggable={draggarble}>
             {children}
         </div>
