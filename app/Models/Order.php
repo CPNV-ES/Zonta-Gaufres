@@ -20,4 +20,12 @@ class Order extends Model
     {
         return $this->belongsTo(People::class, 'contact_id');
     }
+    public function address()
+    {
+        return $this->belongsToMany(Address::class, 'order_address');
+    }
+    public function addressType()
+    {
+        return $this->belongsToMany(AddressType::class, 'order_address');
+    }
 }
