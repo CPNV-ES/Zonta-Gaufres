@@ -4,7 +4,7 @@ import DeliveryguysCard from '@/Components/DeliveryguysCard.jsx'
 import DeliveryguysBigCard from '@/Components/DeliveryguysBigCard.jsx'
 import OrderCard from '@/Components/OrderCard'
 import DeliveryItem from '@/Components/DeliveryItem.jsx'
-import Draggarble from '@/Components/Draggarble.jsx'
+import Draggable from '@/Components/Draggable.jsx'
 
 const Deliveries = () => {
     const subject = 'Livraisons'
@@ -17,23 +17,10 @@ const Deliveries = () => {
 
     const [draggedOrder, setDraggedOrder] = useState(null)
 
-
-    const dragOver = (event) => {
-        event.preventDefault();
-        if (!event.target.classList.contains('drop-area')) return
-        event.target.classList.add("border-gray-400", "border-2");
-    }
-
-    const drop = (event) => {
-        event.target.classList.remove("border-gray-400", "border-2");
-
+    const drop = () => {
         setDeliveries([...deliveries, { order: draggedOrder, deliveryGuy: selectedDeliveryGuy }])
         setOrders(orders.filter(order => order !== draggedOrder))
         setDraggedOrder(null)
-    }
-
-    const dragStart = (order) => {
-        setDraggedOrder(order)
     }
 
     // --- Hardcoded data --- //
@@ -66,7 +53,7 @@ const Deliveries = () => {
                 </section>
                 <section className='flex flex-col flex-1 h-full gap-4 p-4 border-2 rounded-lg bg-slate-200'>
                     {selectedDeliveryGuy ? <DeliveryguysBigCard {...selectedDeliveryGuy} /> : null}
-                    <div onDrop={(event) => drop(event)} onDragOver={(event) => dragOver(event)} className='flex flex-col flex-1 gap-4 pr-2 overflow-y-auto drop-area'>
+                    <div onDrop={() => drop()} onDragOver={(event) => event.preventDefault()} className={`flex flex-col flex-1 gap-4 px-2 overflow-y-auto outline-2 outline-gray-400 drop-area ${draggedOrder? "outline" : null}`}>
 
 
                         <div className='relative flex items-center justify-center text-gray-500 border-gray-300 pointer-events-none border-b-1'>
@@ -86,10 +73,10 @@ const Deliveries = () => {
 
                         {orders.map((order, index) => {
                             return (
-                                <Draggarble key={index} onDragStart={() => dragStart(order)}> {/* TODO, send the ID of the object to manage it from the controller */}
+                                <Draggable key={index} onDragStart={() => setDraggedOrder(order)} onDragEnd={()=> setDraggedOrder(null)}> {/* TODO, send the ID of the object to manage it from the controller */}
                                     <OrderCard {...order}>
                                     </OrderCard>
-                                </Draggarble>
+                                </Draggable>
                             )
                         })}
 
