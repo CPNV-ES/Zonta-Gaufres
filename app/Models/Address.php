@@ -15,4 +15,8 @@ class Address extends Model
     {
         return $this->belongsToMany(Order::class, 'order_address');
     }
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
 }
