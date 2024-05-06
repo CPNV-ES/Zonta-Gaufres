@@ -28,4 +28,8 @@ class Order extends Model
     {
         return $this->belongsToMany(AddressType::class, 'order_address');
     }
+    public function deliverSchedule()
+    {
+        return $this->belongsTo(DeliverSchedule::class);
+    }
 }
