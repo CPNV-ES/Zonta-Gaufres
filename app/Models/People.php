@@ -21,4 +21,8 @@ class People extends Model
     {
         return $this->hasMany(Order::class, 'contact_id');
     }
+    public function billingInformation()
+    {
+        return $this->hasMany(BillingInformation::class);
+    }
 }
