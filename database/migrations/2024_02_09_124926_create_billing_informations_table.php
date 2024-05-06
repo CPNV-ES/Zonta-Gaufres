@@ -10,6 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
+        //TODO: rename the table (remove "s") to match plurial
         Schema::create('billing_informations', function (Blueprint $table) {
             $table->id();
             $table->string('IBAN');
