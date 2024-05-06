@@ -11,6 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         //TODO: rename the table (remove "s") to match plurial
+        //TODO: rename all the fk that are in plural and without _id
         Schema::create('billing_informations', function (Blueprint $table) {
             $table->id();
             $table->string('IBAN');

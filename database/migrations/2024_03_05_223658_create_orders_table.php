@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->enum('payment', ['Livraison', 'Facture', 'En amont']);
             $table->string('gifted_by')->nullable();
             $table->string('deliver_at')->nullable();
-            $table->foreignId('deliver_schedule')->nullable()->constrained();
+            $table->foreignId('deliver_schedules_id')->nullable()->constrained();
             $table->foreignId('contact_id')->constrained('people');
             $table->foreignId('buyer_id')->constrained('people');
             $table->timestamps();
