@@ -25,4 +25,8 @@ class People extends Model
     {
         return $this->hasMany(BillingInformation::class);
     }
+    public function deliverSchedule()
+    {
+        return $this->hasMany(DeliverSchedule::class, 'person_id');
+    }
 }
