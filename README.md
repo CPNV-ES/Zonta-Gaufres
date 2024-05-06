@@ -52,6 +52,7 @@
 [![Docker][Docker.com]][Docker-url]
 [![npm][npm]][npm-url]
 [![composer][composer]][composer-url]
+[![php][php]][php-url]
 
 ### Installation
 
@@ -109,44 +110,61 @@ docker compose up -d
 Now that you are in the container, you can run the following command to install all the dependencies at once.
 
 ```sh
+# If it's the first time you're installing dependencies run:
+npm i
+# Then:
 npm run dep
 ```
+
+> It's due to a package used in the script "dep" which runs all dependencies install concurrently in the same terminal. You can still do each step manually.
 
 #### Run the servers
 
 There are two servers that must be started. One which serves the frontend and one which serves the backend.
 
 ```sh
+npm run dev-all
+# or
 npm run dev
 php artisan serve
-# or
-npm run dev-all
 ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- TODO -->
-
-## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+> Same as before the `dev-all` script is a custom script that will run both servers concurrently in the same terminal. You can still do each step manually.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Contributing
+## Collaborate
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+### Convention
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
+#### Commit
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+The project uses [Conventional Commits][Commit-url]. The keywords used are: `feat`, `fix`, `chore`, `refactor`, `test`, `docs`. The commits are named with the following pattern: `type: description` eg.(feat: add awsome feature).
+
+#### Workflow
+
+The project uses [Gitflow][GitFlow-url]. The branches used are: `main`, `develop`, `feature`, `release`, `hotfix`. The branches are named with the following pattern: `type/short-description` eg.(feature/awsome-feature).
+
+#### file naming
+
+The project uses the following file naming convention.
+
+| Type                | Naming convention | Example           |
+| ------------------- | ----------------- | ----------------- |
+| Class               | PascalCase        | `LoginPage`       |
+| JS                  | camelCase         | `loginPage.js`    |
+| JSX Component       | PascalCase        | `Button.jsx`      |
+| Shadcn/ui Component | camleCase         | `button.jsx`      |
+| CSS                 | kebab-case        | `main.css`        |
+| HTML                | kebab-case        | `login-page.html` |
+
+### Versioning
+
+The project uses [SemVer][SemVer-url]. The versioning is done with the following pattern: `major.minor.patch` eg.(1.0.0).
+
+### Development server
+
+The project uses [Vite][Vite-url] as a development server.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -158,12 +176,12 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Contact
 
-|Developer       |Email                        |
-|----------------|-----------------------------|
-|Noé Zwissig     |<noe.zwissig@eduvaud.ch>     |
-|Cyprien Jaquier |<cyprien.jaquier@eduvaud.ch> |
-|Noah Delgado    |<noah.delgado@eduvaud.ch>    |
-|Benjamin Fontana|<benjamin.fontana@eduvaud.ch>|
+| Developer        | Email                         |
+| ---------------- | ----------------------------- |
+| Noé Zwissig      | <noe.zwissig@eduvaud.ch>      |
+| Cyprien Jaquier  | <cyprien.jaquier@eduvaud.ch>  |
+| Noah Delgado     | <noah.delgado@eduvaud.ch>     |
+| Benjamin Fontana | <benjamin.fontana@eduvaud.ch> |
 
 Project Link: [https://github.com/CPNV-ES/Zonta-Gaufres](https://github.com/CPNV-ES/Zonta-Gaufres)
 
@@ -177,7 +195,7 @@ Project Link: [https://github.com/CPNV-ES/Zonta-Gaufres](https://github.com/CPNV
 [license-url]: https://github.com/CPNV-ES/Zonta-Gaufres/blob/master/LICENSE.txt
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=react
 [React-url]: https://reactjs.org/
-[Laravel.com]: https://img.shields.io/badge/Laravel-20232A?style=for-the-badge&logo=laravel&logoColor=laravel
+[Laravel.com]: https://img.shields.io/badge/Laravel%2010-20232A?style=for-the-badge&logo=laravel&logoColor=laravel
 [Laravel-url]: https://laravel.com
 [ShadCn.com]: https://img.shields.io/badge/shadcn/ui-20232A?style=for-the-badge&logo=shadcnui&logoColor=shadcnui
 [ShadCn-url]: https://shadcn.com
@@ -187,3 +205,9 @@ Project Link: [https://github.com/CPNV-ES/Zonta-Gaufres](https://github.com/CPNV
 [npm-url]: https://www.npmjs.com/
 [composer]: https://img.shields.io/badge/composer-20232A?style=for-the-badge&logo=composer&logoColor=composer
 [composer-url]: https://getcomposer.org/
+[Vite-url]: https://vitejs.dev/
+[GitFlow-url]: https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
+[SemVer-url]: https://semver.org/
+[Commit-url]: https://www.conventionalcommits.org/
+[php]: https://img.shields.io/badge/php%208.2-20232A?style=for-the-badge&logo=php&logoColor=php
+[php-url]: https://www.php.net/
