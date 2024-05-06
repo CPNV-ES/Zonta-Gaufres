@@ -6,13 +6,16 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/Components/ui/dialog"
 
 
-const Dialog = ({ children, dialogTrigger, title, description, buttonLabel }) => {
+const Dialog = ({ children, title, description, buttonLabel }) => {
   return (
     <D>
-      {dialogTrigger}
+      <DialogTrigger asChild>
+        <Button variant="outline">{buttonLabel}</Button>
+      </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
