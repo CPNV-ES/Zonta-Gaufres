@@ -1,3 +1,4 @@
+import React, { useState } from "react"
 import { Button } from "@/Components/ui/button"
 import {
   Dialog as D,
@@ -10,12 +11,17 @@ import {
 } from "@/Components/ui/dialog"
 
 
-const Dialog = ({ children, title, description, buttonLabel }) => {
+const Dialog = ({ children, title, description, buttonLabel, triggerLabel, open = false }) => {
+
+  const [isOpen, setIsOpen] = useState(open)
+
   return (
-    <D>
-      <DialogTrigger asChild>
-        <Button variant="outline">{buttonLabel}</Button>
-      </DialogTrigger>
+    <D open={isOpen} onOpenChange={setIsOpen}>
+      {triggerLabel ?
+        <DialogTrigger asChild>
+          <Button variant="outline">{triggerLabel}</Button>
+        </DialogTrigger>
+        : null}
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
