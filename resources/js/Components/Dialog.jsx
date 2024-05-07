@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { Button } from "@/Components/ui/button"
 import {
   Dialog as D,
@@ -11,9 +11,7 @@ import {
 } from "@/Components/ui/dialog"
 
 
-const Dialog = ({ children, title, description, buttonLabel, triggerLabel, open = false }) => {
-
-  const [isOpen, setIsOpen] = useState(open)
+const Dialog = ({ children, title, description, buttonLabel, triggerLabel, setIsOpen, isOpen = false }) => {
 
   return (
     <D open={isOpen} onOpenChange={setIsOpen}>
