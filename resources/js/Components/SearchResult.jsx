@@ -1,4 +1,4 @@
-const SearchResult = ({type, items}) => {
+const SearchResult = ({itemType, itemList}) => {
     const types = {
         "Facture": {
             title: "Facture",
@@ -21,14 +21,14 @@ const SearchResult = ({type, items}) => {
     return (
         <>
             <div className="text-red-900 m-2">
-                <span>{types[type]?.title}</span>
+                <span>{types[itemType]?.title}</span>
             </div>
             <div>
-                {items.map((item, index) => (
+                {itemList.map((item, index) => (
                     <div key={index}
                          className="flex items-center p-2 border-b rounded bg-gray-100 m-2 border-gray-200 hover:bg-gray-200 cursor-pointer">
                         <div className="flex items-center justify-center w-25 h-25">
-                            <span className={`icon-${types[type]?.icon} text-xl`}></span>
+                            <span className={`icon-${types[itemType]?.icon} text-xl`}></span>
                         </div>
                         <div className="ml-2 flex flex-row truncate">
                             <div>{item.content.join(' - ')}</div>
