@@ -7,16 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class DeliverSchedule extends Model
 {
-    public function people()
+    public function person()
     {
-        return $this->belongsTo(People::class);
+        return $this->belongsTo(Person::class);
     }
     public function city()
     {
-        return $this->belongsToMany(City::class, 'deliver_schedule_cities', 'deliver_schedules_id', 'city_id');
+        return $this->belongsToMany(City::class, 'deliver_schedule_city');
     }
     public function order()
     {
-        return $this->hasMany(Order::class, 'deliver_schedule');
+        return $this->hasMany(Order::class);
     }
 }
