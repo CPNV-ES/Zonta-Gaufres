@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Models\Order;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -27,18 +26,17 @@ final class OrderFactory extends Factory
     */
     public function definition(): array
     {
-        $faker = fake();
         return [
-            'date' => $faker->date,
-            'start_delivery_time' => $faker->time,
-            'end_delivery_time' => $faker->time,
-            'gifted_by' => $faker->optional->firstName,
-            'deliver_at' => $faker->optional->time,
-            'contact_id' => \App\Models\People::factory(),
-            'buyer_id' => \App\Models\People::factory(),
-            // ! Payment type id is not a foreign key
-            'payment_type_id' => $faker->randomNumber(1, true),
-            'deliver_schedules_id' => \App\Models\DeliverSchedule::factory(),
+            'date' => fake()->date(),
+            'start_delivery_time' => fake()->time(),
+            'end_delivery_time' => fake()->time(),
+            'real_delivery_time' => fake()->optional()->time(),
+            'remark' => fake()->optional()->sentence(),
+            'gifted_by' => fake()->optional()->firstName(),
+            'deliver_schedule_id' => \App\Models\DeliverSchedule::factory(),
+            'contact_id' => \App\Models\Person::factory(),
+            'buyer_id' => \App\Models\Person::factory(),
+            'payment_type_id' => fake()->randomNumber(),
         ];
     }
 }

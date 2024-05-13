@@ -26,10 +26,9 @@ final class CityFactory extends Factory
     */
     public function definition(): array
     {
-        $faker = fake();
         return [
-            'name' => $faker->unique->city,
-            'zip_code' => $faker->unique->randomNumber(4, true),
+            'name' => fake()->unique->city(),
+            'zip_code' => fake()->unique->postcode(),
         ];
     }
 }

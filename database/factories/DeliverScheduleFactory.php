@@ -26,11 +26,10 @@ final class DeliverScheduleFactory extends Factory
     */
     public function definition(): array
     {
-        $faker = fake();
         return [
-            'start_delivery_time_window' => $faker->time,
-            'end_delivery_time_window' => $faker->time,
-            'people_id' => \App\Models\People::factory(),
+            'start_delivery_time_window' => fake()->time(),
+            'end_delivery_time_window' => fake()->time(),
+            'person_id' => \App\Models\Person::factory(),
         ];
     }
 }

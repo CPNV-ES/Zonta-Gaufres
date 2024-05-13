@@ -26,13 +26,12 @@ final class AddressFactory extends Factory
     */
     public function definition(): array
     {
-        $faker = fake();
         return [
-            'street' => $faker->streetName,
-            'street_number' => $faker->buildingNumber,
+            'street' => fake()->streetName(),
+            'street_number' => fake()->buildingNumber(),
             'country' => "Suisse",
-            'region' => $faker->cantonName,
-            'complement' => $faker->optional->word,
+            'region' => fake()->cantonName(),
+            'complement' => fake()->optional()->word(),
             'city_id' => \App\Models\City::factory(),
         ];
     }

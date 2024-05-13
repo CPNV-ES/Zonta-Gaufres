@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Models\PeopleType;
+use App\Models\PersonType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<\App\Models\PeopleType>
+ * @extends Factory<\App\Models\PersonType>
  */
-final class PeopleTypeFactory extends Factory
+final class PersonTypeFactory extends Factory
 {
     /**
     * The name of the factory's corresponding model.
     *
     * @var string
     */
-    protected $model = PeopleType::class;
+    protected $model = PersonType::class;
 
     private static $counter = 0;
 
@@ -28,9 +28,9 @@ final class PeopleTypeFactory extends Factory
     */
     public function definition(): array
     {
-        $peopleTypeArray = ["Staff", "DeliveryGuy", "Admin"];
+        $personTypeArray = ["Staff", "DeliveryGuy", "Admin"];
         return [
-            'name' => $peopleTypeArray[self::$counter++],
+            'name' => $personTypeArray[self::$counter++],
         ];
     }
 }

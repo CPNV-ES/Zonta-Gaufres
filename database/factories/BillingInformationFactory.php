@@ -27,8 +27,8 @@ final class BillingInformationFactory extends Factory
     public function definition(): array
     {
         return [
-            'IBAN' => fake()->bankAccountNumber,
-            'people_id' => \App\Models\People::factory(),
+            'IBAN' => fake()->bankAccountNumber(),
+            'person_id' => \App\Models\Person::factory(),
         ];
     }
 }

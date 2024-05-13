@@ -26,7 +26,6 @@ final class ArticleFactory extends Factory
     */
     public function definition(): array
     {
-        $faker = fake();
         return [
             'name' => "Gaufre",
             'price' => 2,
