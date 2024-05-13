@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->time('start_delivery_time');
             $table->time('end_delivery_time');
             $table->time('real_delivery_time')->nullable();
+            $table->string('remarks')->nullable();
             $table->enum('payment', ['Livraison', 'Facture', 'En amont']);
             $table->string('gifted_by')->nullable();
             $table->foreignId('deliver_schedule_id')->nullable()->constrained();
