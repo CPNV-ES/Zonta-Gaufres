@@ -30,7 +30,7 @@ final class PersonFactory extends Factory
             'firstname' => fake()->firstName,
             'lastname' => fake()->lastName,
             'email' => fake()->optional()->safeEmail,
-            'entreprise' => fake()->optional()->company,
+            'company' => fake()->optional()->company,
             'phone_number' => fake()->mobileNumber,
         ];
     }

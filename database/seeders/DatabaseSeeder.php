@@ -9,7 +9,7 @@ use App\Models\AddressType;
 use App\Models\Article;
 use App\Models\BillingInformation;
 use App\Models\City;
-use App\Models\DeliverSchedule;
+use App\Models\DeliverySchedule;
 use App\Models\Order;
 use App\Models\Person;
 use App\Models\PersonType;
@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         Address::factory(10)->create();
         Article::factory(1)->create();
         BillingInformation::factory(1)->create();
-        DeliverSchedule::factory(20)->create();
+        DeliverySchedule::factory(20)->create();
         PersonType::factory(3)->create();
         Person::factory(100)->create();
         Order::factory(100)->create();

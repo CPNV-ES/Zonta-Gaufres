@@ -33,10 +33,10 @@ final class OrderFactory extends Factory
             'real_delivery_time' => fake()->optional()->time(),
             'remark' => fake()->optional()->sentence(),
             'gifted_by' => fake()->optional()->firstName(),
-            'deliver_schedule_id' => \App\Models\DeliverSchedule::factory(),
+            'delivery_schedule_id' => \App\Models\DeliverySchedule::factory(),
             'contact_id' => \App\Models\Person::factory(),
             'buyer_id' => \App\Models\Person::factory(),
-            'payment_type_id' => fake()->randomNumber(),
+            'payment_type_id' => fake()->numberBetween(1, 3),
         ];
     }
 }

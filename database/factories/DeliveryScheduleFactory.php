@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Models\DeliverSchedule;
+use App\Models\DeliverySchedule;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends Factory<\App\Models\DeliverSchedule>
  */
-final class DeliverScheduleFactory extends Factory
+final class DeliveryScheduleFactory extends Factory
 {
     /**
     * The name of the factory's corresponding model.
     *
     * @var string
     */
-    protected $model = DeliverSchedule::class;
+    protected $model = DeliverySchedule::class;
 
     /**
     * Define the model's default state.
