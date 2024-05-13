@@ -11,8 +11,8 @@ use App\Models\BillingInformation;
 use App\Models\City;
 use App\Models\DeliverSchedule;
 use App\Models\Order;
-use App\Models\People;
-use App\Models\PeopleType;
+use App\Models\Person;
+use App\Models\PersonType;
 
 class DatabaseSeeder extends Seeder
 {
@@ -27,8 +27,8 @@ class DatabaseSeeder extends Seeder
         Article::factory(1)->create();
         BillingInformation::factory(1)->create();
         DeliverSchedule::factory(20)->create();
-        PeopleType::factory(3)->create();
-        People::factory(100)->create();
+        PersonType::factory(3)->create();
+        Person::factory(100)->create();
         Order::factory(100)->create();
     }
 }
