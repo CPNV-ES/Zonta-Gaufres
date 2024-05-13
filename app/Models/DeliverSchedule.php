@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DeliverSchedule extends Model
 {
+    use HasFactory;
     public function people()
     {
         return $this->belongsTo(People::class);

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class People extends Model
 {
-
+    use HasFactory;
     public function peopleType(): BelongsToMany
     {
         return $this->belongsToMany(PeopleType::class);

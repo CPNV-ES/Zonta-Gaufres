@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AddressType extends Model
 {
+    use HasFactory;
     public function addresses()
     {
         return $this->belongsToMany(Address::class, 'order_address');
