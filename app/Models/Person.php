@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class People extends Model
+class Person extends Model
 {
 
-    public function peopleType(): BelongsToMany
+    public function personType(): BelongsToMany
     {
-        return $this->belongsToMany(PeopleType::class);
+        return $this->belongsToMany(PersonType::class);
     }
     public function orders()
     {
