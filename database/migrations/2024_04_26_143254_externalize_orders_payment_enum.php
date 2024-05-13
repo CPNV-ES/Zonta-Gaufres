@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payment_type', function (Blueprint $table) {
+        Schema::create('payment_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
         });
@@ -32,6 +32,6 @@ return new class extends Migration
             $table->dropColumn('payment_type_id');
         });
 
-        Schema::dropIfExists('payment_type');
+        Schema::dropIfExists('payment_types');
     }
 };
