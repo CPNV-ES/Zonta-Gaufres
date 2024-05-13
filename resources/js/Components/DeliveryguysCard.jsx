@@ -26,7 +26,7 @@ const DeliveryguysCard = ({
                             );
                         })}
                     </div>
-                    <h1 className="mt-2 ml-3 text-2xl truncate">{name} {surname}</h1>
+                    <h1 className="mt-2 ml-3 text-2xl truncate" title={`${name} ${surname}`}>{name} {surname}</h1>
                 </div>
                 <div className="flex justify-between m-3 mb-2">
                     <div className="flex gap-2 max-w-40">

@@ -15,10 +15,11 @@ return new class extends Migration {
             $table->date('date');
             $table->time('start_delivery_time');
             $table->time('end_delivery_time');
+            $table->time('real_delivery_time')->nullable();
             $table->enum('payment', ['Livraison', 'Facture', 'En amont']);
             $table->string('gifted_by')->nullable();
             $table->string('deliver_at')->nullable();
-            $table->foreignId('deliver_schedule_city')->constrained();
+            $table->foreignId('deliver_schedules_id')->nullable()->constrained();
             $table->foreignId('contact_id')->constrained('people');
             $table->foreignId('buyer_id')->constrained('people');
             $table->timestamps();

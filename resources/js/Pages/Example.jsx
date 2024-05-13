@@ -31,6 +31,7 @@ const Example = () => {
                                  timetable={[{available: true}, {available: false}, {available: true}, {available: false}, {available: false}, {available: true}, {available: true}, {available: false}, {available: true}, {available: false}, {available: true}, {available: true}]}/>
         </MainLayout>
     )
+
 }
 
 export default Example

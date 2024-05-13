@@ -7,10 +7,10 @@ const Navbar = ({ color, subject }) => {
     const [maxNavWidth, setMaxNavWidth] = useState(40)
 
     const NavIcons = [
-        { name: "Commandes", icon: "[material-symbols--article-outline]", color: 'green' },
-        { name: "Livraisons", icon: "[mdi--truck-outline]", color: 'blue' },
-        { name: "Personnel", icon: "[ic--outline-people]", color: 'yellow' },
-        { name: "Factures", icon: "[gravity-ui--file-dollar]", color: 'red' },
+        { name: "Commandes", icon: "[material-symbols--article-outline]", color: 'green', destination: '/orders'},
+        { name: "Livraisons", icon: "[mdi--truck-outline]", color: 'blue', destination: '/deliveries' },
+        { name: "Personnel", icon: "[ic--outline-people]", color: 'yellow', destination: '/people' },
+        { name: "Factures", icon: "[gravity-ui--file-dollar]", color: 'red', destination: '/invoices'},
     ]
 
     useEffect(() => {
@@ -33,12 +33,13 @@ const Navbar = ({ color, subject }) => {
             </button>
 
             <div className='flex flex-col items-start justify-start gap-6 overflow-hidden transition-all duration-700 ease-in-out' style={{ maxWidth: `${maxNavWidth}px` }}>
+
                 <img className='w-10' src="/images/zonta.png" alt="Zonta"></img>
                 <NavIcon name="Recherche" icon="[material-symbols--search-rounded]" />
                 <hr className='w-full rotate-[2] border border-gray-400'></hr>
 
                 {NavIcons.map((icon, index) => {
-                    return <NavIcon key={index} {...icon} selected={icon.name === subject} />
+                    return <NavIcon key={index} {...icon} selected={icon.name === subject} destination={icon.destination} />
                 })}
 
             </div>

@@ -16,18 +16,27 @@ use Inertia\Inertia;
 |
 */
 
+// ! refactor to use controllers once implemented
 Route::get('/', function () {
-    return Inertia::render('Example', [
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    return Inertia::render('Orders');
+});
+
+Route::get('/orders', function () {
+    return Inertia::render('Orders');
+});
+
+Route::get('/deliveries', function () {
+    return Inertia::render('Deliveries');
 });
 
 Route::get('/deliveries/edit', function () {
-    return Inertia::render('Deliveries', [
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    return Inertia::render('DeliveriesEdit');
 });
 
-require __DIR__.'/auth.php';
+Route::get('/people', function () {
+    return Inertia::render('People');
+});
+
+Route::get('/invoices', function () {
+    return Inertia::render('Invoices');
+});
