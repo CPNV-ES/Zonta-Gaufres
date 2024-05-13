@@ -32,6 +32,6 @@ class Order extends Model
     }
     public function deliverSchedule()
     {
-        return $this->belongsTo(DeliverSchedule::class);
+        return $this->belongsTo(DeliverySchedule::class);
     }
 }

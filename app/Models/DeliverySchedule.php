@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DeliverSchedule extends Model
+class DeliverySchedule extends Model
 {
     use HasFactory;
     public function person()
