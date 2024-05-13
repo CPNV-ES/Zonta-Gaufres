@@ -16,11 +16,11 @@ class Order extends Model
 
     public function buyer()
     {
-        return $this->belongsTo(People::class, 'buyer_id');
+        return $this->belongsTo(Person::class, 'buyer_id');
     }
     public function contact()
     {
-        return $this->belongsTo(People::class, 'contact_id');
+        return $this->belongsTo(Person::class, 'contact_id');
     }
     public function address()
     {
@@ -32,6 +32,6 @@ class Order extends Model
     }
     public function deliverSchedule()
     {
-        return $this->belongsTo(DeliverSchedule::class, 'deliver_schedule');
+        return $this->belongsTo(DeliverSchedule::class);
     }
 }

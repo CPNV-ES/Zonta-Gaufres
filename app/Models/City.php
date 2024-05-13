@@ -14,7 +14,7 @@ class City extends Model
     }
     public function deliverSchedule()
     {
-        return $this->belongsToMany(DeliverSchedule::class, 'deliver_schedule_cities', 'deliver_schedules_id', 'city_id');
+        return $this->belongsToMany(DeliverSchedule::class);
     }
 
 }

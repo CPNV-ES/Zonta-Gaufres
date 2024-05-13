@@ -15,8 +15,7 @@ return new class extends Migration {
             $table->id();
             $table->time('start_delivery_time_window');
             $table->time('end_delivery_time_window');
-            //TODO: Rename the FK to people_id
-            $table->foreignId('people_id')->constrained();
+            $table->foreignId('person_id')->constrained();
             $table->timestamps();
         });
     }

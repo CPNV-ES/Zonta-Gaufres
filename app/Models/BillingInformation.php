@@ -9,10 +9,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class BillingInformation extends Model
 {
     use HasFactory;
-    //TODO: remove after the BillingInfromations table is rename in migration
     protected $table = 'billing_informations';
-    public function people(): BelongsTo
+    public function person(): BelongsTo
     {
-        return $this->belongsTo(People::class);
+        return $this->belongsTo(Person::class);
     }
 }
