@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DeliverySchedule extends Model
+class DeliveryGuySchedule extends Model
 {
     use HasFactory;
     public function person()
@@ -14,7 +14,7 @@ class DeliverySchedule extends Model
     }
     public function city()
     {
-        return $this->belongsToMany(City::class, 'delivery_schedule_city');
+        return $this->belongsToMany(City::class, 'delivery_guy_schedule_city');
     }
     public function order()
     {
