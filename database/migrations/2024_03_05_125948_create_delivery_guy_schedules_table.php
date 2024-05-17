@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
 
-        Schema::create('delivery_schedules', function (Blueprint $table) {
+        Schema::create('delivery_guy_schedules', function (Blueprint $table) {
             $table->id();
             $table->time('start_delivery_time_window');
             $table->time('end_delivery_time_window');
@@ -25,6 +25,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('delivery_schedules');
+        Schema::dropIfExists('delivery_guy_schedules');
     }
 };
