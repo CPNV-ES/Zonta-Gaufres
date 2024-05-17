@@ -6,7 +6,7 @@ namespace Database\Factories;
 
 use App\Models\Order;
 use App\Models\Person;
-use App\Models\DeliverySchedule;
+use App\Models\DeliveryGuySchedule;
 use App\Models\PaymentTypes;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -36,7 +36,7 @@ final class OrderFactory extends Factory
             'real_delivery_time' => fake()->optional()->time(),
             'remark' => fake()->optional()->sentence(),
             'gifted_by' => fake()->optional()->firstName(),
-            'delivery_schedule_id' => DeliverySchedule::all()->random()->id,
+            'delivery_guy_schedule_id' => DeliveryGuySchedule::all()->random()->id,
             'contact_id' => Person::all()->random()->id,
             'buyer_id' => Person::all()->random()->id,
             'payment_type_id' => PaymentTypes::all()->random()->id,
