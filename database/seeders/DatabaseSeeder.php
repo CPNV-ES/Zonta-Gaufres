@@ -11,6 +11,7 @@ use App\Models\BillingInformation;
 use App\Models\City;
 use App\Models\DeliverySchedule;
 use App\Models\Order;
+use App\Models\PaymentTypes;
 use App\Models\Person;
 use App\Models\PersonType;
 
@@ -28,7 +29,22 @@ class DatabaseSeeder extends Seeder
         BillingInformation::factory(1)->create();
         DeliverySchedule::factory(20)->create();
         PersonType::factory(3)->create();
+        PaymentTypes::factory(3)->create();
         Person::factory(100)->create();
         Order::factory(100)->create();
+        
+        foreach (DeliverySchedule::all() as $deliverySchedule) {
+            $deliverySchedule->city()->attach(City::all()->random());
+        }
+
+        foreach (Order::all() as $order) {
+            $order->address()->attach(Address::all()->random(), ['address_type_id' => AddressType::all()->random()->id]);
+            $order->articles()->attach(Article::all()->random(), ['quantity' => rand(1, 20)]);
+        }
+
+        foreach (Person::all() as $person) {
+            $person->personType()->attach(PersonType::all()->random());
+        }
+
     }
 }
