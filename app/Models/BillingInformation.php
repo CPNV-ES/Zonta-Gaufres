@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BillingInformation extends Model
 {
+    use HasFactory;
     protected $table = 'billing_informations';
     public function person(): BelongsTo
     {
