@@ -25,8 +25,8 @@ class Person extends Model
     {
         return $this->hasMany(BillingInformation::class);
     }
-    public function deliverSchedule()
+    public function deliveryGuySchedule()
     {
-        return $this->hasMany(DeliverSchedule::class, 'person_id');
+        return $this->hasMany(DeliveryGuySchedule::class, 'person_id');
     }
 }
