@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Article extends Model
 {
+    use HasFactory;
     public function orders(): BelongsToMany
     {
         return $this->belongsToMany(Order::class, 'order_article')->withPivot('quantity');
