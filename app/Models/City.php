@@ -11,9 +11,9 @@ class City extends Model
     {
         return $this->hasMany(Address::class);
     }
-    public function deliverSchedule()
+    public function deliveryGuySchedule()
     {
-        return $this->belongsToMany(DeliverSchedule::class);
+        return $this->belongsToMany(DeliveryGuySchedule::class);
     }
 
 }
