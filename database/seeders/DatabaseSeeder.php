@@ -9,7 +9,7 @@ use App\Models\AddressType;
 use App\Models\Article;
 use App\Models\BillingInformation;
 use App\Models\City;
-use App\Models\DeliverySchedule;
+use App\Models\DeliveryGuySchedule;
 use App\Models\Order;
 use App\Models\PaymentTypes;
 use App\Models\Person;
@@ -27,13 +27,13 @@ class DatabaseSeeder extends Seeder
         Address::factory(10)->create();
         Article::factory(1)->create();
         BillingInformation::factory(1)->create();
-        DeliverySchedule::factory(20)->create();
+        DeliveryGuySchedule::factory(20)->create();
         PersonType::factory(3)->create();
         PaymentTypes::factory(3)->create();
         Person::factory(100)->create();
         Order::factory(100)->create();
         
-        foreach (DeliverySchedule::all() as $deliverySchedule) {
+        foreach (DeliveryGuySchedule::all() as $deliverySchedule) {
             $deliverySchedule->city()->attach(City::all()->random());
         }
 
