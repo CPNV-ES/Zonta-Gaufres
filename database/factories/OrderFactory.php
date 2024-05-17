@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use App\Models\Order;
+use App\Models\Person;
+use App\Models\DeliverySchedule;
+use App\Models\PaymentTypes;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -33,10 +36,10 @@ final class OrderFactory extends Factory
             'real_delivery_time' => fake()->optional()->time(),
             'remark' => fake()->optional()->sentence(),
             'gifted_by' => fake()->optional()->firstName(),
-            'delivery_schedule_id' => \App\Models\DeliverySchedule::factory(),
-            'contact_id' => \App\Models\Person::factory(),
-            'buyer_id' => \App\Models\Person::factory(),
-            'payment_type_id' => fake()->numberBetween(1, 3),
+            'delivery_schedule_id' => DeliverySchedule::all()->random()->id,
+            'contact_id' => Person::all()->random()->id,
+            'buyer_id' => Person::all()->random()->id,
+            'payment_type_id' => PaymentTypes::all()->random()->id,
         ];
     }
 }
