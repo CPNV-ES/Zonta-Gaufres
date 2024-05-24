@@ -26,6 +26,7 @@ const Deliveries = () => {
     }
 
     const linkOrderToPerson = () => {
+        setIsDialogOpened(false)
         // TODO 
         // send draggedOrder and selectedDeliveryGuy to the controller
         // wait the 200 status
@@ -37,18 +38,18 @@ const Deliveries = () => {
 
     // --- Hardcoded data --- //
 
-    // useEffect(() => {
-    //     const TESTORDER = { id:1, address: { streetNumber: '19', city: 'Yvonand', postalCode: '1462', street: 'Priales' }, orders: '30', deliveryGuy: 'Jean Paul', EndDelivery: '14:00', startDelivery: '09:00', enterprise: 'Vaudoise' }
-    //     const TESTORDER2 = { id:2, address: { streetNumber: '19', city: 'Yvonand', postalCode: '1462', street: 'Priales' }, orders: '30', deliveryGuy: 'Jean Paul', EndDelivery: '14:00', startDelivery: '09:00', enterprise: 'Vaudoise' }
-    //     const TESTDELIVERY = {order:{ id:1, address: { streetNumber: '19', city: 'Yvonand', postalCode: '1462', street: 'Priales' }, orders: '30', deliveryGuy: 'Jean Paul', EndDelivery: '14:00', startDelivery: '09:00', enterprise: 'Vaudoise', deliveryHour: '12:00' }, deliveryGuy: selectedDeliveryGuy}
-    //     const TESTGUY = { id:1, name: 'Jean', surname: 'Paul', city: 'Yvonand', orders: 30, trips: 5, timetable: Array.from({ length: 12 }, () => ({ available: true })) }
+    useEffect(() => {
+        const TESTORDER = { id:1, address: { streetNumber: '19', city: 'Yvonand', postalCode: '1462', street: 'Priales' }, orders: '30', deliveryGuy: 'Jean Paul', EndDelivery: '14:00', startDelivery: '09:00', enterprise: 'Vaudoise' }
+        const TESTORDER2 = { id:2, address: { streetNumber: '19', city: 'Yvonand', postalCode: '1462', street: 'Priales' }, orders: '30', deliveryGuy: 'Jean Paul', EndDelivery: '14:00', startDelivery: '09:00', enterprise: 'Vaudoise' }
+        const TESTDELIVERY = {order:{ id:1, address: { streetNumber: '19', city: 'Yvonand', postalCode: '1462', street: 'Priales' }, orders: '30', deliveryGuy: 'Jean Paul', EndDelivery: '14:00', startDelivery: '09:00', enterprise: 'Vaudoise', deliveryHour: '12:00' }, deliveryGuy: selectedDeliveryGuy}
+        const TESTGUY = { id:1, name: 'Jean', surname: 'Paul', city: 'Yvonand', orders: 30, trips: 5, timetable: Array.from({ length: 12 }, () => ({ available: true })) }
 
-    //     setSelectedDeliveryGuy(TESTGUY)
-    //     setOrders([TESTORDER, TESTORDER2])
-    //     setDeliveryGuys([TESTGUY])
-    //     setDeliveries([TESTDELIVERY])
-    //     }
-    //     , [])
+        setSelectedDeliveryGuy(TESTGUY)
+        setOrders([TESTORDER, TESTORDER2])
+        setDeliveryGuys([TESTGUY])
+        setDeliveries([TESTDELIVERY])
+        }
+        , [])
 
     return (
         <MainLayout color={color} subject={subject}>
@@ -61,7 +62,7 @@ const Deliveries = () => {
                 setIsOpen={setIsDialogOpened}
                 isOpen={isDialogOpened}
                 >
-                <TimePicker></TimePicker>
+                <TimePicker onValidate={() => linkOrderToPerson()}></TimePicker>
             </Dialog>
             <div className='flex h-full gap-4 p-4'>
                 <section className='flex flex-col flex-1 h-full gap-4 p-4 border-2 rounded-lg bg-slate-200'>
