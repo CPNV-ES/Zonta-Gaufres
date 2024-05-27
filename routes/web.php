@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DeliveryController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -25,13 +26,9 @@ Route::get('/orders', function () {
     return Inertia::render('Orders');
 });
 
-Route::get('/deliveries', function () {
-    return Inertia::render('Deliveries');
-});
-
-Route::get('/deliveries/edit', function () {
-    return Inertia::render('DeliveriesEdit');
-});
+Route::resources([
+'deliveries' => DeliveryController::class,
+]);
 
 Route::get('/people', function () {
     return Inertia::render('People');
