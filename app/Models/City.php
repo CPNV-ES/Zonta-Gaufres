@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class City extends Model
 {
+    use HasFactory;
     public function address()
     {
         return $this->hasMany(Address::class);
     }
-    public function deliverSchedule()
+    public function deliveryGuySchedule()
     {
-        return $this->belongsToMany(DeliverSchedule::class, 'deliver_schedule_cities', 'deliver_schedules_id', 'city_id');
+        return $this->belongsToMany(DeliveryGuySchedule::class);
     }
 
 }

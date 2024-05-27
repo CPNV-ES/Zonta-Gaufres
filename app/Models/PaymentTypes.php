@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-
-class Article extends Model
+class PaymentTypes extends Model
 {
+    public $timestamps = false;
     use HasFactory;
-    public function orders(): BelongsToMany
+    public function Order(): BelongsToMany
     {
-        return $this->belongsToMany(Order::class, 'order_article')->withPivot('quantity');
+        return $this->belongsToMany(Order::class);
     }
 }

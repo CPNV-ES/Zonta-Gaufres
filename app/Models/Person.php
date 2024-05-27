@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class People extends Model
+class Person extends Model
 {
-
-    public function peopleType(): BelongsToMany
+    use HasFactory;
+    public function personType(): BelongsToMany
     {
-        return $this->belongsToMany(PeopleType::class);
+        return $this->belongsToMany(PersonType::class);
     }
     public function orders()
     {
@@ -25,8 +25,8 @@ class People extends Model
     {
         return $this->hasMany(BillingInformation::class);
     }
-    public function deliverSchedule()
+    public function deliveryGuySchedule()
     {
-        return $this->hasMany(DeliverSchedule::class, 'person_id');
+        return $this->hasMany(DeliveryGuySchedule::class, 'person_id');
     }
 }

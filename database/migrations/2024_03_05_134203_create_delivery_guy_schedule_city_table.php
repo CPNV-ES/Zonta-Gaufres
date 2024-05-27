@@ -10,9 +10,9 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('deliver_schedule_cities', function (Blueprint $table) {
+        Schema::create('delivery_guy_schedule_city', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('deliver_schedules_id')->constrained();
+            $table->foreignId('delivery_guy_schedule_id')->constrained();
             $table->foreignId('city_id')->constrained();
             $table->timestamps();
         });
@@ -23,6 +23,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('deliver_schedule_cities');
+        Schema::dropIfExists('delivery_guy_schedule_city');
     }
 };

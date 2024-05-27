@@ -10,13 +10,10 @@ return new class extends Migration {
      */
     public function up(): void
     {
-
-        Schema::create('deliver_schedules', function (Blueprint $table) {
+        Schema::create('person_person_type', function (Blueprint $table) {
             $table->id();
-            $table->time('start_delivery_time_window');
-            $table->time('end_delivery_time_window');
-            //TODO: Rename the FK to people_id
-            $table->foreignId('people_id')->constrained();
+            $table->foreignId('person_id')->constrained();
+            $table->foreignId('person_type_id')->constrained();
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('deliver_schedules');
+        Schema::dropIfExists('person_person_type');
     }
 };
