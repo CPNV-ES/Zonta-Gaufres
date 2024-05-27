@@ -13,22 +13,22 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 final class AddressTypeFactory extends Factory
 {
     /**
-    * The name of the factory's corresponding model.
-    *
-    * @var string
-    */
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
     protected $model = AddressType::class;
 
     private static $counter = 0;
 
     /**
-    * Define the model's default state.
-    *
-    * @return array
-    */
+     * Define the model's default state.
+     *
+     * @return array
+     */
     public function definition(): array
     {
-        $addressTypeArray = ["Home", "Work", "Other"];
+        $addressTypeArray = ["Invoice", "Delivery"];
         return [
             'name' => $addressTypeArray[self::$counter++],
         ];
