@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OrderController;
 use Inertia\Inertia;
 use App\Http\Controllers\OrderController;
 use App\Models\Order;
