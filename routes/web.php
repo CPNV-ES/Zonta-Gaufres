@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OrderController;
 use Inertia\Inertia;
 
 /*
@@ -32,3 +33,7 @@ Route::get('/people', function () {
 Route::get('/invoices', function () {
     return Inertia::render('Invoices');
 });
+Route::resources([
+    'orders' => OrderController::class,
+]);
+
