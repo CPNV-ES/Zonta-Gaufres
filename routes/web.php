@@ -26,6 +26,7 @@ Route::get('/orders', function () {
     return Inertia::render('Orders');
 });
 
+Route::get('/deliveries/edit', [DeliveryController::class, 'editAll']);
 Route::resources([
 'deliveries' => DeliveryController::class,
 ]);

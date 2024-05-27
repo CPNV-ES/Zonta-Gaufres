@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use Illuminate\Http\Request;
 
 class DeliveryController extends Controller
@@ -41,9 +42,10 @@ class DeliveryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+
+    public function editAll()
     {
-        //
+        return Inertia::render('DeliveriesEdit');
     }
 
     /**
