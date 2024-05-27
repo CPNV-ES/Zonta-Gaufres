@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\OrderController;
+use App\Models\Order;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,12 +17,11 @@ use Inertia\Inertia;
 */
 
 // ! refactor to use controllers once implemented
+
 Route::get('/', function () {
-    return Inertia::render('Orders');
+    return redirect('/orders');
 });
-Route::get('/orders', function () {
-    return Inertia::render('Orders');
-});
+
 Route::get('/deliveries', function () {
     return Inertia::render('Deliveries');
 });
@@ -32,3 +31,7 @@ Route::get('/people', function () {
 Route::get('/invoices', function () {
     return Inertia::render('Invoices');
 });
+
+Route::resources([
+    'orders' => OrderController::class,
+]);
