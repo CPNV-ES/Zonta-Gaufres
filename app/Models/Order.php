@@ -34,4 +34,8 @@ class Order extends Model
     {
         return $this->belongsTo(DeliveryGuySchedule::class);
     }
+    public function paymentType()
+    {
+        return $this->belongsTo(PaymentTypes::class);
+    }
 }
