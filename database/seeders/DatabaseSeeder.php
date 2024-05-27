@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        AddressType::factory(3)->create();
+        AddressType::factory(2)->create();
         City::factory(50)->create();
         Address::factory(10)->create();
         Article::factory(1)->create();
