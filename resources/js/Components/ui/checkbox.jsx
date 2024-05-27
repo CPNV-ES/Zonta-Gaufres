@@ -21,7 +21,7 @@ const Checkbox = React.forwardRef(({ className, ...props }, ref) => (
         <CheckboxPrimitive.Indicator
             className={cn("flex items-center justify-center text-current")}
         >
-            <Check className="w-4 h-4" />
+            <Check className="w-full h-full" />
         </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
 ));
