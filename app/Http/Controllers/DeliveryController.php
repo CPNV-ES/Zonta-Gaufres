@@ -106,6 +106,28 @@ class DeliveryController extends Controller
         return $formattedOrders;
     }
 
+    private function formatDeliveryGuys()
+    {
+        $deliveryGuys = DeliveryGuySchedule::with('person', 'city')->get();
+        $formattedDeliveryGuys = [];
+
+        foreach ($deliveryGuys as $deliveryGuy) {
+            $deliveryGuy = [
+                'id' => $deliveryGuy->id,
+                'name' => $deliveryGuy->person->firstname,
+                'surname' => $deliveryGuy->person->lastname,
+                'city' => $deliveryGuy->city[0]->name,
+                'orders' => 30,
+                'trips' => 5,
+                'timetable' => array_fill(0, 12, ['available' => true]),
+            ];
+
+            array_push($formattedDeliveryGuys, $deliveryGuy);
+        }
+
+        return $formattedDeliveryGuys;
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -120,6 +142,8 @@ class DeliveryController extends Controller
             'initDeliveries' => array_values(array_filter($this->formatOrders(), function ($order) {
                 return $order['realDelivery'] !== null;
             })),
+
+            'deliveryGuys' => $this->formatDeliveryGuys(),
         ]);
     }
 
