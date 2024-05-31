@@ -8,53 +8,55 @@ import Draggable from '@/Components/Draggable.jsx'
 import Dialog from '@/Components/Dialog.jsx'
 import TimePicker from '@/Components/TimePicker'
 
-const Deliveries = ({initOrders = []}) => {
+const Deliveries = ({initOrders = [], initDeliveries = []}) => {
 
     const subject = 'Livraisons'
     const color = 'blue'
     const [deliveryGuys, setDeliveryGuys] = useState([])
-    const [deliveries, setDeliveries] = useState([])
+    const [deliveries, setDeliveries] = useState(initDeliveries)
     const [orders, setOrders] = useState(initOrders) // orders without delivery guy
     const [isDialogOpened, setIsDialogOpened] = useState(false)
     const [isDragging, setIsDragging] = useState(false)
 
     const [selectedDeliveryGuy, setSelectedDeliveryGuy] = useState()
     const [draggedOrder, setDraggedOrder] = useState(null)
+    const [choosenTime, setChoosenTime] = useState('09:00')
 
     const drop = () => {
         setIsDialogOpened(true)
         setIsDragging(false)
     }
 
-    const linkOrderToPerson = () => {
+    const linkOrderToPerson = (time) => {
         setIsDialogOpened(false)
         // TODO 
         // send draggedOrder and selectedDeliveryGuy to the controller
         // wait the 200 status
-        setDeliveries([...deliveries, { order: draggedOrder, deliveryGuy: selectedDeliveryGuy }])
+        draggedOrder.realDelivery = time 
+        setDeliveries([...deliveries, draggedOrder])
         setOrders(orders.filter(order => order !== draggedOrder))
         
         setDraggedOrder(null)
     }
 
+    useEffect(() => {
+        // sort orders bu city
+        setOrders(orders.sort((a, b) => a.address.city.localeCompare(b.address.city)))
+    }, [orders])
+
     // --- Hardcoded data --- //
 
     useEffect(() => {
-        // const TESTORDER = { id:1, address: { street_number: '19', city: 'Yvonand', postalCode: '1462', street: 'ch des Priales' }, quantity: '30', buyer: 'Jean Paul', endDelivery: '14:00', startDelivery: '09:00', enterprise: 'Vaudoise' }
-        const TESTDELIVERY = {order:{ id:1, address: { streetNumber: '19', city: 'Yvonand', postalCode: '1462', street: 'Priales' }, quantity: '30', buyer: 'Jean Paul', endDelivery: '14:00', startDelivery: '09:00', enterprise: 'Vaudoise', deliveryHour: '12:00' }, deliveryGuy: selectedDeliveryGuy}
         const TESTGUY = { id:1, name: 'Jean', surname: 'Paul', city: 'Yvonand', orders: 30, trips: 5, timetable: Array.from({ length: 12 }, () => ({ available: true })) }
-
         setSelectedDeliveryGuy(TESTGUY)
-        // setOrders([TESTORDER, ...orders])
         setDeliveryGuys([TESTGUY])
-        setDeliveries([TESTDELIVERY])
         }
         , [])
 
     return (
         <MainLayout color={color} subject={subject}>
             <Dialog 
-                action={() => linkOrderToPerson()}
+                action={() => linkOrderToPerson(choosenTime)}
                 onClose={() => setIsDragging(false)}
                 title="Heure de livraison"
                 description="Choisissez une heure de livraison pour cette commande"
@@ -62,7 +64,7 @@ const Deliveries = ({initOrders = []}) => {
                 setIsOpen={setIsDialogOpened}
                 isOpen={isDialogOpened}
                 >
-                <TimePicker onValidate={() => linkOrderToPerson()}></TimePicker>
+                <TimePicker time={choosenTime} setTime={setChoosenTime} onValidate={() => linkOrderToPerson(choosenTime)}></TimePicker>
             </Dialog>
             <div className='flex h-full gap-4 p-4'>
                 <section className='flex flex-col flex-1 h-full gap-4 p-4 border-2 rounded-lg bg-slate-200'>
