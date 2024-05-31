@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
+
 use Illuminate\Http\Request;
+use App\Models\Order;
 
 class OrderController extends Controller
 {
@@ -11,7 +14,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -27,7 +30,19 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $order = new Order();
+        $order->date = $request->date;
+        $order->start_delivery_time = $request->start_delivery_time;
+        $order->end_delivery_time = $request->end_delivery_time;
+        if ($request->remark) {
+            $order->remark = $request->remark;
+        }
+        if ($request->gifted_by) {
+            $order->gifted_by = $request->gifted_by;
+        }
+
+
+
     }
 
     /**
