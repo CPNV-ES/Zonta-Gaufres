@@ -1,4 +1,4 @@
-const OrderCard = ({ address, enterprise, deliveryGuy, orders, startDelivery, EndDelivery }) => {
+const OrderCard = ({ address, enterprise, buyer, quantity, startDelivery, EndDelivery }) => {
     return (
         <div className="flex flex-row justify-between w-full p-2 bg-white rounded shadow-md">
             <div className="flex items-center gap-2">
@@ -15,12 +15,12 @@ const OrderCard = ({ address, enterprise, deliveryGuy, orders, startDelivery, En
                 <div className="flex gap-2">
                     <span className="material-symbols-outlined">quick_reorder</span>
                     <span>
-                        <span className="font-bold">{orders}</span> paquets
+                        <span className="font-bold">{quantity}</span> paquets
                     </span>
                 </div>
                 <div className="flex gap-2">
                     <span className="material-symbols-outlined">person</span>
-                    <span>{deliveryGuy}</span>
+                    <span>{buyer}</span>
                 </div>
                 <div className="flex gap-2">
                     <span className="material-symbols-outlined">schedule</span>
