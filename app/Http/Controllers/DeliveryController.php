@@ -93,7 +93,7 @@ class DeliveryController extends Controller
                 'buyer' => $order->buyer->firstname . ' ' . $order->buyer->lastname,
                 'quantity' => $order->articles[0]->pivot->quantity,
                 'deliveryGuy' => $order->delivery_guy,
-                'EndDelivery' => (new \DateTime($order->end_delivery_time))->format('H:i'),
+                'endDelivery' => (new \DateTime($order->end_delivery_time))->format('H:i'),
                 'startDelivery' => (new \DateTime($order->start_delivery_time))->format('H:i'),
                 'enterprise' => $order->enterprise,
             ];

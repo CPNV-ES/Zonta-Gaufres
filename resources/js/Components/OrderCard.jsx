@@ -1,4 +1,4 @@
-const OrderCard = ({ address, enterprise, buyer, quantity, startDelivery, EndDelivery }) => {
+const OrderCard = ({ address, enterprise, buyer, quantity, startDelivery, endDelivery }) => {
     return (
         <div className="flex flex-row justify-between w-full p-2 bg-white rounded shadow-md">
             <div className="flex items-center gap-2">
@@ -26,7 +26,7 @@ const OrderCard = ({ address, enterprise, buyer, quantity, startDelivery, EndDel
                     <span className="material-symbols-outlined">schedule</span>
                     <span>{startDelivery}</span>
                     <span className="text-gray-400 material-symbols-outlined">arrow_forward</span>
-                    <span>{EndDelivery}</span>
+                    <span>{endDelivery}</span>
                 </div>
             </div>
         </div>

@@ -40,8 +40,8 @@ const Deliveries = ({initOrders = []}) => {
     // --- Hardcoded data --- //
 
     useEffect(() => {
-        // const TESTORDER = { id:1, address: { street_number: '19', city: 'Yvonand', postalCode: '1462', street: 'ch des Priales' }, quantity: '30', buyer: 'Jean Paul', EndDelivery: '14:00', startDelivery: '09:00', enterprise: 'Vaudoise' }
-        const TESTDELIVERY = {order:{ id:1, address: { streetNumber: '19', city: 'Yvonand', postalCode: '1462', street: 'Priales' }, quantity: '30', buyer: 'Jean Paul', EndDelivery: '14:00', startDelivery: '09:00', enterprise: 'Vaudoise', deliveryHour: '12:00' }, deliveryGuy: selectedDeliveryGuy}
+        // const TESTORDER = { id:1, address: { street_number: '19', city: 'Yvonand', postalCode: '1462', street: 'ch des Priales' }, quantity: '30', buyer: 'Jean Paul', endDelivery: '14:00', startDelivery: '09:00', enterprise: 'Vaudoise' }
+        const TESTDELIVERY = {order:{ id:1, address: { streetNumber: '19', city: 'Yvonand', postalCode: '1462', street: 'Priales' }, quantity: '30', buyer: 'Jean Paul', endDelivery: '14:00', startDelivery: '09:00', enterprise: 'Vaudoise', deliveryHour: '12:00' }, deliveryGuy: selectedDeliveryGuy}
         const TESTGUY = { id:1, name: 'Jean', surname: 'Paul', city: 'Yvonand', orders: 30, trips: 5, timetable: Array.from({ length: 12 }, () => ({ available: true })) }
 
         setSelectedDeliveryGuy(TESTGUY)
