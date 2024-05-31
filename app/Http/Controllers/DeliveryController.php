@@ -114,8 +114,12 @@ class DeliveryController extends Controller
     {
         return Inertia::render('DeliveriesEdit', [
             'initOrders' => array_values(array_filter($this->formatOrders(), function ($order) {
+                return $order['realDelivery'] === null;
+            })),
+
+            'initDeliveries' => array_values(array_filter($this->formatOrders(), function ($order) {
                 return $order['realDelivery'] !== null;
-            }))
+            })),
         ]);
     }
 
