@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 
-const TimePicker = ({onValidate}) => {
-    const [time, setTime] = useState('18:00')
+const TimePicker = ({time, setTime, onValidate}) => {
     const [isTimeValid, setIsTimeValid] = useState(true)
 
     const checkTime = (time) => {
