@@ -8,12 +8,13 @@ import Draggable from '@/Components/Draggable.jsx'
 import Dialog from '@/Components/Dialog.jsx'
 import TimePicker from '@/Components/TimePicker'
 
-const Deliveries = () => {
+const Deliveries = ({initOrders = []}) => {
+
     const subject = 'Livraisons'
     const color = 'blue'
     const [deliveryGuys, setDeliveryGuys] = useState([])
     const [deliveries, setDeliveries] = useState([])
-    const [orders, setOrders] = useState([])
+    const [orders, setOrders] = useState(initOrders) // orders without delivery guy
     const [isDialogOpened, setIsDialogOpened] = useState(false)
     const [isDragging, setIsDragging] = useState(false)
 
@@ -39,13 +40,12 @@ const Deliveries = () => {
     // --- Hardcoded data --- //
 
     useEffect(() => {
-        const TESTORDER = { id:1, address: { streetNumber: '19', city: 'Yvonand', postalCode: '1462', street: 'Priales' }, orders: '30', deliveryGuy: 'Jean Paul', EndDelivery: '14:00', startDelivery: '09:00', enterprise: 'Vaudoise' }
-        const TESTORDER2 = { id:2, address: { streetNumber: '19', city: 'Yvonand', postalCode: '1462', street: 'Priales' }, orders: '30', deliveryGuy: 'Jean Paul', EndDelivery: '14:00', startDelivery: '09:00', enterprise: 'Vaudoise' }
-        const TESTDELIVERY = {order:{ id:1, address: { streetNumber: '19', city: 'Yvonand', postalCode: '1462', street: 'Priales' }, orders: '30', deliveryGuy: 'Jean Paul', EndDelivery: '14:00', startDelivery: '09:00', enterprise: 'Vaudoise', deliveryHour: '12:00' }, deliveryGuy: selectedDeliveryGuy}
+        // const TESTORDER = { id:1, address: { street_number: '19', city: 'Yvonand', postalCode: '1462', street: 'ch des Priales' }, quantity: '30', buyer: 'Jean Paul', EndDelivery: '14:00', startDelivery: '09:00', enterprise: 'Vaudoise' }
+        const TESTDELIVERY = {order:{ id:1, address: { streetNumber: '19', city: 'Yvonand', postalCode: '1462', street: 'Priales' }, quantity: '30', buyer: 'Jean Paul', EndDelivery: '14:00', startDelivery: '09:00', enterprise: 'Vaudoise', deliveryHour: '12:00' }, deliveryGuy: selectedDeliveryGuy}
         const TESTGUY = { id:1, name: 'Jean', surname: 'Paul', city: 'Yvonand', orders: 30, trips: 5, timetable: Array.from({ length: 12 }, () => ({ available: true })) }
 
         setSelectedDeliveryGuy(TESTGUY)
-        setOrders([TESTORDER, TESTORDER2])
+        // setOrders([TESTORDER, ...orders])
         setDeliveryGuys([TESTGUY])
         setDeliveries([TESTDELIVERY])
         }
