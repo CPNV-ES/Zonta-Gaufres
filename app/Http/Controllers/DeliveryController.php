@@ -15,7 +15,8 @@ class DeliveryController extends Controller
      */
     public function index()
     {
-        $orderWithDeliveryGuySchedule = Order::with(['deliveryGuySchedule.person', 'buyer', 'articles', 'address.city']
+        $orderWithDeliveryGuySchedule = Order::with(
+            ['deliveryGuySchedule.person', 'buyer', 'articles', 'address.city']
         )->get();
 
         $deliveries = [];
@@ -95,6 +96,7 @@ class DeliveryController extends Controller
                 'deliveryGuy' => $order->delivery_guy,
                 'endDelivery' => (new \DateTime($order->end_delivery_time))->format('H:i'),
                 'startDelivery' => (new \DateTime($order->start_delivery_time))->format('H:i'),
+                'realDelivery' => $order->real_delivery_time ? (new \DateTime($order->real_delivery_time))->format('H:i') : null,
                 'enterprise' => $order->enterprise,
             ];
 
@@ -111,7 +113,9 @@ class DeliveryController extends Controller
     public function editAll()
     {
         return Inertia::render('DeliveriesEdit', [
-            'initOrders' => $this->formatOrders(),
+            'initOrders' => array_values(array_filter($this->formatOrders(), function ($order) {
+                return $order['realDelivery'] !== null;
+            }))
         ]);
     }
 
