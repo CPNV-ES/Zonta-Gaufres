@@ -30,6 +30,7 @@
         "vite": "^5.0.0"
     },
     "dependencies": {
+        "@hookform/resolvers": "^3.4.2",
         "@iconify-json/gravity-ui": "^1.1.2",
         "@iconify-json/ic": "^1.1.17",
         "@iconify-json/material-symbols": "^1.1.74",
@@ -37,13 +38,16 @@
         "@radix-ui/react-checkbox": "^1.0.4",
         "@radix-ui/react-dialog": "^1.0.5",
         "@radix-ui/react-label": "^2.0.2",
+        "@radix-ui/react-select": "^2.0.0",
         "@radix-ui/react-slot": "^1.0.2",
         "@tanstack/react-table": "^8.13.2",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.0",
         "lucide-react": "^0.350.0",
         "material-symbols": "^0.16.0",
+        "react-hook-form": "^7.51.5",
         "tailwind-merge": "^2.2.1",
-        "tailwindcss-animate": "^1.0.7"
+        "tailwindcss-animate": "^1.0.7",
+        "zod": "^3.23.8"
     }
 }
