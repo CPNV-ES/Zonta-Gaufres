@@ -65,7 +65,9 @@ const DataTable = ({ inputData, columns, buttonsOptions, onClickHandler }) => {
 
     Array.isArray(buttonsOptions)
         ? null
-        : (buttonsOptions = [{ ...buttonsOptions, id: buttonsOptions?.id || "default"}]);
+        : (buttonsOptions = [
+              { ...buttonsOptions, id: buttonsOptions?.id || "default" },
+          ]);
 
     const footer_buttons = buttonsOptions.map((buttonOptions) => (
         <Button
@@ -147,14 +149,16 @@ const DataTable = ({ inputData, columns, buttonsOptions, onClickHandler }) => {
                     </TableBody>
                 </Table>
             </div>
-            <div className="absolute bottom-0 flex justify-between w-full p-2 bg-white">
-                <span className="flex items-center">
-                    {table.getPreFilteredRowModel().rows.length}
-                    {table.getPreFilteredRowModel().rows.length > 1
-                        ? " résultats"
-                        : " résultat"}
-                </span>
-                <div className="flex gap-2">{footer_buttons}</div>
+            <div className="absolute flex justify-between w-full pr-4 bottom-4">
+                <div className="flex justify-between w-full px-4 py-2 pr-6 bg-white">
+                    <span className="flex items-center">
+                        {table.getPreFilteredRowModel().rows.length}
+                        {table.getPreFilteredRowModel().rows.length > 1
+                            ? " résultats"
+                            : " résultat"}
+                    </span>
+                    <div className="flex gap-2">{footer_buttons}</div>
+                </div>
             </div>
         </>
     );
