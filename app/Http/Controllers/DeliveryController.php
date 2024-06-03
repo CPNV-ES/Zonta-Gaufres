@@ -75,10 +75,12 @@ class DeliveryController extends Controller
         //
     }
 
+
     private function formatOrders()
     {
-        $orders = Order::with('address.city', 'articles', 'buyer')->get();
+        $orders = Order::with('address.city', 'articles', 'buyer', 'deliveryGuySchedule.person')->get();
         $formattedOrders = [];
+        $deliveryGuys = $this->formatDeliveryGuys();
 
         foreach ($orders as $order) {
             $address = [
@@ -88,12 +90,19 @@ class DeliveryController extends Controller
                 'street' => $order->address[0]->street,
             ];
 
+            $personId = $order->deliveryGuySchedule->person->id;
+            $deliveryGuy = array_filter($deliveryGuys, function ($deliveryGuy) use ($personId) {
+                return $deliveryGuy['id'] === $personId;
+            });
+
+            $deliveryGuy = reset($deliveryGuy);
+
             $order = [
                 'id' => $order->id,
                 'address' => $address,
                 'buyer' => $order->buyer->firstname . ' ' . $order->buyer->lastname,
                 'quantity' => $order->articles[0]->pivot->quantity,
-                'deliveryGuy' => $order->delivery_guy,
+                'deliveryGuy' => $deliveryGuy,
                 'endDelivery' => (new \DateTime($order->end_delivery_time))->format('H:i'),
                 'startDelivery' => (new \DateTime($order->start_delivery_time))->format('H:i'),
                 'realDelivery' => $order->real_delivery_time ? (new \DateTime($order->real_delivery_time))->format('H:i') : null,
@@ -105,6 +114,7 @@ class DeliveryController extends Controller
 
         return $formattedOrders;
     }
+
 
     private function formatDeliveryGuys()
     {
