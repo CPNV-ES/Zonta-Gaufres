@@ -66,7 +66,7 @@ const Deliveries = ({initOrders = [], initDeliveries = [], deliveryGuys = []}) =
                     <div className='flex flex-col flex-1 gap-4 pr-2 overflow-y-auto'>
 
                         {deliveryGuys.map((person, index) => {
-                            return <DeliveryguysCard key={index} {...person} />
+                            return <DeliveryguysCard onClick={() => setSelectedDeliveryGuy(person)} key={index} {...person} />
                         })}
 
                     </div>
