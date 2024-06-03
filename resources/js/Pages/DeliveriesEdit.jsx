@@ -40,8 +40,12 @@ const Deliveries = ({initOrders = [], initDeliveries = [], deliveryGuys = []}) =
     }
 
     useEffect(() => {
-        setOrders(orders.sort((a, b) => a.address.city.localeCompare(b.address.city)))
+        orders.sort((a, b) => a.address.city.localeCompare(b.address.city))
     }, [orders])
+
+    useEffect(() => {
+        deliveries.sort((a, b) => a.realDelivery.localeCompare(b.realDelivery))
+    }, [deliveries])
 
     return (
         <MainLayout color={color} subject={subject}>

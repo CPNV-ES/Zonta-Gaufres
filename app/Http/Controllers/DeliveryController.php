@@ -134,15 +134,19 @@ class DeliveryController extends Controller
 
     public function editAll()
     {
+        $formattedOrders = $this->formatOrders();
+
+        $orders = array_values(array_filter($formattedOrders, function ($order) {
+            return $order['realDelivery'] === null;
+        }));
+
+        $deliveries = array_values(array_filter($formattedOrders, function ($order) {
+            return $order['realDelivery'] !== null;
+        }));
+
         return Inertia::render('DeliveriesEdit', [
-            'initOrders' => array_values(array_filter($this->formatOrders(), function ($order) {
-                return $order['realDelivery'] === null;
-            })),
-
-            'initDeliveries' => array_values(array_filter($this->formatOrders(), function ($order) {
-                return $order['realDelivery'] !== null;
-            })),
-
+            'initOrders' => $orders,
+            'initDeliveries' => $deliveries,
             'deliveryGuys' => $this->formatDeliveryGuys(),
         ]);
     }
