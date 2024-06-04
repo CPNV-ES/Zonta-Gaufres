@@ -113,4 +113,22 @@ class OrderController extends Controller
     {
         //
     }
+
+    private function getContactPeopleNames()
+    {
+        $contactPeople = Person::with('personType')->whereHas('personType', function (Builder $query) {
+            $query->where('person_types.id', 2);
+        })->orderBy('lastname', 'asc')->get();
+
+        $contactPeopleNames = [];
+
+        foreach ($contactPeople as $contactPerson) {
+            $contactPerson = [
+                'name' => $contactPerson->lastname . ' ' . $contactPerson->firstname
+            ];
+            array_push($contactPeopleNames, $contactPerson);
+        }
+
+        return $contactPeopleNames;
+    }
 }
