@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { router } from '@inertiajs/react'
 import MainLayout from '../Layouts/MainLayout'
 import DeliveryguysCard from '@/Components/DeliveryguysCard.jsx'
 import DeliveryguysBigCard from '@/Components/DeliveryguysBigCard.jsx'
@@ -30,11 +31,18 @@ const Deliveries = ({ initOrders = [], initDeliveries = [], deliveryGuys = [] })
 
     const linkOrderToPerson = (time) => {
         setIsDialogOpened(false)
-        // TODO 
-        // send draggedOrder and selectedDeliveryGuy to the controller
-        // wait the 200 status
         draggedOrder.realDelivery = time
         draggedOrder.deliveryGuy = selectedDeliveryGuy
+
+        let updatedFields = {
+            delivery_guy_schedule_id: selectedDeliveryGuy.id,
+            real_delivery_time: `${time}:00`
+        }
+
+        router.put(`/orders/${draggedOrder.id}`, updatedFields)
+    
+        // send draggedOrder and selectedDeliveryGuy to the controller
+        // wait the 200 status
         
         setDeliveries([...deliveries, draggedOrder])
         setOrders(orders.filter(order => order !== draggedOrder))
