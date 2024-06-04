@@ -5,14 +5,8 @@ import DataTable from "@/Components/DataTable";
 import { ColumnBuilder } from "@/Builder/ColumnBuilder";
 import { Badge } from "@/Components/ui/badge";
 import { Input } from "@/Components/ui/input";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/Components/ui/select";
 import Dialog from "@/Components/Dialog";
+import MultipleSelector from "@/Components/MultipleSelector";
 
 const builder = new ColumnBuilder();
 
@@ -54,6 +48,12 @@ const columnHeaders = [
 
 const columns = builder.buildColumns(columnHeaders);
 
+const OPTIONS = [
+    { label: "Bénévole", value: "STAFF" },
+    { label: "Livreur", value: "DELIVERY_GUY" },
+    { label: "Admin", value: "ADMIN" },
+];
+
 const People = (people) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     return (
@@ -83,17 +83,15 @@ const People = (people) => {
                 <Input id="email" placeholder="Email" />
                 <Input id="company" placeholder="Entreprise" />
                 <Input id="phone_number" placeholder="Téléphone" />
-                <Select>
-                    <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Rôle(s)" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {}
-                        <SelectItem value="light">Light</SelectItem>
-                        <SelectItem value="dark">Dark</SelectItem>
-                        <SelectItem value="system">System</SelectItem>
-                    </SelectContent>
-                </Select>
+                <MultipleSelector
+                    defaultOptions={OPTIONS}
+                    placeholder="Sélectionner le(s) rôle(s)"
+                    emptyIndicator={
+                        <p className="text-lg leading-10 text-center text-gray-600 dark:text-gray-400">
+                            Aucun rôle trouvé
+                        </p>
+                    }
+                />
             </Dialog>
         </MainLayout>
     );
