@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DeliveryController;
 use Illuminate\Foundation\Application;
@@ -22,13 +23,11 @@ Route::get('/', function () {
     return Inertia::render('Orders');
 });
 
-Route::get('/orders', function () {
-    return Inertia::render('Orders');
-});
-
 Route::get('/deliveries/edit', [DeliveryController::class, 'editAll']);
+
 Route::resources([
-'deliveries' => DeliveryController::class,
+    'deliveries' => DeliveryController::class,
+    'orders' => OrderController::class,
 ]);
 
 Route::get('/people', function () {
