@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import MainLayout from "../../Layouts/MainLayout";
-import DataTable from "@/Components/DataTable";
 
 import { ColumnBuilder } from "@/Builder/ColumnBuilder";
+
 import { Badge } from "@/Components/ui/badge";
 import { Input } from "@/Components/ui/input";
+
+import DataTable from "@/Components/DataTable";
 import Dialog from "@/Components/Dialog";
 import MultipleSelector from "@/Components/MultipleSelector";
 
@@ -48,10 +50,11 @@ const columnHeaders = [
 
 const columns = builder.buildColumns(columnHeaders);
 
+// values must be in French to allow search by French words
 const OPTIONS = [
-    { label: "Bénévole", value: "STAFF" },
-    { label: "Livreur", value: "DELIVERY_GUY" },
-    { label: "Admin", value: "ADMIN" },
+    { label: "Bénévole", value: "Bénévole" },
+    { label: "Livreur", value: "Livreur" },
+    { label: "Admin", value: "Admin" },
 ];
 
 const People = (people) => {
@@ -86,6 +89,7 @@ const People = (people) => {
                 <MultipleSelector
                     defaultOptions={OPTIONS}
                     placeholder="Sélectionner le(s) rôle(s)"
+                    hidePlaceholderWhenSelected={true}
                     emptyIndicator={
                         <p className="text-lg leading-10 text-center text-gray-600 dark:text-gray-400">
                             Aucun rôle trouvé
