@@ -83,16 +83,27 @@ class DeliveryController extends Controller
         $deliveryGuys = $this->formatDeliveryGuys();
 
         foreach ($orders as $order) {
-            $address = [
-                'streetNumber' => $order->address[0]->street_number,
-                'city' => $order->address[0]->city->name,
-                'postalCode' => $order->address[0]->city->zip_code,
-                'street' => $order->address[0]->street,
-            ];
+            if ($order->address->count() > 0){
+                $deliveryGuyId = $order->deliveryGuySchedule ? $order->deliveryGuySchedule->id : null;
+                $address = [
+                    'streetNumber' => $order->address[0]->street_number,
+                    'city' => $order->address[0]->city->name,
+                    'postalCode' => $order->address[0]->city->zip_code,
+                    'street' => $order->address[0]->street,
+                ];
 
-            $personId = $order->deliveryGuySchedule->person->id;
-            $deliveryGuy = array_filter($deliveryGuys, function ($deliveryGuy) use ($personId) {
-                return $deliveryGuy['id'] === $personId;
+            } else {
+                $deliveryGuyId = null;
+                $address = [
+                    'streetNumber' => null,
+                    'city' => null,
+                    'postalCode' => null,
+                    'street' => null,
+                ];
+            }
+
+            $deliveryGuy = array_filter($deliveryGuys, function ($deliveryGuy) use ($deliveryGuyId) {
+                return $deliveryGuy['id'] === $deliveryGuyId;
             });
 
             $deliveryGuy = reset($deliveryGuy);
@@ -114,7 +125,6 @@ class DeliveryController extends Controller
 
         return $formattedOrders;
     }
-
 
     private function formatDeliveryGuys()
     {
