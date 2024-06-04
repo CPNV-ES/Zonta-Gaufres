@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
-
 use App\Enums\PaymentTypesEnum;
-use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Models\Person;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class OrderController extends Controller
 {
     public function index()
     {
-
         $orders = Order::with('deliveryGuySchedule', 'contact', 'buyer', 'articles', 'paymentType')->get();
 
         $orders->load('deliveryGuySchedule.person');
@@ -59,7 +59,11 @@ class OrderController extends Controller
      */
     public function create()
     {
-        //
+        $contactPeopleNames = $this->getContactPeopleNames();
+
+        return Inertia::render('Orders/Create', [
+            "contactPeopleNames" => $contactPeopleNames,
+        ]);
     }
 
     /**
@@ -77,9 +81,6 @@ class OrderController extends Controller
         if ($request->gifted_by) {
             $order->gifted_by = $request->gifted_by;
         }
-
-
-
     }
 
     /**
