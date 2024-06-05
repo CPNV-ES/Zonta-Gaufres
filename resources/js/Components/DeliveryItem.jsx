@@ -1,7 +1,7 @@
-const DeliveryItem = ({ realDelivery, quantity, address}) => {
+const DeliveryItem = ({ realDelivery, quantity, address, unlink }) => {
     return (
         <>
-            <div className="flex flex-row w-full bg-white rounded shadow-md cursor-pointer hover:shadow">
+            <div className="relative flex flex-row w-full bg-white rounded shadow-md">
                 <div className="flex p-3 border-r-2 border-black">
                     <span>{realDelivery}</span>
                 </div>
@@ -14,6 +14,11 @@ const DeliveryItem = ({ realDelivery, quantity, address}) => {
                 <div className="flex flex-1 p-3 max-w-40">
                     <span className="material-symbols-outlined">location_on</span>
                     <span className="truncate" title={address.city}>{address.city}</span>
+                </div>
+                <div className="absolute flex justify-end w-full h-full p-2 text-red-500 group">
+                    <button onClick={unlink} className="hidden h-full px-2 bg-white group-hover:block">
+                        <span className="h-full w-6 icon-[hugeicons--unlink-04]"></span>
+                    </button>
                 </div>
             </div>
         </>)
