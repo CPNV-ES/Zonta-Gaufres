@@ -39,14 +39,12 @@ const Deliveries = ({ initOrders = [], initDeliveries = [], deliveryGuys = [] })
             real_delivery_time: `${time}:00`
         }
 
-        router.put(`/orders/${draggedOrder.id}`, updatedFields)
-    
-        // send draggedOrder and selectedDeliveryGuy to the controller
-        // wait the 200 status
-        
-        setDeliveries([...deliveries, draggedOrder])
-        setOrders(orders.filter(order => order !== draggedOrder))
-        setDraggedOrder(null)
+        router.put(`/orders/${draggedOrder.id}`, updatedFields, {
+            onSuccess: () => {
+                setDeliveries([...deliveries, draggedOrder])
+                setOrders(orders.filter(order => order !== draggedOrder))
+                setDraggedOrder(null)            }
+        })
     }
 
     useEffect(() => {
