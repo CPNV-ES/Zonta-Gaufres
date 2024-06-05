@@ -43,7 +43,23 @@ const Deliveries = ({ initOrders = [], initDeliveries = [], deliveryGuys = [] })
             onSuccess: () => {
                 setDeliveries([...deliveries, draggedOrder])
                 setOrders(orders.filter(order => order !== draggedOrder))
-                setDraggedOrder(null)            }
+                setDraggedOrder(null)
+            }
+        })
+    }
+
+    const unlinkOrderToPerson = async (delivery) => {
+        let updatedFields = {
+            delivery_guy_schedule_id: null,
+            real_delivery_time: null
+        }
+
+        router.put(`/orders/${delivery.id}`, updatedFields, {
+            onSuccess: () => {
+                setDeliveries(deliveries.filter(d => d !== delivery))
+                setOrders([...orders, delivery])
+                setDraggedOrder(null)
+            }
         })
     }
 
@@ -93,7 +109,7 @@ const Deliveries = ({ initOrders = [], initDeliveries = [], deliveryGuys = [] })
                         </div>
 
                         {selectedDeliveryGuyDeliveries.map((delivery, index) => {
-                            return <DeliveryItem key={index} {...delivery} />
+                            return <DeliveryItem key={index} {...delivery} unlink={() => unlinkOrderToPerson(delivery)} />
                         })}
                     </div>
                 </section>
