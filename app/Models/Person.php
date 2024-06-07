@@ -9,6 +9,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Person extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'firstname',
+        'lastname',
+        'email',
+        'phone_number',
+        'remark',
+    ];
+
     public function personType(): BelongsToMany
     {
         return $this->belongsToMany(PersonType::class);

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Person;
 use Inertia\Inertia;
 use App\Enums\PersonTypesEnum;
+use App\Models\PersonType;
+use Illuminate\Support\Facades\DB;
 
 class PersonController extends Controller
 {
@@ -15,7 +17,7 @@ class PersonController extends Controller
 
         $transformed = $people->map(function ($person) {
             $types = $person->personType->map(function ($type) {
-                $case = PersonTypesEnum::fromCase(strtoupper(preg_replace('/(?<!^)[A-Z]/', '_$0', $type->name)));
+                $case = PersonTypesEnum::fromCase($type->name);
                 return [
                     "name" => $case->value,
                     "key" => $case->name,
@@ -52,7 +54,19 @@ class PersonController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => 'required|email',
+            'phone_number' => 'required',
+        ]);
+        DB::transaction(function () use ($request) {
+            $person = Person::create($request->all());
+
+            foreach ($request->roles as $type) {
+                $person->personType()->attach(PersonType::where('name', PersonTypesEnum::from($type)->name)->first());
+            }
+        });
     }
 
     /**
