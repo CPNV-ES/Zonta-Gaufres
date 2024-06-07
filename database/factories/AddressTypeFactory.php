@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\AddressTypesEnum;
 use App\Models\AddressType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -28,7 +29,7 @@ final class AddressTypeFactory extends Factory
      */
     public function definition(): array
     {
-        $addressTypeArray = ["Invoice", "Delivery"];
+        $addressTypeArray = array_column(AddressTypesEnum::cases(), "name");
         return [
             'name' => $addressTypeArray[self::$counter++],
         ];
