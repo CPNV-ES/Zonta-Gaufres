@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
+use App\Enums\PersonTypesEnum;
 use App\Models\PersonType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -28,7 +29,7 @@ final class PersonTypeFactory extends Factory
     */
     public function definition(): array
     {
-        $personTypeArray = ["Staff", "DeliveryGuy", "Admin"];
+        $personTypeArray = array_column(PersonTypesEnum::cases(), "name");
         return [
             'name' => $personTypeArray[self::$counter++],
         ];

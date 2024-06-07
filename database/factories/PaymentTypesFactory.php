@@ -6,6 +6,7 @@ namespace Database\Factories;
 
 use App\Models\PaymentTypes;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Enums\PaymentTypesEnum;
 
 /**
  * @extends Factory<\App\Models\PaymentTypes>
@@ -28,7 +29,7 @@ final class PaymentTypesFactory extends Factory
     */
     public function definition(): array
     {
-        $paymentTypesArray = ["upstream", "delivery", "invoice"];
+        $paymentTypesArray = array_column(PaymentTypesEnum::cases(), "name");
         return [
             'name' => $paymentTypesArray[self::$counter++],
         ];

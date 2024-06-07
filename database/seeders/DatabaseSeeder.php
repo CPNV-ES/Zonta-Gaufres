@@ -3,6 +3,10 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Enums\AddressTypesEnum;
+use App\Enums\PaymentTypesEnum;
+use App\Enums\PersonTypesEnum;
 use Illuminate\Database\Seeder;
 use App\Models\Address;
 use App\Models\AddressType;
@@ -22,14 +26,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        AddressType::factory(3)->create();
+        AddressType::factory(count(AddressTypesEnum::cases()))->create();
         City::factory(50)->create();
         Address::factory(10)->create();
         Article::factory(1)->create();
         BillingInformation::factory(1)->create();
         DeliveryGuySchedule::factory(20)->create();
-        PersonType::factory(3)->create();
-        PaymentTypes::factory(3)->create();
+        PersonType::factory(count(PersonTypesEnum::cases()))->create();
+        PaymentTypes::factory(count(PaymentTypesEnum::cases()))->create();
         Person::factory(100)->create();
         Order::factory(100)->create();
         
