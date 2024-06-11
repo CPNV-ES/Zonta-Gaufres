@@ -20,7 +20,7 @@ const Timetable = ({ deliveries, baseHour = 7 }) => {
             {timetable.map((hour, index) => {
                 return (<span
                     key={index}
-                    className={`flex-1 rounded-b text-center pb-1 ${hour ? 'bg-green-300' : 'bg-red-300'}`}>{index + baseHour}</span>);
+                    className={`flex-1 rounded-b text-center pb-1 ${hour ? 'bg-blue-200' : 'bg-blue-500'}`}>{index + baseHour}</span>);
             })}
         </div>
     )

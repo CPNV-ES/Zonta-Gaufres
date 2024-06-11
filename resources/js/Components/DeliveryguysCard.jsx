@@ -1,22 +1,14 @@
 import React from 'react';
+import Timetable from './Timetable';
 
-const DeliveryguysCard = ({deliveryGuy, onClick}) => {
+const DeliveryguysCard = ({ deliveryGuy, onClick }) => {
     return (
         <div onClick={onClick}
             className="flex flex-col justify-between w-full pl-2 pr-2 bg-white rounded shadow-md cursor-pointer h-28 group min-w-72">
             <div className='overflow-hidden'>
                 <div
                     className="flex w-full gap-2 transition-transform duration-500 transform -translate-y-3/4 hours-container group-hover:translate-y-0">
-                    {/* {timetable.map((day, index) => {
-                        return (
-                            <span
-                                key={index}
-                                className={`flex-1 rounded-b text-center pb-1 ${day.available ? 'bg-green-300' : 'bg-red-300'}`}
-                            >
-                                {index + 1}
-                            </span>
-                        );
-                    })} */}
+                    <Timetable deliveries={deliveryGuy.order} />
                 </div>
                 <h1 className="mt-2 ml-3 text-2xl truncate" title={`${deliveryGuy.person.firstname} ${deliveryGuy.person.lastname}`}>{deliveryGuy.person.firstname} {deliveryGuy.person.lastname}</h1>
             </div>
