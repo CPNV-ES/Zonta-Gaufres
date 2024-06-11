@@ -9,18 +9,15 @@ import Draggable from '@/Components/Draggable.jsx'
 import Dialog from '@/Components/Dialog.jsx'
 import TimePicker from '@/Components/TimePicker'
 
-const Deliveries = ({ initOrders = [], initDeliveries = [], deliveryGuys = [] }) => {
-
+const Deliveries = ({ initOrders = [], deliveryGuys = [] }) => {
     const subject = 'Livraisons'
     const color = 'blue'
 
-    const [deliveries, setDeliveries] = useState(initDeliveries)
     const [orders, setOrders] = useState(initOrders) // orders without delivery guy
     const [isDialogOpened, setIsDialogOpened] = useState(false)
     const [isDragging, setIsDragging] = useState(false)
 
-    const [selectedDeliveryGuy, setSelectedDeliveryGuy] = useState(deliveryGuys[0])
-    const [selectedDeliveryGuyDeliveries, setSelectedDeliveryGuyDeliveries] = useState([])
+    const [selectedDeliveryGuy, setSelectedDeliveryGuy] = useState(deliveryGuys[1])
     const [draggedOrder, setDraggedOrder] = useState(null)
     const [choosenTime, setChoosenTime] = useState('09:00')
 
@@ -31,18 +28,19 @@ const Deliveries = ({ initOrders = [], initDeliveries = [], deliveryGuys = [] })
 
     const linkOrderToPerson = (time) => {
         setIsDialogOpened(false)
-        draggedOrder.realDelivery = time
+        draggedOrder.real_delivery_time = time
         draggedOrder.deliveryGuy = selectedDeliveryGuy
 
         let updatedFields = {
             delivery_guy_schedule_id: selectedDeliveryGuy.id,
-            real_delivery_time: `${time}:00`
+            real_delivery_time: `${time}:00` // The format is ${HH:mm}:ss
         }
 
         router.put(`/orders/${draggedOrder.id}`, updatedFields, {
             onSuccess: () => {
-                setDeliveries([...deliveries, draggedOrder])
+                selectedDeliveryGuy.order.push(draggedOrder)
                 setOrders(orders.filter(order => order !== draggedOrder))
+                sortDeliveriesByTime(selectedDeliveryGuy)
                 setDraggedOrder(null)
             }
         })
@@ -56,24 +54,30 @@ const Deliveries = ({ initOrders = [], initDeliveries = [], deliveryGuys = [] })
 
         router.put(`/orders/${delivery.id}`, updatedFields, {
             onSuccess: () => {
-                setDeliveries(deliveries.filter(d => d !== delivery))
+                selectedDeliveryGuy.order = (selectedDeliveryGuy.order.filter(d => d !== delivery))
                 setOrders([...orders, delivery])
                 setDraggedOrder(null)
             }
         })
     }
 
+    function sortDeliveriesByTime(deliveryGuy) {
+        try {
+            deliveryGuy.order.sort((a, b) => a.real_delivery_time.localeCompare(b.real_delivery_time))
+        } catch {
+        }
+    }
+
     useEffect(() => {
-        orders.sort((a, b) => a.address.city.localeCompare(b.address.city))
+        orders.sort((a, b) => a.address[0].city.name.localeCompare(b.address[0].city.name))
+        sortDeliveriesByTime(selectedDeliveryGuy)
     }, [orders])
 
     useEffect(() => {
-        deliveries.sort((a, b) => a.realDelivery.localeCompare(b.realDelivery))
-    }, [deliveries])
-
-    useEffect(() => {
-        setSelectedDeliveryGuyDeliveries(deliveries.filter(delivery => delivery.deliveryGuy.id === selectedDeliveryGuy.id))
-    }, [selectedDeliveryGuy, deliveries])
+        deliveryGuys.map((deliveryGuy) => {
+            sortDeliveriesByTime(deliveryGuy)
+        })
+    }, [])
 
     return (
         <MainLayout color={color} subject={subject}>
@@ -94,13 +98,13 @@ const Deliveries = ({ initOrders = [], initDeliveries = [], deliveryGuys = [] })
                     <div className='flex flex-col flex-1 gap-4 pr-2 overflow-y-auto'>
 
                         {deliveryGuys.map((person, index) => {
-                            return <DeliveryguysCard onClick={() => setSelectedDeliveryGuy(person)} key={index} {...person} />
+                            return <DeliveryguysCard onClick={() => setSelectedDeliveryGuy(person)} key={index} deliveryGuy={person} />
                         })}
 
                     </div>
                 </section>
                 <section className='flex flex-col flex-1 h-full gap-4 p-4 border-2 rounded-lg bg-slate-200'>
-                    {selectedDeliveryGuy ? <DeliveryguysBigCard {...selectedDeliveryGuy} /> : null}
+                    {selectedDeliveryGuy ? <DeliveryguysBigCard deliveryGuy={selectedDeliveryGuy} /> : null}
                     <div onDrop={() => drop()} onDragOver={(event) => event.preventDefault()} className={`flex flex-col flex-1 gap-4 px-2 overflow-y-auto outline-2 outline-gray-400 drop-area ${isDragging ? "outline" : null}`}>
 
                         <div className='relative flex items-center justify-center text-gray-500 border-gray-300 pointer-events-none border-b-1'>
@@ -108,24 +112,21 @@ const Deliveries = ({ initOrders = [], initDeliveries = [], deliveryGuys = [] })
                             <span className='z-10 px-4 bg-slate-200'>8:00</span>
                         </div>
 
-                        {selectedDeliveryGuyDeliveries.map((delivery, index) => {
-                            return <DeliveryItem key={index} {...delivery} unlink={() => unlinkOrderToPerson(delivery)} />
+                        {selectedDeliveryGuy.order.map((delivery, index) => {
+                            return <DeliveryItem key={index} delivery={delivery} unlink={() => unlinkOrderToPerson(delivery)} />
                         })}
                     </div>
                 </section>
                 <section className='flex flex-col flex-1 h-full gap-4 p-4 border-2 rounded-lg bg-slate-200'>
                     <h1 className='text-xl font-semibold text-gray-500'>Commandes</h1>
                     <div className='flex flex-col flex-1 gap-4 pr-2 overflow-y-auto transition-all duration-500'>
-
                         {orders.map((order, index) => {
                             return (
-                                <Draggable key={index} onDragStart={() => { setDraggedOrder(order), setIsDragging(true) }} onDragEnd={() => setIsDragging(false)}> {/* TODO, send the ID of the object to manage it from the controller */}
-                                    <OrderCard {...order}>
-                                    </OrderCard>
+                                <Draggable key={index} onDragStart={() => { setDraggedOrder(order), setIsDragging(true) }} onDragEnd={() => setIsDragging(false)}>
+                                    <OrderCard order={order}> </OrderCard>
                                 </Draggable>
                             )
                         })}
-
                     </div>
                 </section>
             </div>

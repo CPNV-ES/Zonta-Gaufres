@@ -75,99 +75,14 @@ class DeliveryController extends Controller
         //
     }
 
-
-    private function formatOrders()
-    {
-        $orders = Order::with('address.city', 'articles', 'buyer', 'deliveryGuySchedule.person')->get();
-        $formattedOrders = [];
-        $deliveryGuys = $this->formatDeliveryGuys();
-
-        foreach ($orders as $order) {
-            if ($order->address->count() > 0){
-                $deliveryGuyId = $order->deliveryGuySchedule ? $order->deliveryGuySchedule->id : null;
-                $address = [
-                    'streetNumber' => $order->address[0]->street_number,
-                    'city' => $order->address[0]->city->name,
-                    'postalCode' => $order->address[0]->city->zip_code,
-                    'street' => $order->address[0]->street,
-                ];
-
-            } else {
-                $deliveryGuyId = null;
-                $address = [
-                    'streetNumber' => null,
-                    'city' => null,
-                    'postalCode' => null,
-                    'street' => null,
-                ];
-            }
-
-            $deliveryGuy = array_filter($deliveryGuys, function ($deliveryGuy) use ($deliveryGuyId) {
-                return $deliveryGuy['id'] === $deliveryGuyId;
-            });
-
-            $deliveryGuy = reset($deliveryGuy);
-
-            $order = [
-                'id' => $order->id,
-                'address' => $address,
-                'buyer' => $order->buyer->firstname . ' ' . $order->buyer->lastname,
-                'quantity' => $order->articles[0]->pivot->quantity,
-                'deliveryGuy' => $deliveryGuy,
-                'endDelivery' => (new \DateTime($order->end_delivery_time))->format('H:i'),
-                'startDelivery' => (new \DateTime($order->start_delivery_time))->format('H:i'),
-                'realDelivery' => $order->real_delivery_time ? (new \DateTime($order->real_delivery_time))->format('H:i') : null,
-                'enterprise' => $order->enterprise,
-            ];
-
-            array_push($formattedOrders, $order);
-        }
-
-        return $formattedOrders;
-    }
-
-    private function formatDeliveryGuys()
-    {
-        $deliveryGuys = DeliveryGuySchedule::with('person', 'city')->get();
-        $formattedDeliveryGuys = [];
-
-        foreach ($deliveryGuys as $deliveryGuy) {
-            $deliveryGuy = [
-                'id' => $deliveryGuy->id,
-                'name' => $deliveryGuy->person->firstname,
-                'surname' => $deliveryGuy->person->lastname,
-                'city' => $deliveryGuy->city[0]->name,
-                'orders' => 30,
-                'trips' => 5,
-                'timetable' => array_fill(0, 12, ['available' => true]),
-            ];
-
-            array_push($formattedDeliveryGuys, $deliveryGuy);
-        }
-
-        return $formattedDeliveryGuys;
-    }
-
     /**
      * Show the form for editing the specified resource.
-     */
-
+     */ 
     public function editAll()
     {
-        $formattedOrders = $this->formatOrders();
-
-        $orders = array_values(array_filter($formattedOrders, function ($order) {
-            return $order['realDelivery'] === null;
-        }));
-
-        $deliveries = array_values(array_filter($formattedOrders, function ($order) {
-            return $order['realDelivery'] !== null;
-        }));
-
         return Inertia::render('DeliveriesEdit', [
-            'initOrders' => $orders,
-            'initDeliveries' => $deliveries,
-            'deliveryGuys' => $this->formatDeliveryGuys(),
+            'initOrders' => Order::with('address.city', 'articles', 'buyer', 'deliveryGuySchedule.person')->get(),
+            'deliveryGuys' => DeliveryGuySchedule::with('person', 'city', 'order.articles', 'order.address.city')->get()
         ]);
     }
 
