@@ -1,29 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import Timetable from './Timetable';
 
-const DeliveryguysBigCard = ({ deliveryGuy, baseHour = 7 }) => {
-    const TEMPLATE_TIMETABLE = [true, true, true, true, true, true, true, true, true, true, true, true]
-    const [timetable, setTimetable] = useState(TEMPLATE_TIMETABLE)
-
-    useEffect(() => {
-        let newTimetable = TEMPLATE_TIMETABLE
-
-        deliveryGuy.order.map((order) => {
-            if (order.real_delivery_time && newTimetable[parseInt(order.real_delivery_time.slice(0, 2)) - baseHour] == true)
-                newTimetable[parseInt(order.real_delivery_time.slice(0, 2)) - baseHour] = false
-        })
-        setTimetable(newTimetable)
-    }, [deliveryGuy])
-
-
+const DeliveryguysBigCard = ({ deliveryGuy }) => {
+   
     return (<>
         <div className="flex flex-col w-full h-64 pl-2 pr-2 overflow-hidden bg-white rounded shadow-md group min-w-72">
-            <div className="flex w-full gap-2 hours-container">
-                {timetable.map((hour, index) => {
-                    return (<span
-                        key={index}
-                        className={`flex-1 rounded-b text-center pb-1 ${hour ? 'bg-green-300' : 'bg-red-300'}`}>{index + baseHour}</span>);
-                })}
-            </div>
+            <Timetable deliveries={deliveryGuy.order}/>
             <div className="flex m-2">
                 <div className="flex flex-col items-center w-1/2 h-full">
                     <div className="flex items-center justify-center w-32 h-32 text-6xl text-white bg-gray-300 rounded-full">
