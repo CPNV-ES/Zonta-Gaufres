@@ -125,6 +125,7 @@ class OrderController extends Controller
 
         foreach ($contactPeople as $contactPerson) {
             $contactPerson = [
+                'id' => $contactPerson->id,
                 'name' => $contactPerson->lastname . ' ' . $contactPerson->firstname
             ];
             array_push($contactPeopleNames, $contactPerson);
