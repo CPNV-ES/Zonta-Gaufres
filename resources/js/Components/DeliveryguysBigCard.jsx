@@ -1,63 +1,47 @@
 import React from 'react';
+import Timetable from './Timetable';
 
-const DeliveryguysBigCard = ({
-                                 name,
-                                 surname,
-                                 city,
-                                 postalCode,
-                                 street,
-                                 streetNumber,
-                                 phone,
-                                 orders,
-                                 trips,
-                                 timetable = Array.from({length: 12}, () => ({available: true})) // Simplified timetable generation
-                             }) => {
+const DeliveryguysBigCard = ({ deliveryGuy }) => {
+   
     return (<>
-    <div className="m-2 h-64 flex w-1/3 flex-col overflow-hidden rounded bg-white pr-2 pl-2 shadow-md group min-w-72">
-        <div className="flex w-full gap-2 hours-container">
-            {timetable.map((day, index) => {
-                return (<span
-                    key={index}
-                    className={`flex-1 rounded-b text-center pb-1 ${day.available ? 'bg-green-300' : 'bg-red-300'}`}>{index + 1}</span>);
-            })}
-        </div>
-        <div className="flex m-2">
-            <div className="h-full w-1/2 flex flex-col items-center">
-                <div className="h-32 w-32 bg-gray-300 rounded-full flex items-center justify-center text-white text-6xl">
-                    <span>{`${name.charAt(0)}${surname.charAt(0)}`}</span>
-                </div>
-                <h1 className="text-2xl truncate mt-4">{name} {surname}</h1>
-            </div>
-            <div className="h-full w-1/2 flex flex-col justify-evenly  py-4">
-                <div className="flex gap-2 items-center">
-                    <span className="material-symbols-outlined">location_on</span>
-                    <div className="flex flex-col flex-1 overflow-hidden">
-                        <span className="truncate">{street} {streetNumber}</span>
-                        <p className="truncate w-full">
-                            {postalCode} <span className="font-bold">{city}</span>
-                        </p>
+        <div className="flex flex-col w-full h-64 pl-2 pr-2 overflow-hidden bg-white rounded shadow-md group min-w-72">
+            <Timetable deliveries={deliveryGuy.order}/>
+            <div className="flex m-2">
+                <div className="flex flex-col items-center w-1/2 h-full">
+                    <div className="flex items-center justify-center w-32 h-32 text-6xl text-white bg-gray-300 rounded-full">
+                        <span>{`${deliveryGuy.person.firstname.charAt(0)}${deliveryGuy.person.lastname.charAt(0)}`}</span>
                     </div>
+                    <h1 className="mt-4 text-2xl truncate" title={`${deliveryGuy.person.firstname} ${deliveryGuy.person.lastname}`}>{deliveryGuy.person.firstname} {deliveryGuy.person.lastname}</h1>
+                </div>
+                <div className="flex flex-col w-1/2 h-full py-4 justify-evenly">
+                    <div className="flex items-center gap-2">
+                        <span className="material-symbols-outlined">location_on</span>
+                        <div className="flex flex-col flex-1 overflow-hidden">
+                            <span className="w-full truncate">
+                                {deliveryGuy.city[0].name}
+                            </span>
+                        </div>
 
-                </div>
-                <div className="flex gap-2">
-                    <span className="material-symbols-outlined">quick_reorder</span>
-                    <span>
-                            <span className="font-bold">{orders}</span> paquets
+                    </div>
+                    <div className="flex gap-2">
+                        <span className="material-symbols-outlined">quick_reorder</span>
+                        <span>
+                            <span className="font-bold">{0}</span> paquets
                         </span>
+                    </div>
+                    <div className="flex gap-2">
+                        <span className="material-symbols-outlined">route</span>
+                        <span>
+                            <span className="font-bold">{0}</span> trajets
+                        </span>
+                    </div>
+                    <div className="flex gap-2">
+                        <span className="material-symbols-outlined">phone</span>
+                        <span>{deliveryGuy.person.phone_number}</span>
+                    </div>
                 </div>
-                <div className="flex gap-2">
-                    <span className="material-symbols-outlined">route</span>
-                    <span>
-                        <span className="font-bold">{trips}</span> trajets
-                    </span>
-            </div>
-            <div className="flex gap-2">
-                <span className="material-symbols-outlined">phone</span>
-                <span>{phone}</span>
             </div>
         </div>
-    </div>
-    </div>
-</>)
+    </>)
 };
 export default DeliveryguysBigCard;

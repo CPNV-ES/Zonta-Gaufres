@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Button } from "@/Components/ui/button"
 import {
   Dialog as D,
@@ -11,7 +11,13 @@ import {
 } from "@/Components/ui/dialog"
 
 
-const Dialog = ({ children, title, description, buttonLabel, triggerLabel, setIsOpen, isOpen = false }) => {
+const Dialog = ({ children, title, description, buttonLabel, triggerLabel, action, onClose, setIsOpen, isOpen = false }) => {
+
+  useEffect(() => {
+    if (!isOpen)
+      onClose
+
+  }, [isOpen])
 
   return (
     <D open={isOpen} onOpenChange={setIsOpen}>
@@ -29,7 +35,7 @@ const Dialog = ({ children, title, description, buttonLabel, triggerLabel, setIs
         </DialogHeader>
         {children}
         <DialogFooter>
-          <Button type="submit">{buttonLabel}</Button>
+          <Button onClick={() => {action(), setIsOpen(false)}} type="submit">{buttonLabel}</Button>
         </DialogFooter>
       </DialogContent>
     </D>

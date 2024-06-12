@@ -9,11 +9,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Order extends Model
 {
     use HasFactory;
+    protected $fillable = ['real_delivery_time', 'delivery_guy_schedule_id'];
+
+
     public function articles(): BelongsToMany
     {
         return $this->belongsToMany(Article::class, 'order_article')->withPivot('quantity');
     }
-
     public function buyer()
     {
         return $this->belongsTo(Person::class, 'buyer_id');

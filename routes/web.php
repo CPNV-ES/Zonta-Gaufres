@@ -1,7 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DeliveryController;
+use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 /*
@@ -18,15 +21,20 @@ use Inertia\Inertia;
 // ! refactor to use controllers once implemented
 
 Route::get('/', function () {
-    return redirect('/orders');
+    return Inertia::render('Orders');
 });
 
-Route::get('/deliveries', function () {
-    return Inertia::render('Deliveries');
-});
+Route::get('/deliveries/edit', [DeliveryController::class, 'editAll']);
+
+Route::resources([
+    'deliveries' => DeliveryController::class,
+    'orders' => OrderController::class,
+]);
+
 Route::get('/people', function () {
     return Inertia::render('People');
 });
+
 Route::get('/invoices', function () {
     return Inertia::render('Invoices');
 });

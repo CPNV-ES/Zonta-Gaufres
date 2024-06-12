@@ -1,5 +1,5 @@
 import React from "react";
-import MainLayout from "../Layouts/MainLayout";
+import MainLayout from "../../Layouts/MainLayout";
 import DataTable from "@/Components/DataTable";
 
 import { ColumnBuilder } from "@/Builder/ColumnBuilder";
@@ -39,12 +39,12 @@ const columnHeaders = [
         header: "Livreur",
     },
     {
-        accessor: "delivery_count",
-        header: "Nb livraisons",
+        accessor: "company",
+        header: "Entreprise",
     },
     {
-        accessor: "trip_count",
-        header: "Nb trajets",
+        accessor: "buyer",
+        header: "Personne livrée",
     },
     {
         accessor: "address",
@@ -66,52 +66,38 @@ const columnHeaders = [
 
 const columns = builder.buildColumns(columnHeaders);
 
-// ! TODO - Replace with actual data pulled from the database
-const inputData = [
-    {
-        delivery_id: 1,
-        delivery_guy: "Doe John",
-        delivery_count: 5,
-        trip_count: 3,
-        address: "Fake Street 123",
-        postal_code: 1234,
-        locality: "Fake City",
-        phone_number: "078 123 45 67",
-    },
-    {
-        delivery_id: 2,
-        delivery_guy: "Doe Jane",
-        delivery_count: 3,
-        trip_count: 2,
-        address: "Fake Street 456",
-        postal_code: 5678,
-        locality: "Fake City",
-        phone_number: "079 123 45 67",
-    },
-    {
-        delivery_id: 3,
-        delivery_guy: "Doe Jack",
-        delivery_count: 2,
-        trip_count: 1,
-        address: "Fake Street 789",
-        postal_code: 1357,
-        locality: "Fake City",
-        phone_number: "021 123 45 67",
-    },
-];
+const Deliveries = ({ initDeliveries }) => {
 
-const Deliveries = () => {
+    const formatDeliveries = () => {
+        let tmpdeliveries = []
+        initDeliveries.map((d) => {
+            const tmpdelivery = {
+                'delivery_id': d.id,
+                'delivery_guy': `${d.delivery_guy_schedule.person.firstname} ${d.delivery_guy_schedule.person.lastname}`,
+                'buyer': `${d.buyer.firstname} ${d.buyer.lastname}`,
+                'company': d.buyer.company,
+                'address': `${d.address[0].street} ${d.address[0].street_number}`,
+                'postal_code': d.address[0].city.zip_code,
+                'locality': d.address[0].city.name,
+                'phone_number': d.buyer.phone_number
+            }
+            tmpdeliveries.push(tmpdelivery)
+        })
+        return tmpdeliveries
+    }
+
     return (
         <MainLayout color="blue" subject="Livraisons">
             <DataTable
                 columns={columns}
-                inputData={inputData}
+                inputData={formatDeliveries()}
                 buttonsOptions={[
                     {
                         id: "edit_delivery",
                         icon: "pencil",
                         action: "Modifier les livraisons",
                         variant: "blue",
+                        handler: () => window.location.href = '/deliveries/edit'
                     },
                     {
                         id: "print_labels",
