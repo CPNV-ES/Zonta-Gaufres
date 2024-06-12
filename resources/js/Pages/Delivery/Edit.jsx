@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { router } from '@inertiajs/react'
-import MainLayout from '../Layouts/MainLayout'
+import MainLayout from '../../Layouts/MainLayout'
 import DeliveryguysCard from '@/Components/DeliveryguysCard.jsx'
 import DeliveryguysBigCard from '@/Components/DeliveryguysBigCard.jsx'
 import OrderCard from '@/Components/OrderCard'

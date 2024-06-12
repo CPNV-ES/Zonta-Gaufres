@@ -1,8 +1,6 @@
 import React from "react";
-import MainLayout from "../Layouts/MainLayout";
+import MainLayout from "../../Layouts/MainLayout";
 import DataTable from "@/Components/DataTable";
-
-import { router } from '@inertiajs/react'
 
 import { ColumnBuilder } from "@/Builder/ColumnBuilder";
 import { Checkbox } from "@/Components/ui/checkbox";
