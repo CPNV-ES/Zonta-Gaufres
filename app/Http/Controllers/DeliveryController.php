@@ -15,39 +15,11 @@ class DeliveryController extends Controller
      */
     public function index()
     {
-        $orderWithDeliveryGuySchedule = Order::with(
-            ['deliveryGuySchedule.person', 'buyer', 'articles', 'address.city']
-        )->get();
-
-        $deliveries = [];
-
-        foreach ($orderWithDeliveryGuySchedule as $order) {
-            $personId = $order->deliveryGuySchedule->person->id;
-            $tripCountByDeliveryGuy = DeliveryGuySchedule::where('person_id', $personId)->count();
-
-            $quantity = $order->articles[0]->pivot->quantity;
-            $gaufresPerPackage = 5;
-            $numberOfPackages = ceil($quantity / $gaufresPerPackage);
-
-            $address = $order->address[0];
-
-            $delivery = [
-                'delivery_id' => $order->delivery_guy_schedule_id,
-                'delivery_guy' => $order->deliveryGuySchedule->person->firstname . ' ' . $order->deliveryGuySchedule->person->lastname,
-                'delivery_count' => $numberOfPackages,
-                'trip_count' => $tripCountByDeliveryGuy,
-                'address' => $address->street . ' ' . $address->street_number,
-                'postal_code' => $address->city->zip_code,
-                'locality' => $address->city->name,
-                'phone_number' => $order->buyer->phone_number,
-            ];
-
-            $deliveries[] = $delivery;
-        }
-
         return Inertia::render(
             'Deliveries',
-            ['deliveries' => $deliveries]
+            [
+                'initDeliveries' => Order::whereNotNull('real_delivery_time')->with('deliveryGuySchedule.person', 'buyer', 'articles', 'address.city')->get()
+            ]
         );
     }
 
@@ -77,7 +49,7 @@ class DeliveryController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     */ 
+     */
     public function editAll()
     {
         return Inertia::render('DeliveriesEdit', [

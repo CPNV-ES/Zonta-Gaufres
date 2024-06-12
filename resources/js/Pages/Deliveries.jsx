@@ -2,15 +2,15 @@ import React from "react";
 import MainLayout from "../Layouts/MainLayout";
 import DataTable from "@/Components/DataTable";
 
-import {ColumnBuilder} from "@/Builder/ColumnBuilder";
-import {Checkbox} from "@/Components/ui/checkbox";
+import { ColumnBuilder } from "@/Builder/ColumnBuilder";
+import { Checkbox } from "@/Components/ui/checkbox";
 
 const builder = new ColumnBuilder();
 
 const columnHeaders = [
     {
         accessor: "select",
-        header: ({table}) => (
+        header: ({ table }) => (
             <Checkbox
                 {...{
                     checked:
@@ -21,7 +21,7 @@ const columnHeaders = [
                 }}
             />
         ),
-        cell: ({row}) => (
+        cell: ({ row }) => (
             <Checkbox
                 {...{
                     checked: row.getIsSelected(),
@@ -39,12 +39,12 @@ const columnHeaders = [
         header: "Livreur",
     },
     {
-        accessor: "delivery_count",
-        header: "Nb livraisons",
+        accessor: "company",
+        header: "Entreprise",
     },
     {
-        accessor: "trip_count",
-        header: "Nb trajets",
+        accessor: "buyer",
+        header: "Personne livrée",
     },
     {
         accessor: "address",
@@ -66,12 +66,31 @@ const columnHeaders = [
 
 const columns = builder.buildColumns(columnHeaders);
 
-const Deliveries = ({deliveries}) => {
+const Deliveries = ({ initDeliveries }) => {
+
+    const formatDeliveries = () => {
+        let tmpdeliveries = []
+        initDeliveries.map((d) => {
+            const tmpdelivery = {
+                'delivery_id': d.id,
+                'delivery_guy': `${d.delivery_guy_schedule.person.firstname} ${d.delivery_guy_schedule.person.lastname}`,
+                'buyer': `${d.buyer.firstname} ${d.buyer.lastname}`,
+                'company': d.buyer.company,
+                'address': `${d.address[0].street} ${d.address[0].street_number}`,
+                'postal_code': d.address[0].city.zip_code,
+                'locality': d.address[0].city.name,
+                'phone_number': d.buyer.phone_number
+            }
+            tmpdeliveries.push(tmpdelivery)
+        })
+        return tmpdeliveries
+    }
+
     return (
         <MainLayout color="blue" subject="Livraisons">
             <DataTable
                 columns={columns}
-                inputData={deliveries}
+                inputData={formatDeliveries()}
                 buttonsOptions={[
                     {
                         id: "edit_delivery",
