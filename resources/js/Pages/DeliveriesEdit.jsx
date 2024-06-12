@@ -98,7 +98,7 @@ const Deliveries = ({ initOrders = [], deliveryGuys = [] }) => {
                     <div className='flex flex-col flex-1 gap-4 pr-2 overflow-y-auto'>
 
                         {deliveryGuys.map((person, index) => {
-                            return <DeliveryguysCard onClick={() => setSelectedDeliveryGuy(person)} key={index} deliveryGuy={person} />
+                            return <DeliveryguysCard onClick={() => setSelectedDeliveryGuy(person)} key={index} deliveryGuy={person} className={selectedDeliveryGuy === person ? "bg-blue-100" : "bg-white"} />
                         })}
 
                     </div>
@@ -107,10 +107,10 @@ const Deliveries = ({ initOrders = [], deliveryGuys = [] }) => {
                     {selectedDeliveryGuy ? <DeliveryguysBigCard deliveryGuy={selectedDeliveryGuy} /> : null}
                     <div onDrop={() => drop()} onDragOver={(event) => event.preventDefault()} className={`flex flex-col flex-1 gap-4 px-2 overflow-y-auto outline-2 outline-gray-400 drop-area ${isDragging ? "outline" : null}`}>
 
-                        <div className='relative flex items-center justify-center text-gray-500 border-gray-300 pointer-events-none border-b-1'>
+                        {/* <div className='relative flex items-center justify-center text-gray-500 border-gray-300 pointer-events-none border-b-1'>
                             <i className='absolute left-0 w-full h-[2px] bg-gray-300' />
                             <span className='z-10 px-4 bg-slate-200'>8:00</span>
-                        </div>
+                        </div> */}
 
                         {selectedDeliveryGuy.order.map((delivery, index) => {
                             return <DeliveryItem key={index} delivery={delivery} unlink={() => unlinkOrderToPerson(delivery)} />
