@@ -91,7 +91,8 @@ class OrderController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $order = Order::find($id);
+        $order->update($request->all());
     }
 
     /**

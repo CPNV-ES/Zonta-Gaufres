@@ -17,7 +17,7 @@ const Deliveries = ({ initOrders = [], deliveryGuys = [] }) => {
     const [isDialogOpened, setIsDialogOpened] = useState(false)
     const [isDragging, setIsDragging] = useState(false)
 
-    const [selectedDeliveryGuy, setSelectedDeliveryGuy] = useState(deliveryGuys[1])
+    const [selectedDeliveryGuy, setSelectedDeliveryGuy] = useState(deliveryGuys[0])
     const [draggedOrder, setDraggedOrder] = useState(null)
     const [choosenTime, setChoosenTime] = useState('09:00')
 
@@ -98,7 +98,7 @@ const Deliveries = ({ initOrders = [], deliveryGuys = [] }) => {
                     <div className='flex flex-col flex-1 gap-4 pr-2 overflow-y-auto'>
 
                         {deliveryGuys.map((person, index) => {
-                            return <DeliveryguysCard onClick={() => setSelectedDeliveryGuy(person)} key={index} deliveryGuy={person} className={selectedDeliveryGuy === person ? "bg-blue-100 border-blue-500 border" : "bg-white"} />
+                            return <DeliveryguysCard onClick={() => setSelectedDeliveryGuy(person)} key={index} deliveryGuy={person} className={selectedDeliveryGuy.id == person.id ? "bg-blue-100 border-blue-500 border" : "bg-white"} />
                         })}
 
                     </div>
