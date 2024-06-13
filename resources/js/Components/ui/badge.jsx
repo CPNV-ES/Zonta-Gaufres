@@ -27,6 +27,10 @@ const badgeVariants = cva(
                 pending: "border-transparent bg-yellow-200 text-yellow-500",
                 cancelled: "border-transparent bg-red-200 text-red-500",
                 open: "border-transparent bg-blue-200 text-blue-500",
+                // people roles badges colors
+                DELIVERY_GUY: "border-transparent bg-blue-200 text-blue-500",
+                ADMIN: "border-transparent bg-green-200 text-green-500",
+                STAFF: "border-transparent bg-yellow-200 text-yellow-500",
             },
         },
         defaultVariants: {
