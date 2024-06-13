@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DeliveryGuySchedule;
-use Inertia\Inertia;
-use App\Models\Order;
 use App\Enums\PaymentTypesEnum;
+use App\Models\DeliveryGuySchedule;
+use App\Models\Order;
+use App\Models\Person;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class OrderController extends Controller
 {
     public function index()
     {
-
         $orders = Order::with('deliveryGuySchedule', 'contact', 'buyer', 'articles', 'paymentType')->get();
 
         $orders->load('deliveryGuySchedule.person');
@@ -59,7 +60,11 @@ class OrderController extends Controller
      */
     public function create()
     {
-        //
+        $contactPeopleNames = $this->getContactPeopleNames();
+
+        return Inertia::render('Orders/Create', [
+            "contactPeopleNames" => $contactPeopleNames,
+        ]);
     }
 
     /**
@@ -67,7 +72,16 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $order = new Order();
+        $order->date = $request->date;
+        $order->start_delivery_time = $request->start_delivery_time;
+        $order->end_delivery_time = $request->end_delivery_time;
+        if ($request->remark) {
+            $order->remark = $request->remark;
+        }
+        if ($request->gifted_by) {
+            $order->gifted_by = $request->gifted_by;
+        }
     }
 
     /**
@@ -101,5 +115,24 @@ class OrderController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    private function getContactPeopleNames()
+    {
+        $contactPeople = Person::with('personType')->whereHas('personType', function (Builder $query) {
+            $query->where('person_types.id', 2);
+        })->orderBy('lastname', 'asc')->get();
+
+        $contactPeopleNames = [];
+
+        foreach ($contactPeople as $contactPerson) {
+            $contactPerson = [
+                'id' => $contactPerson->id,
+                'name' => $contactPerson->lastname . ' ' . $contactPerson->firstname
+            ];
+            array_push($contactPeopleNames, $contactPerson);
+        }
+
+        return $contactPeopleNames;
     }
 }
