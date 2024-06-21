@@ -2,7 +2,7 @@
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
+[![License][license-shield]][license-url]
 
 <br />
 <div align="center">
@@ -15,7 +15,7 @@
   <p align="center">
     An awesome management system for Zonta waffles sells!
     <br />
-    <a href="https://github.com/CPNV-ES/Zonta-Gaufres"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/CPNV-ES/Zonta-Gaufres/wiki"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="https://github.com/CPNV-ES/Zonta-Gaufres/issues">Request Feature</a>
@@ -35,13 +35,18 @@
 [![Laravel][Laravel.com]][Laravel-url]
 [![React][React.js]][React-url]
 [![Shadcn][ShadCn.com]][ShadCn-url]
+[![Inertia.js][Inertia.js]][Inertia-url]
+[![Vite][Vite]][Vite-url]
 [![Docker][Docker.com]][Docker-url]
+[![mysql][mysql]][mysql-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Environment
 
-<!-- TODO -->
+[![VSCode][VSCode]][VSCode-url]
+[![PHPStorm][PHPStorm]][PHPStorm-url]
+[![Windows][Windows]][Windows-url]
 
 # Getting Started
 
@@ -71,7 +76,7 @@
     npm run dep
     ```
 
-> The `dep` script is a custom script that will install both npm and composer dependencies at once.
+> The `dep` script is a custom script that will install both npm and composer dependencies at once. You MUST have run `npm install` before running this script if you don't have `concurrently` installed.
 
 3. Create the `.env` file based on the `.env.example` file
 
@@ -82,7 +87,7 @@
 4. Build docker containers (optional)
 
     ```sh
-    docker compose build
+    docker compose up -d --build
     ```
 
 ### Runnning the project
@@ -168,9 +173,139 @@ The project uses [Vite][Vite-url] as a development server.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+### Directory structure
+
+```sh
+.
+├── artisan
+├── bootstrap
+│   └── app.php
+├── .editorconfig
+├── .gitattributes
+├── storage
+│   ├── app
+│   │   ├── .gitignore
+│   │   └── public
+│   │       ├── .gitignore
+│   │       └── zonta
+│   │           └── zonta-red-big.png
+│   └── logs
+│       ├── .gitignore
+│       └── laravel.log
+├── .env
+├── LICENSE.txt
+├── app
+│   ├── Console
+│   │   └── Kernel.php
+│   ├── Exceptions
+│   │   └── Handler.php
+│   ├── Enums
+│   │   ├── AddressTypesEnum.php
+│   │   └── OtherEnum.php
+│   ├── Http
+│   │   ├── Controllers
+│   │   │   ├── Controller.php
+│   │   │   ├── Auth
+│   │   │   │   ├── VerifyEmailController.php
+│   │   │   │   └── OtherAuthControllers.php
+│   │   │   ├── DeliveryController.php
+│   │   │   └── OtherController.php
+│   │   ├── Kernel.php
+│   │   ├── Middleware
+│   │   │   ├── Authenticate.php
+│   │   │   ├── EncryptCookies.php
+│   │   │   ├── PreventRequestsDuringMaintenance.php
+│   │   │   ├── RedirectIfAuthenticated.php
+│   │   │   ├── TrimStrings.php
+│   │   │   ├── TrustHosts.php
+│   │   │   ├── TrustProxies.php
+│   │   │   ├── ValidateSignature.php
+│   │   │   ├── VerifyCsrfToken.php
+│   │   │   └── HandleInertiaRequests.php
+│   │   └── Requests
+│   │       ├── Auth
+│   │       │   └── LoginRequest.php
+│   │       └── ProfileUpdateRequest.php
+│   ├── Models
+│   │   ├── Address.php
+│   │   └── OtherModels.php
+│   └── Providers
+│       ├── AuthServiceProvider.php
+│       └── OtherProviders.php
+├── components.json
+├── composer.json
+├── composer.lock
+├── config
+│   ├── auth.php
+│   └── OtherConfig.php
+├── database
+│   ├── .gitignore
+│   ├── factories
+│   │   ├── AddressFactory.php
+│   │   └── ModelFactory.php
+│   ├── migrations
+│   │   ├── 2024_02_04_225203_create_articles_table.php
+│   │   └── OthersMigrations.php
+│   └── seeders
+│       └── DatabaseSeeder.php
+├── .devcontainer
+│   └── devcontainer.json
+├── docker-compose.yml
+├── .env.example
+├── .gitignore
+├── jsconfig.json
+├── package.json
+├── package-lock.json
+├── phpunit.xml
+├── postcss.config.js
+├── public
+│   ├── favicon.ico
+│   ├── .htaccess
+│   ├── index.php
+│   ├── robots.txt
+│   └── images
+│       └── zonta.png
+├── resources
+│   ├── css
+│   │   └── app.css
+│   ├── js
+│   │   ├── app.jsx
+│   │   ├── Builder
+│   │   │   └── ColumnBuilder.js
+│   │   ├── Components
+│   │   │   ├── DataTable.jsx
+│   │   │   ├── CustomComponents.jsx
+│   │   │   └── ui
+│   │   │       ├── badge.jsx
+│   │   │       └── componentsInstalledThroughShadcn.jsx
+│   │   ├── Layouts
+│   │   │   └── MainLayout.jsx
+│   │   ├── lib
+│   │   │   └── utils.js
+│   │   └── Pages
+│   │       ├── Delivery
+│   │       │   ├── Edit.jsx
+│   │       │   └── Index.jsx
+│   │       └── FeatureName
+│   │           └── Index.jsx
+│   └── views
+│       └── app.blade.php
+├── routes
+│   ├── api.php
+│   ├── channels.php
+│   ├── console.php
+│   ├── auth.php
+│   └── web.php
+├── tailwind.config.js
+├── vite.config.js
+└── README.md
+```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the MIT License. See [`LICENSE.txt`][License-url] for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -180,7 +315,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 | ---------------- | ----------------------------- |
 | Noé Zwissig      | <noe.zwissig@eduvaud.ch>      |
 | Cyprien Jaquier  | <cyprien.jaquier@eduvaud.ch>  |
-| Noah Delgado     | <noah.delgado@eduvaud.ch>     |
+| Noah Delgado     | <noah.delgado1@eduvaud.ch>    |
 | Benjamin Fontana | <benjamin.fontana@eduvaud.ch> |
 
 Project Link: [https://github.com/CPNV-ES/Zonta-Gaufres](https://github.com/CPNV-ES/Zonta-Gaufres)
@@ -191,8 +326,6 @@ Project Link: [https://github.com/CPNV-ES/Zonta-Gaufres](https://github.com/CPNV
 [contributors-url]: https://github.com/CPNV-ES/Zonta-Gaufres/graphs/contributors
 [issues-shield]: https://img.shields.io/github/issues/CPNV-ES/Zonta-Gaufres.svg?style=for-the-badge
 [issues-url]: https://github.com/CPNV-ES/Zonta-Gaufres/issues
-[license-shield]: https://img.shields.io/github/license/CPNV-ES/Zonta-Gaufres.svg?style=for-the-badge
-[license-url]: https://github.com/CPNV-ES/Zonta-Gaufres/blob/master/LICENSE.txt
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=react
 [React-url]: https://reactjs.org/
 [Laravel.com]: https://img.shields.io/badge/Laravel%2010-20232A?style=for-the-badge&logo=laravel&logoColor=laravel
@@ -206,8 +339,21 @@ Project Link: [https://github.com/CPNV-ES/Zonta-Gaufres](https://github.com/CPNV
 [composer]: https://img.shields.io/badge/composer-20232A?style=for-the-badge&logo=composer&logoColor=composer
 [composer-url]: https://getcomposer.org/
 [Vite-url]: https://vitejs.dev/
+[Vite]: https://img.shields.io/badge/Vite-20232A?style=for-the-badge&logo=vite&logoColor=vite
 [GitFlow-url]: https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
 [SemVer-url]: https://semver.org/
 [Commit-url]: https://www.conventionalcommits.org/
 [php]: https://img.shields.io/badge/php%208.2-20232A?style=for-the-badge&logo=php&logoColor=php
 [php-url]: https://www.php.net/
+[Inertia.js]: https://img.shields.io/badge/Inertia.js-20232A?style=for-the-badge&logo=inertia&logoColor=inertia
+[Inertia-url]: https://inertiajs.com/
+[mysql]: https://img.shields.io/badge/mysql-20232A?style=for-the-badge&logo=mysql&logoColor=mysql
+[mysql-url]: https://www.mysql.com/
+[VSCode]: https://img.shields.io/badge/VSCode-20232A?style=for-the-badge&logo=visual-studio-code&logoColor=visual-studio-code
+[VSCode-url]: https://code.visualstudio.com/
+[PHPStorm]: https://img.shields.io/badge/PHPStorm-20232A?style=for-the-badge&logo=phpstorm&logoColor=phpstorm
+[PHPStorm-url]: https://www.jetbrains.com/phpstorm/
+[Windows]: https://img.shields.io/badge/Windows-20232A?style=for-the-badge&logo=windows&logoColor=windows
+[Windows-url]: https://www.microsoft.com/
+[License-shield]: https://img.shields.io/github/license/CPNV-ES/Zonta-Gaufres.svg?style=for-the-badge
+[License-url]: https://github.com/CPNV-ES/Zonta-Gaufres/blob/main/LICENSE.txt
