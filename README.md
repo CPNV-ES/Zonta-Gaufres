@@ -1,221 +1,361 @@
-#
-
 <a name="readme-top"></a>
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
+[![License][license-shield]][license-url]
 
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/CPNV-ES/Zonta-Gaufres">
+    <img src="./storage/app/zonta/zonta-red-big.png" alt="Zonta Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Best-README-Template</h3>
+<h3 align="center">Zonta Gaufres</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
+    An awesome management system for Zonta waffles sells!
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/CPNV-ES/Zonta-Gaufres/wiki"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
+    <a href="https://github.com/CPNV-ES/Zonta-Gaufres/issues">Request Feature</a>
     ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
+    <a href="https://github.com/CPNV-ES/Zonta-Gaufres/issues">Report Bug</a>
   </p>
 </div>
 
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
+# About The Project
 
-## About The Project
+The whole project which is not yet finished is a management system for Zonta waffles sells. It's a school project for the CPNV.
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
-
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should implement DRY principles to the rest of your life :smile:
-
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have contributed to expanding this template!
-
-Use the `BLANK_README.md` to get started.
+Most of the project is still under development. You might want to switch to develop branch to see the latest changes and be able to run and contribute to the project.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Built With
+## Built With
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
+[![Laravel][Laravel.com]][Laravel-url]
+[![React][React.js]][React-url]
+[![Shadcn][ShadCn.com]][ShadCn-url]
+[![Inertia.js][Inertia.js]][Inertia-url]
+[![Vite][Vite]][Vite-url]
+[![Docker][Docker.com]][Docker-url]
+[![mysql][mysql]][mysql-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Getting Started
+## Environment
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+[![VSCode][VSCode]][VSCode-url]
+[![PHPStorm][PHPStorm]][PHPStorm-url]
+[![Windows][Windows]][Windows-url]
+
+# Getting Started
+
+## Development
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-
-  ```sh
-  npm install npm@latest -g
-  ```
+[![Docker][Docker.com]][Docker-url]
+[![npm][npm]][npm-url]
+[![composer][composer]][composer-url]
+[![php][php]][php-url]
 
 ### Installation
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
 
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   git clone https://github.com/CPNV-ES/Zonta-Gaufres.git
    ```
 
-3. Install NPM packages
+2. Install npm and composer dependencies (`not required` if you're planning to use `devcontainer`)
 
-   ```sh
-   npm install
-   ```
+    ```sh
+    npm install
+    composer install
+    #or
+    npm run dep
+    ```
 
-4. Enter your API in `config.js`
+> The `dep` script is a custom script that will install both npm and composer dependencies at once. You MUST have run `npm install` before running this script if you don't have `concurrently` installed.
 
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+3. Create the `.env` file based on the `.env.example` file
+
+    ```sh
+     cp .env.example .env
+     ```
+
+4. Build docker containers (optional)
+
+    ```sh
+    docker compose up -d --build
+    ```
+
+### Runnning the project
+
+#### Using Docker and devcontainer
+
+As the project is using Docker container with a devcontainer, you can simply run the dev container using the `vscode` extension `ms-vscode-remote.remote-containers`.
+
+Open the project in vscode. It should ask you to reopen in the container. If it doesn't, you can click on `ctrl + shit + p` and type `reopen in container` then press enter.
+
+The devcontainer contains extensions to allow any dev to work with the same formatting and have a better collaboration.
+
+##### Not using VSCode ?
+
+If you are using another IDE which has a `limited support for devcontainers`, you might no be able to run the devcontainer at its current state. Therefore, you can still run the container with the following command.
+
+```sh
+docker compose up -d
+```
+
+> `-d` stands for detached mode, meaning that the container will run in the background.
+
+#### Install dependencies
+
+Now that you are in the container, you can run the following command to install all the dependencies at once.
+
+```sh
+# If it's the first time you're installing dependencies run:
+npm i
+# Then:
+npm run dep
+```
+
+> It's due to a package used in the script "dep" which runs all dependencies install concurrently in the same terminal. You can still do each step manually.
+
+#### Run the servers
+
+There are two servers that must be started. One which serves the frontend and one which serves the backend.
+
+```sh
+npm run dev-all
+# or
+npm run dev
+php artisan serve
+```
+
+> Same as before the `dev-all` script is a custom script that will run both servers concurrently in the same terminal. You can still do each step manually.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Usage
+## Collaborate
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+### Convention
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+#### Commit
+
+The project uses [Conventional Commits][Commit-url]. The keywords used are: `feat`, `fix`, `chore`, `refactor`, `test`, `docs`. The commits are named with the following pattern: `type: description` eg.(feat: add awsome feature).
+
+#### Workflow
+
+The project uses [Gitflow][GitFlow-url]. The branches used are: `main`, `develop`, `feature`, `release`, `hotfix`. The branches are named with the following pattern: `type/short-description` eg.(feature/awsome-feature).
+
+#### file naming
+
+The project uses the following file naming convention.
+
+| Type                | Naming convention | Example           |
+| ------------------- | ----------------- | ----------------- |
+| Class               | PascalCase        | `LoginPage`       |
+| JS                  | camelCase         | `loginPage.js`    |
+| JSX Component       | PascalCase        | `Button.jsx`      |
+| Shadcn/ui Component | camleCase         | `button.jsx`      |
+| CSS                 | kebab-case        | `main.css`        |
+| HTML                | kebab-case        | `login-page.html` |
+
+### Versioning
+
+The project uses [SemVer][SemVer-url]. The versioning is done with the following pattern: `major.minor.patch` eg.(1.0.0).
+
+### Development server
+
+The project uses [Vite][Vite-url] as a development server.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Roadmap
+### Directory structure
 
-* [x] Add Changelog
-* [x] Add back to top links
-* [ ] Add Additional Templates w/ Examples
-* [ ] Add "components" document to easily copy & paste sections of the readme
-* [ ] Multi-language Support
-  * [ ] Chinese
-  * [ ] Spanish
-
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+```sh
+.
+├── artisan
+├── bootstrap
+│   └── app.php
+├── .editorconfig
+├── .gitattributes
+├── storage
+│   ├── app
+│   │   ├── .gitignore
+│   │   └── public
+│   │       ├── .gitignore
+│   │       └── zonta
+│   │           └── zonta-red-big.png
+│   └── logs
+│       ├── .gitignore
+│       └── laravel.log
+├── .env
+├── LICENSE.txt
+├── app
+│   ├── Console
+│   │   └── Kernel.php
+│   ├── Exceptions
+│   │   └── Handler.php
+│   ├── Enums
+│   │   ├── AddressTypesEnum.php
+│   │   └── OtherEnum.php
+│   ├── Http
+│   │   ├── Controllers
+│   │   │   ├── Controller.php
+│   │   │   ├── Auth
+│   │   │   │   ├── VerifyEmailController.php
+│   │   │   │   └── OtherAuthControllers.php
+│   │   │   ├── DeliveryController.php
+│   │   │   └── OtherController.php
+│   │   ├── Kernel.php
+│   │   ├── Middleware
+│   │   │   ├── Authenticate.php
+│   │   │   ├── EncryptCookies.php
+│   │   │   ├── PreventRequestsDuringMaintenance.php
+│   │   │   ├── RedirectIfAuthenticated.php
+│   │   │   ├── TrimStrings.php
+│   │   │   ├── TrustHosts.php
+│   │   │   ├── TrustProxies.php
+│   │   │   ├── ValidateSignature.php
+│   │   │   ├── VerifyCsrfToken.php
+│   │   │   └── HandleInertiaRequests.php
+│   │   └── Requests
+│   │       ├── Auth
+│   │       │   └── LoginRequest.php
+│   │       └── ProfileUpdateRequest.php
+│   ├── Models
+│   │   ├── Address.php
+│   │   └── OtherModels.php
+│   └── Providers
+│       ├── AuthServiceProvider.php
+│       └── OtherProviders.php
+├── components.json
+├── composer.json
+├── composer.lock
+├── config
+│   ├── auth.php
+│   └── OtherConfig.php
+├── database
+│   ├── .gitignore
+│   ├── factories
+│   │   ├── AddressFactory.php
+│   │   └── ModelFactory.php
+│   ├── migrations
+│   │   ├── 2024_02_04_225203_create_articles_table.php
+│   │   └── OthersMigrations.php
+│   └── seeders
+│       └── DatabaseSeeder.php
+├── .devcontainer
+│   └── devcontainer.json
+├── docker-compose.yml
+├── .env.example
+├── .gitignore
+├── jsconfig.json
+├── package.json
+├── package-lock.json
+├── phpunit.xml
+├── postcss.config.js
+├── public
+│   ├── favicon.ico
+│   ├── .htaccess
+│   ├── index.php
+│   ├── robots.txt
+│   └── images
+│       └── zonta.png
+├── resources
+│   ├── css
+│   │   └── app.css
+│   ├── js
+│   │   ├── app.jsx
+│   │   ├── Builder
+│   │   │   └── ColumnBuilder.js
+│   │   ├── Components
+│   │   │   ├── DataTable.jsx
+│   │   │   ├── CustomComponents.jsx
+│   │   │   └── ui
+│   │   │       ├── badge.jsx
+│   │   │       └── componentsInstalledThroughShadcn.jsx
+│   │   ├── Layouts
+│   │   │   └── MainLayout.jsx
+│   │   ├── lib
+│   │   │   └── utils.js
+│   │   └── Pages
+│   │       ├── Delivery
+│   │       │   ├── Edit.jsx
+│   │       │   └── Index.jsx
+│   │       └── FeatureName
+│   │           └── Index.jsx
+│   └── views
+│       └── app.blade.php
+├── routes
+│   ├── api.php
+│   ├── channels.php
+│   ├── console.php
+│   ├── auth.php
+│   └── web.php
+├── tailwind.config.js
+├── vite.config.js
+└── README.md
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+Distributed under the MIT License. See [`LICENSE.txt`][License-url] for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - <email@example.com>
+| Developer        | Email                         |
+| ---------------- | ----------------------------- |
+| Noé Zwissig      | <noe.zwissig@eduvaud.ch>      |
+| Cyprien Jaquier  | <cyprien.jaquier@eduvaud.ch>  |
+| Noah Delgado     | <noah.delgado1@eduvaud.ch>    |
+| Benjamin Fontana | <benjamin.fontana@eduvaud.ch> |
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## Acknowledgments
-
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
-
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-* [Malven's Grid Cheatsheet](https://grid.malven.co/)
-* [Img Shields](https://shields.io)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
-* [React Icons](https://react-icons.github.io/react-icons/search)
+Project Link: [https://github.com/CPNV-ES/Zonta-Gaufres](https://github.com/CPNV-ES/Zonta-Gaufres)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
-[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[contributors-shield]: https://img.shields.io/github/contributors/CPNV-ES/Zonta-Gaufres.svg?style=for-the-badge
+[contributors-url]: https://github.com/CPNV-ES/Zonta-Gaufres/graphs/contributors
+[issues-shield]: https://img.shields.io/github/issues/CPNV-ES/Zonta-Gaufres.svg?style=for-the-badge
+[issues-url]: https://github.com/CPNV-ES/Zonta-Gaufres/issues
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=react
 [React-url]: https://reactjs.org/
-[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-[Vue-url]: https://vuejs.org/
-[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
-[Angular-url]: https://angular.io/
-[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
-[Svelte-url]: https://svelte.dev/
-[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
+[Laravel.com]: https://img.shields.io/badge/Laravel%2010-20232A?style=for-the-badge&logo=laravel&logoColor=laravel
 [Laravel-url]: https://laravel.com
-[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
-[Bootstrap-url]: https://getbootstrap.com
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com 
+[ShadCn.com]: https://img.shields.io/badge/shadcn/ui-20232A?style=for-the-badge&logo=shadcnui&logoColor=shadcnui
+[ShadCn-url]: https://shadcn.com
+[Docker.com]: https://img.shields.io/badge/Docker-20232A?style=for-the-badge&logo=docker&logoColor=docker
+[Docker-url]: https://www.docker.com/
+[npm]: https://img.shields.io/badge/npm-20232A?style=for-the-badge&logo=npm&logoColor=npm
+[npm-url]: https://www.npmjs.com/
+[composer]: https://img.shields.io/badge/composer-20232A?style=for-the-badge&logo=composer&logoColor=composer
+[composer-url]: https://getcomposer.org/
+[Vite-url]: https://vitejs.dev/
+[Vite]: https://img.shields.io/badge/Vite-20232A?style=for-the-badge&logo=vite&logoColor=vite
+[GitFlow-url]: https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
+[SemVer-url]: https://semver.org/
+[Commit-url]: https://www.conventionalcommits.org/
+[php]: https://img.shields.io/badge/php%208.2-20232A?style=for-the-badge&logo=php&logoColor=php
+[php-url]: https://www.php.net/
+[Inertia.js]: https://img.shields.io/badge/Inertia.js-20232A?style=for-the-badge&logo=inertia&logoColor=inertia
+[Inertia-url]: https://inertiajs.com/
+[mysql]: https://img.shields.io/badge/mysql-20232A?style=for-the-badge&logo=mysql&logoColor=mysql
+[mysql-url]: https://www.mysql.com/
+[VSCode]: https://img.shields.io/badge/VSCode-20232A?style=for-the-badge&logo=visual-studio-code&logoColor=visual-studio-code
+[VSCode-url]: https://code.visualstudio.com/
+[PHPStorm]: https://img.shields.io/badge/PHPStorm-20232A?style=for-the-badge&logo=phpstorm&logoColor=phpstorm
+[PHPStorm-url]: https://www.jetbrains.com/phpstorm/
+[Windows]: https://img.shields.io/badge/Windows-20232A?style=for-the-badge&logo=windows&logoColor=windows
+[Windows-url]: https://www.microsoft.com/
+[License-shield]: https://img.shields.io/github/license/CPNV-ES/Zonta-Gaufres.svg?style=for-the-badge
+[License-url]: https://github.com/CPNV-ES/Zonta-Gaufres/blob/main/LICENSE.txt
