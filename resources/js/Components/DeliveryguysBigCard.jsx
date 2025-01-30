@@ -18,7 +18,7 @@ const DeliveryguysBigCard = ({ deliveryGuy }) => {
                         <span className="material-symbols-outlined">location_on</span>
                         <div className="flex flex-col flex-1 overflow-hidden">
                             <span className="w-full truncate">
-                                {deliveryGuy.city[0].name}
+                                {deliveryGuy.city[0]?.name}
                             </span>
                         </div>
 
