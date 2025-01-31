@@ -12,10 +12,7 @@ class Order extends Model
     protected $fillable = ['real_delivery_time', 'delivery_guy_schedule_id'];
 
 
-    public function articles(): BelongsToMany
-    {
-        return $this->belongsToMany(Article::class, 'order_article')->withPivot('quantity');
-    }
+
     public function buyer()
     {
         return $this->belongsTo(Person::class, 'buyer_id');
@@ -26,11 +23,7 @@ class Order extends Model
     }
     public function address()
     {
-        return $this->belongsToMany(Address::class, 'order_address');
-    }
-    public function addressType()
-    {
-        return $this->belongsToMany(AddressType::class, 'order_address');
+        return $this->belongsTo(Address::class, 'addresse_id');
     }
     public function deliveryGuySchedule()
     {
