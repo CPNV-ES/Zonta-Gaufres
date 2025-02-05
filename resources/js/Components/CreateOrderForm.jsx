@@ -1,5 +1,4 @@
 "use client"
-import React, {useState} from 'react';
 import {z} from "zod";
 import {Input} from "@/Components/ui/input.jsx";
 import {Button} from "@/Components/ui/button";
@@ -10,6 +9,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
 
 const formSchema = z.object({
+    //TODO: fix error message when empty
     order: z.object({
         quantity: z.preprocess((val) => Number(val), z.number({
             required_error: "Ce champ est requis.",
@@ -19,12 +19,15 @@ const formSchema = z.object({
             message: "Le champ doit être un nombre positif.",
         }).int({
             message: "Le champ doit être un nombre entier.",
-        })),
+        })
+    ),
         contact: z.string().optional(),
         gifted_by: z.string().optional(),
         start_delivery_time: z.string().optional(),
         end_delivery_time: z.string().optional(),
-        payment: z.string().optional(),
+        payment: z.string({
+            required_error: "Ce champ est requis.",
+        }),
     }),
     person: z.object({
         phone_number: z.preprocess((val) => Number(val), z.number({
@@ -55,19 +58,10 @@ const formSchema = z.object({
             required_error: "Ce champ est requis.",
         }),
     }),
-    same_as_delivery: z.boolean().optional(),
-    billingAddress: z.object({
-        city: z.string().optional(),
-        street: z.string().optional(),
-        street_number: z.string().optional(),
-        complement: z.string().optional(),
-        npa: z.string().optional(),
-    }),
     notification: z.boolean().optional(),
 })
 
 const CreateOrderForm = (contactPeopleNames) => {
-    const [sameAsDelivery, setSameAsDelivery] = useState(false);
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -264,7 +258,7 @@ const CreateOrderForm = (contactPeopleNames) => {
                                 )}
                             />
                         </div>
-                        <FormLabel className="py-2">Plage horaire de livraison*</FormLabel>
+                        <FormLabel className="py-2">Plage horaire de livraison</FormLabel>
                         <div className="flex flex-row gap-2 items-center">
                             <span>De</span>
                             <FormField
@@ -301,7 +295,7 @@ const CreateOrderForm = (contactPeopleNames) => {
                             name="order.payment"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Mode de paiement</FormLabel>
+                                    <FormLabel>Mode de paiement*</FormLabel>
                                     <FormControl>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <SelectTrigger>
@@ -317,85 +311,6 @@ const CreateOrderForm = (contactPeopleNames) => {
                                 </FormItem>
                             )}
                         />
-                        <FormField
-                            control={form.control}
-                            name="same_as_delivery"
-                            render={({field}) => (
-                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-3 my-2">
-                                    <FormControl>
-                                        <Checkbox
-                                            checked={field.value}
-                                            onCheckedChange={(checked) => {
-                                                field.onChange(checked);
-                                                setSameAsDelivery(checked);
-                                            }}
-                                        />
-                                    </FormControl>
-                                    <div className="space-y-1 leading-none">
-                                        <FormLabel>
-                                            Utiliser l'adresse de livraison comme adresse de facturation
-                                        </FormLabel>
-                                    </div>
-                                </FormItem>
-                            )}
-                        />
-                        {!sameAsDelivery && (
-                            <>
-                                <FormField
-                                    control={form.control}
-                                    name="billingAddress.street"
-                                    render={({field}) => (
-                                        <FormItem>
-                                            <FormLabel>Rue et numéro*</FormLabel>
-                                            <FormControl>
-                                                <Input placeholder="Rue" {...field} />
-                                            </FormControl>
-                                            <FormMessage/>
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="billingAddress.complement"
-                                    render={({field}) => (
-                                        <FormItem>
-                                            <FormLabel>Complément d'adresse</FormLabel>
-                                            <FormControl>
-                                                <Input placeholder="Complément" {...field} />
-                                            </FormControl>
-                                            <FormMessage/>
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormLabel className="py-2">NPA et localité*</FormLabel>
-                                <div className="flex w-full flex-row gap-2 items-center">
-                                    <FormField
-                                        control={form.control}
-                                        name="billingAddress.npa"
-                                        render={({field}) => (
-                                            <FormItem>
-                                                <FormControl>
-                                                    <Input type="number" placeholder="npa" {...field} />
-                                                </FormControl>
-                                                <FormMessage/>
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="billingAddress.city"
-                                        render={({field}) => (
-                                            <FormItem>
-                                                <FormControl>
-                                                    <Input placeholder="Localité" {...field} />
-                                                </FormControl>
-                                                <FormMessage/>
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
-                            </>
-                        )}
                     </div>
                 </div>
                 <div className="flex justify-end">
@@ -414,7 +329,7 @@ const CreateOrderForm = (contactPeopleNames) => {
                                     </FormControl>
                                     <div className="space-y-1 leading-none">
                                         <FormLabel>
-                                            Je shouaiterais recevoir des annonces sur les prochaines ventes
+                                            Je souhaiterais recevoir des annonces sur les prochaines ventes
                                         </FormLabel>
                                     </div>
                                 </FormItem>
