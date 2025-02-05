@@ -58,7 +58,7 @@ const Index = (orders) => {
                     icon: "plus",
                     action: "Créer une commande",
                     variant: "green",
-                    handler: (a) => console.log(a),
+                    handler: (a) => window.location.href = "/orders/create",
                 }}
                 onClickHandler={(row) => console.log(row.id)}
             />

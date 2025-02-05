@@ -15,7 +15,7 @@ const DeliveryguysCard = ({ deliveryGuy, onClick, className="bg-white" }) => {
             <div className="flex justify-between m-3 mb-2">
                 <div className="flex gap-2 max-w-40">
                     <span className="material-symbols-outlined">location_on</span>
-                    <span className="truncate" title={deliveryGuy.city[0].name}>{deliveryGuy.city[0].name}</span>
+                    <span className="truncate" title={deliveryGuy.city[0]?.name}>{deliveryGuy.city[0]?.name}</span>
                 </div>
                 <div className="flex flex-row gap-4">
                     <div className="flex gap-2">

@@ -27,8 +27,6 @@ Route::get('/invoices', function () {
     return Inertia::render('Invoices');
 });
 
-Route::resources([
-    'deliveries' => DeliveryController::class,
-    'orders' => OrderController::class,
-    'people' => PersonController::class,
-]);
+Route::resource("deliveries", DeliveryController::class)->only(["index", "editAll"]);
+Route::resource("orders", OrderController::class)->only(["index", "store", "create", "update"]);
+Route::resource("people", PersonController::class)->only(["index", "store"]);
