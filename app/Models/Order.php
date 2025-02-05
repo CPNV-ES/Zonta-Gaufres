@@ -11,7 +11,10 @@ class Order extends Model
     use HasFactory;
     protected $fillable = ['real_delivery_time', 'delivery_guy_schedule_id'];
 
-
+    public function total_price($price = 2)
+    {
+        return $this->waffle_quantity * $price;
+    }
 
     public function buyer()
     {

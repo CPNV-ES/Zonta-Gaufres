@@ -39,7 +39,7 @@ class OrderController extends Controller
                 "time_slot" => $order->deliveryGuySchedule !== null ? $order->deliveryGuySchedule->start_delivery_time_window . ' - ' . $order->deliveryGuySchedule->end_delivery_time_window : "",
                 "contact" => $order->contact->firstname,
                 "waffles_number" => $order->waffle_quantity,
-                "total" => $order->waffle_quantity * 2 /*check if there's a way to be more automatic incase of changing price, for now 2.-/waffle */,
+                "total" => $order->total_price(),
                 "status" => [
                     "key" => "paid",
                     "name" => "Payée"
