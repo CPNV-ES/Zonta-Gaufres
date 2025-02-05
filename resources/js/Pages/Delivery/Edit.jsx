@@ -69,7 +69,7 @@ const Deliveries = ({ initOrders = [], deliveryGuys = [] }) => {
     }
 
     useEffect(() => {
-        orders.sort((a, b) => a.address[0].city.name.localeCompare(b.address[0].city.name))
+        orders.sort((a, b) => a.address.city.name.localeCompare(b.address.city.name))
         sortDeliveriesByTime(selectedDeliveryGuy)
     }, [orders])
 

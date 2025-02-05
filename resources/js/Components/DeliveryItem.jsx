@@ -8,12 +8,12 @@ const DeliveryItem = ({ delivery, unlink }) => {
                 <div className="flex flex-1 p-3">
                     <span className="material-symbols-outlined">quick_reorder</span>
                     <span className="text-nowrap">
-                        <span className="font-bold">{delivery.articles[0].pivot.quantity}</span> paquets
+                        <span className="font-bold">{delivery.waffle_quantity}</span> paquets
                     </span>
                 </div>
                 <div className="flex flex-1 p-3 max-w-40">
                     <span className="material-symbols-outlined">location_on</span>
-                    <span className="truncate" title={delivery.address[0].city.name}>{delivery.address[0].city.name}</span>
+                    <span className="truncate" title={delivery.address.city.name}>{delivery.address.city.name}</span>
                 </div>
                 <div className="absolute flex justify-end w-full h-full p-2 text-red-500 group">
                     <button onClick={unlink} className="hidden h-full px-2 bg-white group-hover:block">

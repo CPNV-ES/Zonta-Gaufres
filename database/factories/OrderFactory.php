@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\Person;
 use App\Models\DeliveryGuySchedule;
 use App\Models\PaymentTypes;
+use App\Models\Address;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,17 +17,17 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 final class OrderFactory extends Factory
 {
     /**
-    * The name of the factory's corresponding model.
-    *
-    * @var string
-    */
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
     protected $model = Order::class;
 
     /**
-    * Define the model's default state.
-    *
-    * @return array
-    */
+     * Define the model's default state.
+     *
+     * @return array
+     */
     public function definition(): array
     {
         return [
@@ -40,6 +41,8 @@ final class OrderFactory extends Factory
             'contact_id' => Person::all()->random()->id,
             'buyer_id' => Person::all()->random()->id,
             'payment_type_id' => PaymentTypes::all()->random()->id,
+            'waffle_quantity' => fake()->numberBetween(1, 20),
+            'address_id' => Address::all()->random()->id,
         ];
     }
 }

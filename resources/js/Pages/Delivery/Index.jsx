@@ -76,9 +76,9 @@ const Deliveries = ({ initDeliveries }) => {
                 'delivery_guy': `${d.delivery_guy_schedule.person.firstname} ${d.delivery_guy_schedule.person.lastname}`,
                 'buyer': `${d.buyer.firstname} ${d.buyer.lastname}`,
                 'company': d.buyer.company,
-                'address': `${d.address[0].street} ${d.address[0].street_number}`,
-                'postal_code': d.address[0].city.zip_code,
-                'locality': d.address[0].city.name,
+                'address': `${d.address.street} ${d.address.street_number}`,
+                'postal_code': d.address.city.zip_code,
+                'locality': d.address.city.name,
                 'phone_number': d.buyer.phone_number
             }
             tmpdeliveries.push(tmpdelivery)

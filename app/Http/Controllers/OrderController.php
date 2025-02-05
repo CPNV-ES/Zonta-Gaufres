@@ -14,12 +14,13 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::with('deliveryGuySchedule', 'contact', 'buyer', 'articles', 'paymentType')->get();
+        $orders = Order::with('deliveryGuySchedule', 'contact', 'buyer', 'paymentType', 'address')->get();
 
         $orders->load('deliveryGuySchedule.person');
+        $orders->load('address.city');
 
         $transformed = $orders->map(function ($order) {
-            $waffleQuantity = $order->articles[0]->pivot->quantity;
+
 
             $paymentType = PaymentTypesEnum::fromCase($order->paymentType->name);
 
@@ -29,16 +30,16 @@ class OrderController extends Controller
                 "invoice_id" => $order->id,
                 "company" => $order->contact->company,
                 "client" => $order->buyer->firstname . ' ' . $order->buyer->lastname,
-                "address" => $order->address[0]->street . ' ' . $order->address[0]->street_number,
-                "zip_code" => $order->address[0]->city->zip_code,
-                "city" => $order->address[0]->city->name,
+                "address" => $order->address->street . ' ' . $order->address->street_number,
+                "zip_code" => $order->address->city->zip_code,
+                "city" => $order->address->city->name,
                 "note" => $order->remark,
                 "gifted_by" => $order->gifted_by,
                 "delivery_guy" => $order->deliveryGuySchedule !== null ? $order->deliveryGuySchedule->person->firstname . ' ' . $order->deliveryGuySchedule->person->lastname : "",
                 "time_slot" => $order->deliveryGuySchedule !== null ? $order->deliveryGuySchedule->start_delivery_time_window . ' - ' . $order->deliveryGuySchedule->end_delivery_time_window : "",
                 "contact" => $order->contact->firstname,
-                "waffles_number" => $waffleQuantity,
-                "total" => $waffleQuantity * $order->articles[0]->price,
+                "waffles_number" => $order->waffle_quantity,
+                "total" => $order->total_price(),
                 "status" => [
                     "key" => "paid",
                     "name" => "Payée"
