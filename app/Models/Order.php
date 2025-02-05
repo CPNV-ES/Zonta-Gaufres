@@ -26,7 +26,7 @@ class Order extends Model
     }
     public function address()
     {
-        return $this->belongsTo(Address::class, 'addresse_id');
+        return $this->belongsTo(Address::class, 'address_id');
     }
     public function deliveryGuySchedule()
     {

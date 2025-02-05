@@ -42,7 +42,7 @@ final class OrderFactory extends Factory
             'buyer_id' => Person::all()->random()->id,
             'payment_type_id' => PaymentTypes::all()->random()->id,
             'waffle_quantity' => fake()->numberBetween(1, 20),
-            'addresse_id' => Address::all()->random()->id,
+            'address_id' => Address::all()->random()->id,
         ];
     }
 }
