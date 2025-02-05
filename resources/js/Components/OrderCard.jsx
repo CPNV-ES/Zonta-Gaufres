@@ -7,9 +7,9 @@ const OrderCard = ({ order }) => {
                 <span className="material-symbols-outlined">location_on</span>
                 <div className="flex flex-col flex-1 overflow-hidden">
                     <span>{order.buyer.company}</span>
-                    <span className="truncate">{order.address[0].street} {order.address[0].streetNumber}</span>
+                    <span className="truncate">{order.address.street} {order.address.streetNumber}</span>
                     <p className="w-full truncate">
-                        {order.address[0].city.zip_code} <span className="font-bold">{order.address[0].city.name}</span>
+                        {order.address.city.zip_code} <span className="font-bold">{order.address.city.name}</span>
                     </p>
                 </div>
             </div>
@@ -17,7 +17,7 @@ const OrderCard = ({ order }) => {
                 <div className="flex gap-2">
                     <span className="material-symbols-outlined">quick_reorder</span>
                     <span>
-                        <span className="font-bold">{order.articles[0].pivot.quantity}</span> paquets
+                        <span className="font-bold">{order.waffle_quantity}</span> paquets
                     </span>
                 </div>
                 <div className="flex gap-2">
