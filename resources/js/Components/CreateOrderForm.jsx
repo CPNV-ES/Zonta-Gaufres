@@ -7,6 +7,7 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/Components/ui/form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
+import axios from "axios";
 
 const formSchema = z.object({
     //TODO: fix error message when empty
@@ -70,8 +71,15 @@ const CreateOrderForm = (contactPeopleNames) => {
         },
     });
 
+    //TODO: function to store data
     const onSubmit = (data) => {
-        console.log(data);
+        axios.post("/orders", data)
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
 
     return (
