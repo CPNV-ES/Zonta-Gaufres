@@ -29,4 +29,4 @@ Route::get('/invoices', function () {
 
 Route::resource("deliveries", DeliveryController::class)->only(["index", "editAll"]);
 Route::resource("orders", OrderController::class)->only(["index", "store", "create", "update"]);
-Route::resource("people", PersonController::class)->only(["index", "store"]);
+Route::resource("people", PersonController::class)->only(["index", "store", "update"]);

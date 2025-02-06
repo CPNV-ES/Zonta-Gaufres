@@ -90,7 +90,22 @@ class PersonController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => 'required|email',
+            'phone_number' => 'required',
+        ]);
+
+        DB::transaction(function () use ($request, $id) {
+            $person = Person::findOrFail($id);
+            $person->update($request->all());
+
+            $person->personType()->detach();
+            foreach ($request->roles as $type) {
+                $person->personType()->attach(PersonType::where('name', PersonTypesEnum::from($type)->name)->first());
+            }
+        });
     }
 
     /**
