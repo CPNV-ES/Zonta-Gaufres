@@ -58,7 +58,7 @@ const People = (people) => {
                         onClick={() => handleEdit(row.row.original)}
                         className="text-blue-500 hover:underline"
                     >
-                        Edit
+                        Editer
                     </button>
                 </div>
             ),
