@@ -30,6 +30,7 @@ class PersonController extends Controller
                 'lastname' => $person->lastname,
                 'email' => $person->email,
                 'phone_number' => $person->phone_number,
+                'company' => $person->company,
                 'types' => $types,
                 'orders_count' => $person->orders->count(),
                 'note' => $person->remark,
@@ -57,7 +58,8 @@ class PersonController extends Controller
         $request->validate([
             'firstname' => 'required',
             'lastname' => 'required',
-            'email' => 'required|email',
+            'company' => 'nullable',
+            'email' => 'nullable|email',
             'phone_number' => 'required',
         ]);
         DB::transaction(function () use ($request) {
@@ -93,7 +95,8 @@ class PersonController extends Controller
         $request->validate([
             'firstname' => 'required',
             'lastname' => 'required',
-            'email' => 'required|email',
+            'email' => 'nullable|email',
+            'company' => 'nullable',
             'phone_number' => 'required',
         ]);
 
