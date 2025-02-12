@@ -8,6 +8,7 @@ import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, Form
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
 import axios from "axios";
+import {format} from "date-fns";
 
 const formSchema = z.object({
     //TODO: fix error message when empty
@@ -29,6 +30,7 @@ const formSchema = z.object({
         payment: z.string({
             required_error: "Ce champ est requis.",
         }),
+        date: z.string().optional(),
     }),
     person: z.object({
         phone_number: z.preprocess((val) => Number(val), z.number({
@@ -73,6 +75,7 @@ const CreateOrderForm = (contactPeopleNames) => {
 
     //TODO: function to store data
     const onSubmit = (data) => {
+        data.order.date = format(new Date(data.order.date), "yyyy-MM-dd");
         axios.post("/orders", data)
             .then((response) => {
                 console.log(response);
@@ -100,6 +103,19 @@ const CreateOrderForm = (contactPeopleNames) => {
                                     <FormDescription>
                                         Toutes les gaufres sont emballées dans des paquets de 5 unités.
                                     </FormDescription>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="order.date"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Date de la commande*</FormLabel>
+                                    <FormControl>
+                                        <Input type="date" {...field} />
+                                    </FormControl>
                                     <FormMessage/>
                                 </FormItem>
                             )}
