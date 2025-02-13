@@ -30,6 +30,7 @@ class PersonController extends Controller
                 'lastname' => $person->lastname,
                 'email' => $person->email,
                 'phone_number' => $person->phone_number,
+                'company' => $person->company,
                 'types' => $types,
                 'orders_count' => $person->orders->count(),
                 'note' => $person->remark,
@@ -57,7 +58,8 @@ class PersonController extends Controller
         $request->validate([
             'firstname' => 'required',
             'lastname' => 'required',
-            'email' => 'required|email',
+            'company' => 'nullable',
+            'email' => 'nullable|email',
             'phone_number' => 'required',
         ]);
         DB::transaction(function () use ($request) {
@@ -90,7 +92,23 @@ class PersonController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => 'nullable|email',
+            'company' => 'nullable',
+            'phone_number' => 'required',
+        ]);
+
+        DB::transaction(function () use ($request, $id) {
+            $person = Person::findOrFail($id);
+            $person->update($request->all());
+
+            $person->personType()->detach();
+            foreach ($request->roles as $type) {
+                $person->personType()->attach(PersonType::where('name', PersonTypesEnum::from($type)->name)->first());
+            }
+        });
     }
 
     /**

@@ -12,54 +12,68 @@ import MultipleSelector from "@/Components/MultipleSelector";
 
 import { router } from "@inertiajs/react";
 
-const builder = new ColumnBuilder();
-
-const columnHeaders = [
-    {
-        accessor: "lastname",
-        header: "Nom",
-    },
-    {
-        accessor: "firstname",
-        header: "Prénom",
-    },
-    {
-        accessor: "types",
-        header: "Rôle",
-        cell: (row) => (
-            <div className="flex gap-2">
-                {row.getValue().map((badge) => (
-                    <Badge key={badge.key} variant={badge.key}>
-                        {badge.name}
-                    </Badge>
-                ))}
-            </div>
-        ),
-    },
-    {
-        accessor: "phone_number",
-        header: "Téléphone",
-    },
-    {
-        accessor: "email",
-        header: "Email",
-    },
-    {
-        accessor: "orders_count",
-        header: "Nb commandes",
-    },
-];
-
-const columns = builder.buildColumns(columnHeaders);
-
-// values must be in French to allow search by French words
-const OPTIONS = [
-    { label: "Bénévole", value: "Bénévole" },
-    { label: "Livreur", value: "Livreur" },
-    { label: "Admin", value: "Admin" },
-];
-
 const People = (people) => {
+    const builder = new ColumnBuilder();
+
+    const columnHeaders = [
+        {
+            accessor: "lastname",
+            header: "Nom",
+        },
+        {
+            accessor: "firstname",
+            header: "Prénom",
+        },
+        {
+            accessor: "types",
+            header: "Rôle",
+            cell: (row) => (
+                <div className="flex gap-2">
+                    {row.getValue().map((badge) => (
+                        <Badge key={badge.key} variant={badge.key}>
+                            {badge.name}
+                        </Badge>
+                    ))}
+                </div>
+            ),
+        },
+        {
+            accessor: "phone_number",
+            header: "Téléphone",
+        },
+        {
+            accessor: "email",
+            header: "Email",
+        },
+        {
+            accessor: "orders_count",
+            header: "Nb commandes",
+        },
+        {
+            accessor: "actions",
+            header: "Actions",
+            cell: (row) => (
+                <div className="flex gap-2">
+                    <button
+                        onClick={() => handleEdit(row.row.original)}
+                        className="text-blue-500 hover:underline"
+                    >
+                        Editer
+                    </button>
+                </div>
+            ),
+        },
+    ];
+
+    const columns = builder.buildColumns(columnHeaders);
+
+    // values must be in French to allow search by French words
+    const OPTIONS = [
+        { label: "Bénévole", value: "Bénévole" },
+        { label: "Livreur", value: "Livreur" },
+        { label: "Admin", value: "Admin" },
+    ];
+
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [input, setInput] = useState({
         firstname: "",
@@ -69,6 +83,56 @@ const People = (people) => {
         phone_number: "",
         roles: [],
     });
+    const [isEditing, setIsEditing] = useState(false);
+    const [currentPersonId, setCurrentPersonId] = useState(null);
+
+    const handleEdit = (person) => {
+        setInput({
+            firstname: person.firstname,
+            lastname: person.lastname,
+            email: person.email,
+            company: person.company,
+            phone_number: person.phone_number,
+            roles: person.types.map((role) => role.name),
+        });
+        setCurrentPersonId(person.id);
+        setIsEditing(true);
+        setIsDialogOpen(true);
+    };
+
+    const handleSubmit = () => {
+        if (isEditing) {
+            router.put(`/people/${currentPersonId}`, {
+                firstname: input.firstname,
+                lastname: input.lastname,
+                email: input.email,
+                company: input.company,
+                phone_number: input.phone_number,
+                roles: input.roles,
+            });
+        } else {
+            router.post("/people", {
+                firstname: input.firstname,
+                lastname: input.lastname,
+                email: input.email,
+                company: input.company,
+                phone_number: input.phone_number,
+                roles: input.roles,
+            });
+        }
+        setIsDialogOpen(false);
+        setIsEditing(false);
+        setInput({
+            firstname: "",
+            lastname: "",
+            email: "",
+            company: "",
+            phone_number: "",
+            roles: [],
+        });
+        window.location.reload();
+    };
+
     return (
         <MainLayout color="yellow" subject="Personnel">
             <DataTable
@@ -79,24 +143,26 @@ const People = (people) => {
                     action: "Ajouter une personne",
                     variant: "yellow",
                     handler: () => {
+                        setInput({
+                            firstname: "",
+                            lastname: "",
+                            email: "",
+                            company: "",
+                            phone_number: "",
+                            roles: [],
+                        });
+                        setIsEditing(false);
                         setIsDialogOpen(true);
                     },
                 }}
             />
             <Dialog
-                title="Ajouter une personne"
+                title={
+                    isEditing ? "Modifier une personne" : "Ajouter une personne"
+                }
                 description=""
-                buttonLabel="Sauvegarder"
-                action={() => {
-                    router.post("/people", {
-                        firstname: input.firstname,
-                        lastname: input.lastname,
-                        email: input.email,
-                        company: input.company,
-                        phone_number: input.phone_number,
-                        roles: input.roles,
-                    });
-                }}
+                buttonLabel={isEditing ? "Mettre à jour" : "Sauvegarder"}
+                action={handleSubmit}
                 isOpen={isDialogOpen}
                 setIsOpen={setIsDialogOpen}
             >
@@ -150,8 +216,11 @@ const People = (people) => {
                         </p>
                     }
                     inputProps={input.roles}
+                    value={input.roles.map((role) =>
+                        OPTIONS.find((el) => el.value === role)
+                    )}
                     onChange={(e) => {
-                        setInput({ ...input, roles: e.map((el) => el.value)});
+                        setInput({ ...input, roles: e.map((el) => el.value) });
                     }}
                 />
             </Dialog>
