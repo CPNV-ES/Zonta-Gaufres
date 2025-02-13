@@ -9,7 +9,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Order extends Model
 {
     use HasFactory;
-    protected $fillable = ['real_delivery_time', 'delivery_guy_schedule_id'];
+    protected $fillable = [
+        'waffle_quantity',
+        'date',
+        'buyer_id',
+        'contact_id',
+        'address_id',
+        'delivery_guy_schedule_id',
+        'payment_type_id',
+        'remark',
+        'gifted_by',
+        'start_delivery_time',
+        'end_delivery_time',
+        'real_delivery_time',
+    ];
 
     public function total_price($price = 2)
     {

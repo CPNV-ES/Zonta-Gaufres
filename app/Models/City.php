@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class City extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'zip_code',
+    ];
     public function address()
     {
         return $this->hasMany(Address::class);
@@ -16,5 +21,4 @@ class City extends Model
     {
         return $this->belongsToMany(DeliveryGuySchedule::class);
     }
-
 }

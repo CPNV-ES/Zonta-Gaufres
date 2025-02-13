@@ -8,6 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Address extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'street',
+        'street_number',
+        'country',
+        'region',
+        'city_id',
+    ];
     public function orders()
     {
         return $this->hasMany(Order::class);
