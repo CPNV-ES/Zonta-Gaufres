@@ -25,8 +25,12 @@ const formSchema = z.object({
     ),
         contact: z.string().optional(),
         gifted_by: z.string().optional(),
-        start_delivery_time: z.string().optional(),
-        end_delivery_time: z.string().optional(),
+        start_delivery_time: z.string({
+            required_error: "Ce champ est requis.",
+        }),
+        end_delivery_time: z.string({
+            required_error: "Ce champ est requis.",
+        }),
         payment: z.string({
             required_error: "Ce champ est requis.",
         }),
@@ -60,6 +64,12 @@ const formSchema = z.object({
         npa: z.string({
             required_error: "Ce champ est requis.",
         }),
+        region: z.string({
+            required_error: "Ce champ est requis.",
+        }),
+        country: z.string({
+            required_error: "Ce champ est requis.",
+        }),
     }),
     notification: z.boolean().optional(),
 })
@@ -73,7 +83,6 @@ const CreateOrderForm = (contactPeopleNames) => {
         },
     });
 
-    //TODO: function to store data
     const onSubmit = (data) => {
         data.order.date = format(new Date(data.order.date), "yyyy-MM-dd");
         axios.post("/orders", data)
@@ -282,7 +291,33 @@ const CreateOrderForm = (contactPeopleNames) => {
                                 )}
                             />
                         </div>
-                        <FormLabel className="py-2">Plage horaire de livraison</FormLabel>
+                        <FormField
+                            control={form.control}
+                            name="deliveryAddress.region"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Région*</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Région" {...field} />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                         <FormField
+                            control={form.control}
+                            name="deliveryAddress.country"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Pays*</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Pays" {...field} />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                        <FormLabel className="py-2">Plage horaire de livraison*</FormLabel>
                         <div className="flex flex-row gap-2 items-center">
                             <span>De</span>
                             <FormField
@@ -291,8 +326,19 @@ const CreateOrderForm = (contactPeopleNames) => {
                                 render={({field}) => (
                                     <FormItem>
                                         <FormControl>
-                                            <Input placeholder="8:00" {...field} />
+                                        <Input
+                                            placeholder="8:00"
+                                            {...field}
+                                            onBlur={(e) => {
+                                                if (!e.target.value) {
+                                                    field.onChange(e.target.placeholder);
+                                                }
+                                            }}
+                                        />
                                         </FormControl>
+                                        <FormDescription>
+                                        Défaut : 8:00
+                                        </FormDescription>
                                         <FormMessage/>
                                     </FormItem>
                                 )}
@@ -304,8 +350,19 @@ const CreateOrderForm = (contactPeopleNames) => {
                                 render={({field}) => (
                                     <FormItem>
                                         <FormControl>
-                                            <Input placeholder="18:00" {...field} />
+                                        <Input
+                                            placeholder="18:00"
+                                            {...field}
+                                            onBlur={(e) => {
+                                                if (!e.target.value) {
+                                                    field.onChange(e.target.placeholder);
+                                                }
+                                            }}
+                                        />
                                         </FormControl>
+                                        <FormDescription>
+                                        Défaut : 18:00
+                                        </FormDescription>
                                         <FormMessage/>
                                     </FormItem>
                                 )}
