@@ -10,6 +10,9 @@ import {useForm} from "react-hook-form";
 import axios from "axios";
 import {format} from "date-fns";
 
+
+//
+
 const formSchema = z.object({
     //TODO: fix error message when empty
     order: z.object({
@@ -37,11 +40,11 @@ const formSchema = z.object({
         date: z.string().optional(),
     }),
     person: z.object({
-        phone_number: z.preprocess((val) => Number(val), z.number({
+        phone_number: z.string({
             required_error: "Ce champ est requis.",
-        }).int({
-            message: "Le champ doit être un nombre entier.",
-        })),
+        }).regex(/^\d{3} \d{3} \d{2} \d{2}$/, {
+            message: "Le numéro de téléphone doit être au format 078 947 23 17.",
+        }),
         lastname: z.string({
             required_error: "Ce champ est requis.",
         }),
@@ -137,8 +140,16 @@ const CreateOrderForm = (contactPeopleNames) => {
                                 <FormItem>
                                     <FormLabel>Téléphone*</FormLabel>
                                     <FormControl>
-                                        <Input type="number" placeholder="Numéro" {...field} />
+                                    <Input
+                                        type="tel"
+                                        placeholder="Numéro"
+                                        pattern="\d{3} \d{3} \d{2} \d{2}"
+                                        {...field}
+                                    />
                                     </FormControl>
+                                    <FormDescription>
+                                    Format : 079 123 45 67
+                                    </FormDescription>
                                     <FormMessage/>
                                 </FormItem>
                             )}
