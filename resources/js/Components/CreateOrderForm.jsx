@@ -13,7 +13,7 @@ import {format} from "date-fns";
 const formSchema = z.object({
     //TODO: fix error message when empty
     order: z.object({
-        quantity: z.preprocess((val) => Number(val), z.number({
+        waffle_quantity: z.preprocess((val) => Number(val), z.number({
             required_error: "Ce champ est requis.",
         }).min(1, {
             message: "La valeur doit être supérieure à 0.",
@@ -78,7 +78,7 @@ const CreateOrderForm = (contactPeopleNames) => {
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            quantity: undefined,
+            waffle_quantity: undefined,
             phone_number: undefined,
         },
     });
@@ -102,7 +102,7 @@ const CreateOrderForm = (contactPeopleNames) => {
                         <h1 className="text-2xl">Commande</h1>
                         <FormField
                             control={form.control}
-                            name="order.quantity"
+                            name="order.waffle_quantity"
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Nombre de gaufres*</FormLabel>
@@ -178,12 +178,15 @@ const CreateOrderForm = (contactPeopleNames) => {
                                     <FormControl>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Selectionner votre personne de contact"/>
+                                                <SelectValue placeholder="Sélectionner votre personne de contact">
+                                                    {contactPeopleNames.contactPeopleNames.find(person => String(person.id) === String(field.value))?.name || "Sélectionner votre personne de contact"}
+                                                </SelectValue>
                                             </SelectTrigger>
                                             <SelectContent>
-                                                {contactPeopleNames.contactPeopleNames.map((person, i) => <SelectItem
+                                                {contactPeopleNames.contactPeopleNames.map((person, i) =>
+                                                <SelectItem
                                                     key={i}
-                                                    value={person.name}>{person.name}</SelectItem>)}
+                                                    value={person.id}>{person.name}</SelectItem>)}
                                             </SelectContent>
                                         </Select>
                                     </FormControl>
@@ -383,8 +386,10 @@ const CreateOrderForm = (contactPeopleNames) => {
                                                 <SelectValue placeholder="Selectionner un mode de paiement"/>
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="au livreur">Au livreur</SelectItem>
-                                                <SelectItem value="facture">Sur facture</SelectItem>
+                                                <SelectItem value="DELIVERY">Au livreur</SelectItem>
+                                                <SelectItem value="INVOICE">Sur facture</SelectItem>
+                                                <SelectItem value="UPSTREAM">Sur place</SelectItem>
+
                                             </SelectContent>
                                         </Select>
                                     </FormControl>

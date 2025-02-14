@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Enums\PaymentTypesEnum;
+use App\Models\Address;
 use App\Models\DeliveryGuySchedule;
 use App\Models\Order;
 use App\Models\Person;
+use App\Models\City;
 use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+
 
 class OrderController extends Controller
 {
@@ -75,17 +78,64 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'order[date]' => 'required',
-            'waffle_quantity' => 'required',
-            'buyer_id' => 'required',
-            'contact_id' => 'required',
-            'address_id' => 'required',
-            'payment_type_id' => 'required',
-        ]);
-        DB::transaction(function () use ($request) {
-            $order = Order::create($request->all());
-        });
+        $orderData = $request->input('order');
+        $personData = $request->input('person');
+        $addressData = $request->input('deliveryAddress');
+
+        $cityName = $addressData['city'];
+        $zip = $addressData['npa'];
+
+
+        $person = Person::where([
+            'firstname' => $personData['firstname'],
+            'lastname' => $personData['lastname'],
+            'phone_number' => $personData['phone_number']
+        ])->first();
+
+        if (!$person) {
+            $person = Person::create($personData);
+        }
+
+        $city = City::where([
+            'name' => $cityName,
+            'zip_code' => $zip
+        ])->first();
+
+        if (!$city) {
+            $city = City::create([
+                'name' => $cityName,
+                'zip_code' => $zip
+            ]);
+        }
+
+        $address = Address::where([
+            'street' => $addressData['street'],
+            'street_number' => $addressData['street_number'],
+            'region' => $addressData['region'],
+            'country' => $addressData['country'],
+            'city_id' => $city->id
+        ])->first();
+
+        if (!$address) {
+            $address = Address::create([
+                'street' => $addressData['street'],
+                'street_number' => $addressData['street_number'],
+                'region' => $addressData['region'],
+                'country' => $addressData['country'],
+                'city_id' => $city->id
+            ]);
+        }
+
+        $test = PaymentTypesEnum::fromCase($orderData['payment'])->value;
+
+        $order = Order::create(array_merge($orderData, [
+            'person_id' => $person->id,
+            'address_id' => $address->id,
+            'buyer_id' => $person->id,
+            'payment_type_id' => PaymentTypesEnum::fromCase($orderData['payment'])->value,
+            'contact_id' => $orderData['contact']
+        ]));
+
 
         return redirect()->route('orders.index');
     }
