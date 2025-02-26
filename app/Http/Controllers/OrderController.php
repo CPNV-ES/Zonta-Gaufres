@@ -126,14 +126,35 @@ class OrderController extends Controller
             ]);
         }
 
-        $test = PaymentTypesEnum::fromCase($orderData['payment'])->value;
+        $time1 = new DateTime($orderData['start_delivery_time']);
+        $time2 = new DateTime($orderData['end_delivery_time']);
+
+        // Convert times to seconds since midnight
+        $seconds1 = $time1->format('H') * 3600 + $time1->format('i') * 60 + $time1->format('s');
+        $seconds2 = $time2->format('H') * 3600 + $time2->format('i') * 60 + $time2->format('s');
+
+        // Calculate the difference in seconds, accounting for times spanning midnight
+        if ($seconds2 < $seconds1) {
+            $seconds2 += 24 * 3600; // Add 24 hours in seconds to the second time
+        }
+
+        $diffSeconds = $seconds2 - $seconds1;
+
+        // Convert the difference back to hours, minutes, and seconds
+        $hours = floor($diffSeconds / 3600);
+        $minutes = floor(($diffSeconds % 3600) / 60);
+        $seconds = $diffSeconds % 60;
+
+        $realDeliveryTime = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+
 
         $order = Order::create(array_merge($orderData, [
             'person_id' => $person->id,
             'address_id' => $address->id,
             'buyer_id' => $person->id,
             'payment_type_id' => PaymentTypesEnum::fromCase($orderData['payment'])->value,
-            'contact_id' => $orderData['contact']
+            'contact_id' => $orderData['contact'],
+            'real_delivery_time' => $realDeliveryTime,
         ]));
 
 
