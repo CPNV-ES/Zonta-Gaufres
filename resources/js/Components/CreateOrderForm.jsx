@@ -9,6 +9,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
 import axios from "axios";
 import {format} from "date-fns";
+import { Textarea } from "@/components/ui/textarea";
 
 
 //
@@ -27,6 +28,7 @@ const formSchema = z.object({
         })
     ),
         contact: z.string().optional(),
+        remark: z.string().optional(),
         gifted_by: z.string().optional(),
         start_delivery_time: z.string({
             required_error: "Ce champ est requis.",
@@ -403,6 +405,20 @@ const CreateOrderForm = (contactPeopleNames) => {
 
                                             </SelectContent>
                                         </Select>
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                        <h1 className="text-2xl">Remarque sur le commande</h1>
+                        <FormField
+                            control={form.control}
+                            name="order.remark"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Remark</FormLabel>
+                                    <FormControl>
+                                        <Textarea placeholder="Ajouter des remarques si nécessaire" {...field} />
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>

@@ -155,6 +155,7 @@ class OrderController extends Controller
             'payment_type_id' => PaymentTypesEnum::fromCase($orderData['payment'])->value,
             'contact_id' => $orderData['contact'],
             'real_delivery_time' => $realDeliveryTime,
+            'remark' => $orderData['remark']
         ]));
 
 
