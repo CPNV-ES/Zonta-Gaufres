@@ -93,6 +93,7 @@ const CreateOrderForm = (contactPeopleNames) => {
         axios.post("/orders", data)
             .then((response) => {
                 console.log(response);
+                window.location.href = "/orders";
             })
             .catch((error) => {
                 console.log(error);
@@ -449,7 +450,7 @@ const CreateOrderForm = (contactPeopleNames) => {
                             )}
                         />
                         <div className="flex gap-2">
-                            <Button variant="destructive">Annuler</Button>
+                            <Button variant="destructive" type="button"  onClick={() => window.location.href = "/orders"} >Annuler</Button>
                             <Button className="bg-green-500" type="submit">Commander</Button>
                         </div>
                     </div>
