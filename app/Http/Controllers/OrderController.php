@@ -8,7 +8,6 @@ use App\Models\DeliveryGuySchedule;
 use App\Models\Order;
 use App\Models\Person;
 use App\Models\City;
-use DateTime;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -85,70 +84,18 @@ class OrderController extends Controller
         $cityName = $addressData['city'];
         $zip = $addressData['npa'];
 
+        $person = Person::findOrCreate($personData);
 
-        $person = Person::where([
-            'firstname' => $personData['firstname'],
-            'lastname' => $personData['lastname'],
-            'phone_number' => $personData['phone_number']
-        ])->first();
-
-        if (!$person) {
-            $person = Person::create($personData);
-        }
-
-        $city = City::where([
+        $city = City::findOrCreate([
             'name' => $cityName,
             'zip_code' => $zip
-        ])->first();
+        ]);
 
-        if (!$city) {
-            $city = City::create([
-                'name' => $cityName,
-                'zip_code' => $zip
-            ]);
-        }
+        $address = Address::findOrCreate(array_merge($addressData, ['city_id' => $city->id]));
 
-        $address = Address::where([
-            'street' => $addressData['street'],
-            'street_number' => $addressData['street_number'],
-            'region' => $addressData['region'],
-            'country' => $addressData['country'],
-            'city_id' => $city->id
-        ])->first();
+        $realDeliveryTime =  Order::calculateTimeDifference($orderData['start_delivery_time'], $orderData['end_delivery_time']);
 
-        if (!$address) {
-            $address = Address::create([
-                'street' => $addressData['street'],
-                'street_number' => $addressData['street_number'],
-                'region' => $addressData['region'],
-                'country' => $addressData['country'],
-                'city_id' => $city->id
-            ]);
-        }
-
-        $time1 = new DateTime($orderData['start_delivery_time']);
-        $time2 = new DateTime($orderData['end_delivery_time']);
-
-        // Convert times to seconds since midnight
-        $seconds1 = $time1->format('H') * 3600 + $time1->format('i') * 60 + $time1->format('s');
-        $seconds2 = $time2->format('H') * 3600 + $time2->format('i') * 60 + $time2->format('s');
-
-        // Calculate the difference in seconds, accounting for times spanning midnight
-        if ($seconds2 < $seconds1) {
-            $seconds2 += 24 * 3600; // Add 24 hours in seconds to the second time
-        }
-
-        $diffSeconds = $seconds2 - $seconds1;
-
-        // Convert the difference back to hours, minutes, and seconds
-        $hours = floor($diffSeconds / 3600);
-        $minutes = floor(($diffSeconds % 3600) / 60);
-        $seconds = $diffSeconds % 60;
-
-        $realDeliveryTime = sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
-
-
-        $order = Order::create(array_merge($orderData, [
+        Order::create(array_merge($orderData, [
             'person_id' => $person->id,
             'address_id' => $address->id,
             'buyer_id' => $person->id,
@@ -156,6 +103,7 @@ class OrderController extends Controller
             'contact_id' => $orderData['contact'],
             'real_delivery_time' => $realDeliveryTime,
         ]));
+
         return redirect()->route('orders.index');
     }
 

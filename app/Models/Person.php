@@ -18,6 +18,20 @@ class Person extends Model
         'phone_number',
         'remark',
     ];
+    public static function findOrCreate(array $data)
+    {
+        $person = self::where([
+            'firstname' => $data['firstname'],
+            'lastname' => $data['lastname'],
+            'phone_number' => $data['phone_number']
+        ])->first();
+
+        if (!$person) {
+            $person = self::create($data);
+        }
+
+        return $person;
+    }
 
     public function personType(): BelongsToMany
     {
