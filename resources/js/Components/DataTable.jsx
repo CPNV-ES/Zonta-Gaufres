@@ -149,7 +149,7 @@ const DataTable = ({ inputData, columns, buttonsOptions, onClickHandler }) => {
                     </TableBody>
                 </Table>
             </div>
-            <div className="absolute flex justify-between w-full pr-4 lg:bottom-0 sm:bottom-4">
+            <div className="absolute flex justify-between w-full pr-4 bottom-4">
                 <div className="flex justify-between w-full px-4 py-2 pr-6 bg-white">
                     <span className="flex items-center">
                         {table.getPreFilteredRowModel().rows.length}
