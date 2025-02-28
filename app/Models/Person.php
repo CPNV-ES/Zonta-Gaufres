@@ -19,6 +19,11 @@ class Person extends Model
         'remark',
     ];
 
+    public function getFullnameAttribute()
+    {
+        return $this->firstname . ' ' . $this->lastname;
+    }
+
     public function personType(): BelongsToMany
     {
         return $this->belongsToMany(PersonType::class);
