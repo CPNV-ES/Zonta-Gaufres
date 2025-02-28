@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Enums\PersonTypesEnum;
 
 class Person extends Model
 {
@@ -28,6 +29,8 @@ class Person extends Model
 
         if (!$person) {
             $person = self::create($data);
+            $personTypeId = PersonTypesEnum::CLIENT->value;
+            $person->personType()->attach(PersonType::where('name', PersonTypesEnum::from($personTypeId)->name)->first());
         }
 
         return $person;
