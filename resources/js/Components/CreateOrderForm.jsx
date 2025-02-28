@@ -2,7 +2,6 @@
 import {z} from "zod";
 import {Input} from "@/Components/ui/input.jsx";
 import {Button} from "@/Components/ui/button";
-import {Checkbox} from "@/Components/ui/checkbox";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/Components/ui/select";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/Components/ui/form";
 import {zodResolver} from "@hookform/resolvers/zod";
@@ -11,11 +10,7 @@ import axios from "axios";
 import {format} from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
 
-
-//
-
 const formSchema = z.object({
-    //TODO: fix error message when empty
     order: z.object({
         waffle_quantity: z.preprocess((val) => Number(val), z.number({
             required_error: "Ce champ est requis.",
@@ -355,7 +350,6 @@ const CreateOrderForm = (contactPeopleNames) => {
                                         />
                                         </FormControl>
                                         <FormDescription>
-                                        Défaut : 8:00
                                         </FormDescription>
                                         <FormMessage/>
                                     </FormItem>
@@ -379,7 +373,6 @@ const CreateOrderForm = (contactPeopleNames) => {
                                         />
                                         </FormControl>
                                         <FormDescription>
-                                        Défaut : 18:00
                                         </FormDescription>
                                         <FormMessage/>
                                     </FormItem>
