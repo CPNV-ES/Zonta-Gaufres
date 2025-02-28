@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use Faker\Provider\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class City extends Model
+
+class City extends BaseModel
 {
     use HasFactory;
 
@@ -13,20 +14,6 @@ class City extends Model
         'name',
         'zip_code',
     ];
-
-    public static function findOrCreate(array $data)
-    {
-        $city = self::where([
-            'name' => $data['name'],
-            'zip_code' => $data['zip_code']
-        ])->first();
-
-        if (!$city) {
-            $city = self::create($data);
-        }
-
-        return $city;
-    }
 
     public function address()
     {

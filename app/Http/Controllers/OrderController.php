@@ -91,6 +91,8 @@ class OrderController extends Controller
             'zip_code' => $zip
         ]);
 
+        unset($addressData['city'], $addressData['npa']);
+
         $address = Address::findOrCreate(array_merge($addressData, ['city_id' => $city->id]));
 
         $realDeliveryTime =  Order::calculateTimeDifference($orderData['start_delivery_time'], $orderData['end_delivery_time']);

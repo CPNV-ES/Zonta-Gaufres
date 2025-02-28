@@ -3,11 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Enums\PersonTypesEnum;
 
-class Person extends Model
+class Person extends BaseModel
 {
     use HasFactory;
 
@@ -19,22 +18,6 @@ class Person extends Model
         'phone_number',
         'remark',
     ];
-    public static function findOrCreate(array $data)
-    {
-        $person = self::where([
-            'firstname' => $data['firstname'],
-            'lastname' => $data['lastname'],
-            'phone_number' => $data['phone_number']
-        ])->first();
-
-        if (!$person) {
-            $person = self::create($data);
-            $personTypeId = PersonTypesEnum::CLIENT->value;
-            $person->personType()->attach(PersonType::where('name', PersonTypesEnum::from($personTypeId)->name)->first());
-        }
-
-        return $person;
-    }
 
     public function personType(): BelongsToMany
     {
