@@ -78,7 +78,6 @@ const formSchema = z.object({
             required_error: "Ce champ est requis.",
         }),
     }),
-    notification: z.boolean().optional(),
 })
 
 const CreateOrderForm = (contactPeopleNames) => {
@@ -431,26 +430,8 @@ const CreateOrderForm = (contactPeopleNames) => {
                 </div>
                 <div className="flex justify-end">
                     <div className="flex flex-col">
-                        <h1 className="text-2xl">Valider la commander</h1>
-                        <FormField
-                            control={form.control}
-                            name="notification"
-                            render={({field}) => (
-                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-3 my-2">
-                                    <FormControl>
-                                        <Checkbox
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                    </FormControl>
-                                    <div className="space-y-1 leading-none">
-                                        <FormLabel>
-                                            Je souhaiterais recevoir des annonces sur les prochaines ventes
-                                        </FormLabel>
-                                    </div>
-                                </FormItem>
-                            )}
-                        />
+                        <h1 className="text-2xl p-3 my-2">Valider la commander</h1>
+
                         <div className="flex gap-2">
                             <Button variant="destructive" type="button"  onClick={() => window.location.href = "/orders"} >Annuler</Button>
                             <Button className="bg-green-500" type="submit">Commander</Button>
