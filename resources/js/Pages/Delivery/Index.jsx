@@ -73,8 +73,9 @@ const Deliveries = ({ initDeliveries }) => {
         initDeliveries.map((d) => {
             const tmpdelivery = {
                 'delivery_id': d.id,
-                'delivery_guy': `${d.delivery_guy_schedule.person.firstname} ${d.delivery_guy_schedule.person.lastname}`,
-                'buyer': `${d.buyer.firstname} ${d.buyer.lastname}`,
+                'delivery_guy': d.delivery_guy_schedule && d.delivery_guy_schedule.person
+                ? `${d.delivery_guy_schedule.person.firstname} ${d.delivery_guy_schedule.person.lastname}`
+                : "Aucun livreur",                'buyer': `${d.buyer.firstname} ${d.buyer.lastname}`,
                 'company': d.buyer.company,
                 'address': `${d.address.street} ${d.address.street_number}`,
                 'postal_code': d.address.city.zip_code,

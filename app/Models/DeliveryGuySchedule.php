@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class DeliveryGuySchedule extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'person_id',
+        'start_delivery_time_window',
+        'end_delivery_time_window',
+        'remark',
+    ];
     public function person()
     {
         return $this->belongsTo(Person::class);

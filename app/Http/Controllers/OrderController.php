@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Enums\PaymentTypesEnum;
+use App\Models\Address;
 use App\Models\DeliveryGuySchedule;
 use App\Models\Order;
 use App\Models\Person;
+use App\Models\City;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+
 
 class OrderController extends Controller
 {
@@ -28,7 +32,7 @@ class OrderController extends Controller
 
             return [
                 "invoice_id" => $order->id,
-                "company" => $order->contact->company,
+                "company" => $order->buyer->company,
                 "client" => $order->buyer->firstname . ' ' . $order->buyer->lastname,
                 "address" => $order->address->street . ' ' . $order->address->street_number,
                 "zip_code" => $order->address->city->zip_code,
@@ -73,16 +77,36 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $order = new Order();
-        $order->date = $request->date;
-        $order->start_delivery_time = $request->start_delivery_time;
-        $order->end_delivery_time = $request->end_delivery_time;
-        if ($request->remark) {
-            $order->remark = $request->remark;
-        }
-        if ($request->gifted_by) {
-            $order->gifted_by = $request->gifted_by;
-        }
+        $orderData = $request->input('order');
+        $personData = $request->input('person');
+        $addressData = $request->input('deliveryAddress');
+
+        $cityName = $addressData['city'];
+        $zip = $addressData['npa'];
+
+        $person = Person::findOrCreate($personData);
+
+        $city = City::findOrCreate([
+            'name' => $cityName,
+            'zip_code' => $zip
+        ]);
+
+        unset($addressData['city'], $addressData['npa']);
+
+        $address = Address::findOrCreate(array_merge($addressData, ['city_id' => $city->id]));
+
+        $realDeliveryTime =  Order::calculateTimeDifference($orderData['start_delivery_time'], $orderData['end_delivery_time']);
+
+        Order::create(array_merge($orderData, [
+            'person_id' => $person->id,
+            'address_id' => $address->id,
+            'buyer_id' => $person->id,
+            'payment_type_id' => PaymentTypesEnum::fromCase($orderData['payment'])->value,
+            'contact_id' => $orderData['contact'],
+            'real_delivery_time' => $realDeliveryTime,
+        ]));
+
+        return redirect()->route('orders.index');
     }
 
     /**

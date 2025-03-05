@@ -2,12 +2,19 @@
 
 namespace App\Models;
 
+use Faker\Provider\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class City extends Model
+
+class City extends BaseModel
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'zip_code',
+    ];
+
     public function address()
     {
         return $this->hasMany(Address::class);
@@ -16,5 +23,4 @@ class City extends Model
     {
         return $this->belongsToMany(DeliveryGuySchedule::class);
     }
-
 }
