@@ -92,7 +92,7 @@ const DataTable = ({ inputData, columns, buttonsOptions, onClickHandler }) => {
 
     return (
         <>
-            <div className="flex flex-col justify-between w-full h-full pb-12 overflow-auto">
+            <div className="flex flex-col justify-between w-full h-full pb-24 overflow-auto">
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map((headerGroup) => (
