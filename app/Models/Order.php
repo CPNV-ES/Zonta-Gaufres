@@ -56,7 +56,7 @@ class OrderCollection extends \Illuminate\Database\Eloquent\Collection
             $number_of_packet = ceil($order->waffle_quantity / 5);
             for ($packet_index = 1; $packet_index <= $number_of_packet; $packet_index++) {
                 $html .= "<td style='width: 50%; height: 150px;'>";
-                $html .= $this->generateLabel($order, $packet_index, $this->count() == 1 ? 50 : 95);
+                $html .= $this->generateLabel($order, $packet_index, $this->count() == 1 && $number_of_packet == 1 ? 50 : 95);
                 $html .= "</td>";
 
                 $total_index++;
