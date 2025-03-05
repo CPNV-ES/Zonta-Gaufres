@@ -1,5 +1,5 @@
 import React from "react";
-import MainLayout from "../Layouts/MainLayout";
+import MainLayout from "../../Layouts/MainLayout";
 import DataTable from "@/Components/DataTable";
 
 import { ColumnBuilder } from "@/Builder/ColumnBuilder";
@@ -91,12 +91,13 @@ const inputData = [
     },
 ];
 
-const Invoices = () => {
+const Index = (/*here data to put from controller*/ ) => {
+    /*check how it is send, if needed -> datas.datas*/
     return (
         <MainLayout color="red" subject="Factures">
             <DataTable
                 columns={columns}
-                inputData={inputData}
+                inputData={inputData/*replace here by datas*/}
                 buttonsOptions={{
                     icon: "download",
                     action: "Télécharger",
@@ -108,4 +109,4 @@ const Invoices = () => {
     );
 };
 
-export default Invoices;
+export default Index;
