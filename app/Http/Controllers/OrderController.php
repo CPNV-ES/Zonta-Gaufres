@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Enums\PaymentTypesEnum;
+use App\Enums\PersonTypesEnum;
 use App\Models\Address;
 use App\Models\DeliveryGuySchedule;
 use App\Models\Order;
 use App\Models\Person;
 use App\Models\City;
+use App\Models\PersonType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -145,7 +147,7 @@ class OrderController extends Controller
     private function getContactPeopleNames()
     {
         $contactPeople = Person::with('personType')->whereHas('personType', function (Builder $query) {
-            $query->where('person_types.id', 2);
+            $query->where('person_types.id', 3);
         })->orderBy('lastname', 'asc')->get();
 
         $contactPeopleNames = [];
