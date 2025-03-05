@@ -32,7 +32,7 @@ class OrderController extends Controller
 
             return [
                 "invoice_id" => $order->id,
-                "company" => $order->contact->company,
+                "company" => $order->buyer->company,
                 "client" => $order->buyer->firstname . ' ' . $order->buyer->lastname,
                 "address" => $order->address->street . ' ' . $order->address->street_number,
                 "zip_code" => $order->address->city->zip_code,
