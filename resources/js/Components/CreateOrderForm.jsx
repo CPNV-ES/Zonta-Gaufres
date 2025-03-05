@@ -50,8 +50,8 @@ const formSchema = z.object({
         firstname: z.string({
             required_error: "Ce champ est requis.",
         }),
+        company: z.string().optional(),
     }),
-    company: z.string().optional(),
     deliveryAddress: z.object({
         city: z.string({
             required_error: "Ce champ est requis.",
@@ -222,7 +222,7 @@ const CreateOrderForm = (contactPeopleNames) => {
                         <h1 className="text-2xl">Information de livraison</h1>
                         <FormField
                             control={form.control}
-                            name="company"
+                            name="person.company"
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Entreprise</FormLabel>
