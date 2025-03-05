@@ -24,4 +24,9 @@ class Address extends BaseModel
     {
         return $this->belongsTo(City::class);
     }
+
+    public function getFullAttribute()
+    {
+        return "{$this->street} {$this->number}, {$this->city->name}";
+    }
 }

@@ -87,6 +87,16 @@ const Deliveries = ({ initDeliveries }) => {
         return tmpdeliveries
     }
 
+    const handleLabelsPrint = (rowSelection) => {
+        const selectedRows = Object.keys(rowSelection).filter(key => rowSelection[key]);
+        if (selectedRows.length === 0) {
+            return;
+        }
+        const selectedIds = selectedRows.map(row => initDeliveries[row].id);
+
+        window.location.href = `/deliveries/print_labels?deliveries=${selectedIds.join(',')}`
+    }
+
     return (
         <MainLayout color="blue" subject="Livraisons">
             <DataTable
@@ -107,6 +117,7 @@ const Deliveries = ({ initDeliveries }) => {
                         item: "série d'étiquettes",
                         itemPlural: "séries d'étiquettes",
                         variant: "blue",
+                        handler: handleLabelsPrint
                     },
                     {
                         id: "print_delivery_sheet",
