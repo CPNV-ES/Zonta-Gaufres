@@ -72,6 +72,7 @@ const People = (people) => {
         { label: "Bénévole", value: "Bénévole" },
         { label: "Livreur", value: "Livreur" },
         { label: "Admin", value: "Admin" },
+        { label: "Client", value: "Client" },
     ];
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);

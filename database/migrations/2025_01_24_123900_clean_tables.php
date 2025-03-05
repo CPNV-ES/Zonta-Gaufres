@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::dropIfExists('order_article');
         Schema::dropIfExists('articles');
         Schema::dropIfExists('billing_informations');
-        Schema::dropIfExists('addresse_types');
+
         Schema::dropIfExists('order_address');
 
         Schema::table('orders', function (Blueprint $table) {
@@ -22,6 +22,8 @@ return new class extends Migration
             $table->integer('waffle_quantity');
             $table->foreignId('address_id')->constrained();
         });
+
+        Schema::dropIfExists('address_types');
     }
 
     /**

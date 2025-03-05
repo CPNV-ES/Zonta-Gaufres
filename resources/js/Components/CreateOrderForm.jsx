@@ -1,17 +1,18 @@
 "use client"
-import React, {useState} from 'react';
 import {z} from "zod";
 import {Input} from "@/Components/ui/input.jsx";
 import {Button} from "@/Components/ui/button";
-import {Checkbox} from "@/Components/ui/checkbox";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/Components/ui/select";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/Components/ui/form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
+import axios from "axios";
+import {format} from "date-fns";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
     order: z.object({
-        quantity: z.preprocess((val) => Number(val), z.number({
+        waffle_quantity: z.preprocess((val) => Number(val), z.number({
             required_error: "Ce champ est requis.",
         }).min(1, {
             message: "La valeur doit être supérieure à 0.",
@@ -19,27 +20,38 @@ const formSchema = z.object({
             message: "Le champ doit être un nombre positif.",
         }).int({
             message: "Le champ doit être un nombre entier.",
-        })),
-        contact: z.string().optional(),
+        })
+    ),
+        contact: z.string({
+            required_error: "Ce champ est requis.",
+        }),
+        remark: z.string().optional(),
         gifted_by: z.string().optional(),
-        start_delivery_time: z.string().optional(),
-        end_delivery_time: z.string().optional(),
-        payment: z.string().optional(),
+        start_delivery_time: z.string({
+            required_error: "Ce champ est requis.",
+        }),
+        end_delivery_time: z.string({
+            required_error: "Ce champ est requis.",
+        }),
+        payment: z.string({
+            required_error: "Ce champ est requis.",
+        }),
+        date: z.string().optional(),
     }),
     person: z.object({
-        phone_number: z.preprocess((val) => Number(val), z.number({
+        phone_number: z.string({
             required_error: "Ce champ est requis.",
-        }).int({
-            message: "Le champ doit être un nombre entier.",
-        })),
+        }).regex(/^\d{3} \d{3} \d{2} \d{2}$/, {
+            message: "Le numéro de téléphone doit être au format 078 947 23 17.",
+        }),
         lastname: z.string({
             required_error: "Ce champ est requis.",
         }),
         firstname: z.string({
             required_error: "Ce champ est requis.",
         }),
+        company: z.string().optional(),
     }),
-    company: z.string().optional(),
     deliveryAddress: z.object({
         city: z.string({
             required_error: "Ce champ est requis.",
@@ -54,30 +66,34 @@ const formSchema = z.object({
         npa: z.string({
             required_error: "Ce champ est requis.",
         }),
+        region: z.string({
+            required_error: "Ce champ est requis.",
+        }),
+        country: z.string({
+            required_error: "Ce champ est requis.",
+        }),
     }),
-    same_as_delivery: z.boolean().optional(),
-    billingAddress: z.object({
-        city: z.string().optional(),
-        street: z.string().optional(),
-        street_number: z.string().optional(),
-        complement: z.string().optional(),
-        npa: z.string().optional(),
-    }),
-    notification: z.boolean().optional(),
 })
 
 const CreateOrderForm = (contactPeopleNames) => {
-    const [sameAsDelivery, setSameAsDelivery] = useState(false);
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            quantity: undefined,
+            waffle_quantity: undefined,
             phone_number: undefined,
         },
     });
 
     const onSubmit = (data) => {
-        console.log(data);
+        data.order.date = format(new Date(data.order.date), "yyyy-MM-dd");
+        axios.post("/orders", data)
+            .then((response) => {
+                console.log(response);
+                window.location.href = "/orders";
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
 
     return (
@@ -88,7 +104,7 @@ const CreateOrderForm = (contactPeopleNames) => {
                         <h1 className="text-2xl">Commande</h1>
                         <FormField
                             control={form.control}
-                            name="order.quantity"
+                            name="order.waffle_quantity"
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Nombre de gaufres*</FormLabel>
@@ -102,6 +118,19 @@ const CreateOrderForm = (contactPeopleNames) => {
                                 </FormItem>
                             )}
                         />
+                        <FormField
+                            control={form.control}
+                            name="order.date"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Date de la commande*</FormLabel>
+                                    <FormControl>
+                                        <Input type="date" {...field} />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
                         <h1 className="text-2xl">Information du client</h1>
                         <FormField
                             control={form.control}
@@ -110,8 +139,16 @@ const CreateOrderForm = (contactPeopleNames) => {
                                 <FormItem>
                                     <FormLabel>Téléphone*</FormLabel>
                                     <FormControl>
-                                        <Input type="number" placeholder="Numéro" {...field} />
+                                    <Input
+                                        type="tel"
+                                        placeholder="Numéro"
+                                        pattern="\d{3} \d{3} \d{2} \d{2}"
+                                        {...field}
+                                    />
                                     </FormControl>
+                                    <FormDescription>
+                                    Format : 079 123 45 67
+                                    </FormDescription>
                                     <FormMessage/>
                                 </FormItem>
                             )}
@@ -147,16 +184,19 @@ const CreateOrderForm = (contactPeopleNames) => {
                             name="order.contact"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Personne de contact</FormLabel>
+                                    <FormLabel>Personne de contact*</FormLabel>
                                     <FormControl>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Selectionner votre personne de contact"/>
+                                                <SelectValue placeholder="Sélectionner votre personne de contact">
+                                                    {contactPeopleNames.contactPeopleNames.find(person => String(person.id) === String(field.value))?.name || "Sélectionner votre personne de contact"}
+                                                </SelectValue>
                                             </SelectTrigger>
                                             <SelectContent>
-                                                {contactPeopleNames.contactPeopleNames.map((person, i) => <SelectItem
+                                                {contactPeopleNames.contactPeopleNames.map((person, i) =>
+                                                <SelectItem
                                                     key={i}
-                                                    value={person.name}>{person.name}</SelectItem>)}
+                                                    value={person.id}>{person.name}</SelectItem>)}
                                             </SelectContent>
                                         </Select>
                                     </FormControl>
@@ -182,7 +222,7 @@ const CreateOrderForm = (contactPeopleNames) => {
                         <h1 className="text-2xl">Information de livraison</h1>
                         <FormField
                             control={form.control}
-                            name="company"
+                            name="person.company"
                             render={({field}) => (
                                 <FormItem>
                                     <FormLabel>Entreprise</FormLabel>
@@ -264,6 +304,32 @@ const CreateOrderForm = (contactPeopleNames) => {
                                 )}
                             />
                         </div>
+                        <FormField
+                            control={form.control}
+                            name="deliveryAddress.region"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Région*</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Région" {...field} />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                         <FormField
+                            control={form.control}
+                            name="deliveryAddress.country"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Pays*</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Pays" {...field} />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
                         <FormLabel className="py-2">Plage horaire de livraison*</FormLabel>
                         <div className="flex flex-row gap-2 items-center">
                             <span>De</span>
@@ -273,8 +339,18 @@ const CreateOrderForm = (contactPeopleNames) => {
                                 render={({field}) => (
                                     <FormItem>
                                         <FormControl>
-                                            <Input placeholder="8:00" {...field} />
+                                        <Input
+                                            placeholder="8:00"
+                                            {...field}
+                                            onBlur={(e) => {
+                                                if (!e.target.value) {
+                                                    field.onChange(e.target.placeholder);
+                                                }
+                                            }}
+                                        />
                                         </FormControl>
+                                        <FormDescription>
+                                        </FormDescription>
                                         <FormMessage/>
                                     </FormItem>
                                 )}
@@ -286,8 +362,18 @@ const CreateOrderForm = (contactPeopleNames) => {
                                 render={({field}) => (
                                     <FormItem>
                                         <FormControl>
-                                            <Input placeholder="18:00" {...field} />
+                                        <Input
+                                            placeholder="18:00"
+                                            {...field}
+                                            onBlur={(e) => {
+                                                if (!e.target.value) {
+                                                    field.onChange(e.target.placeholder);
+                                                }
+                                            }}
+                                        />
                                         </FormControl>
+                                        <FormDescription>
+                                        </FormDescription>
                                         <FormMessage/>
                                     </FormItem>
                                 )}
@@ -301,15 +387,17 @@ const CreateOrderForm = (contactPeopleNames) => {
                             name="order.payment"
                             render={({field}) => (
                                 <FormItem>
-                                    <FormLabel>Mode de paiement</FormLabel>
+                                    <FormLabel>Mode de paiement*</FormLabel>
                                     <FormControl>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <SelectTrigger>
                                                 <SelectValue placeholder="Selectionner un mode de paiement"/>
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="au livreur">Au livreur</SelectItem>
-                                                <SelectItem value="facture">Sur facture</SelectItem>
+                                                <SelectItem value="DELIVERY">Au livreur</SelectItem>
+                                                <SelectItem value="INVOICE">Sur facture</SelectItem>
+                                                <SelectItem value="UPSTREAM">Sur place</SelectItem>
+
                                             </SelectContent>
                                         </Select>
                                     </FormControl>
@@ -317,111 +405,28 @@ const CreateOrderForm = (contactPeopleNames) => {
                                 </FormItem>
                             )}
                         />
+                        <h1 className="text-2xl">Remarque sur le commande</h1>
                         <FormField
                             control={form.control}
-                            name="same_as_delivery"
+                            name="order.remark"
                             render={({field}) => (
-                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-3 my-2">
+                                <FormItem>
+                                    <FormLabel>Remark</FormLabel>
                                     <FormControl>
-                                        <Checkbox
-                                            checked={field.value}
-                                            onCheckedChange={(checked) => {
-                                                field.onChange(checked);
-                                                setSameAsDelivery(checked);
-                                            }}
-                                        />
+                                        <Textarea placeholder="Ajouter des remarques si nécessaire" {...field} />
                                     </FormControl>
-                                    <div className="space-y-1 leading-none">
-                                        <FormLabel>
-                                            Utiliser l'adresse de livraison comme adresse de facturation
-                                        </FormLabel>
-                                    </div>
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />
-                        {!sameAsDelivery && (
-                            <>
-                                <FormField
-                                    control={form.control}
-                                    name="billingAddress.street"
-                                    render={({field}) => (
-                                        <FormItem>
-                                            <FormLabel>Rue et numéro*</FormLabel>
-                                            <FormControl>
-                                                <Input placeholder="Rue" {...field} />
-                                            </FormControl>
-                                            <FormMessage/>
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="billingAddress.complement"
-                                    render={({field}) => (
-                                        <FormItem>
-                                            <FormLabel>Complément d'adresse</FormLabel>
-                                            <FormControl>
-                                                <Input placeholder="Complément" {...field} />
-                                            </FormControl>
-                                            <FormMessage/>
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormLabel className="py-2">NPA et localité*</FormLabel>
-                                <div className="flex w-full flex-row gap-2 items-center">
-                                    <FormField
-                                        control={form.control}
-                                        name="billingAddress.npa"
-                                        render={({field}) => (
-                                            <FormItem>
-                                                <FormControl>
-                                                    <Input type="number" placeholder="npa" {...field} />
-                                                </FormControl>
-                                                <FormMessage/>
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
-                                        name="billingAddress.city"
-                                        render={({field}) => (
-                                            <FormItem>
-                                                <FormControl>
-                                                    <Input placeholder="Localité" {...field} />
-                                                </FormControl>
-                                                <FormMessage/>
-                                            </FormItem>
-                                        )}
-                                    />
-                                </div>
-                            </>
-                        )}
                     </div>
                 </div>
                 <div className="flex justify-end">
                     <div className="flex flex-col">
-                        <h1 className="text-2xl">Valider la commander</h1>
-                        <FormField
-                            control={form.control}
-                            name="notification"
-                            render={({field}) => (
-                                <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-3 my-2">
-                                    <FormControl>
-                                        <Checkbox
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                    </FormControl>
-                                    <div className="space-y-1 leading-none">
-                                        <FormLabel>
-                                            Je shouaiterais recevoir des annonces sur les prochaines ventes
-                                        </FormLabel>
-                                    </div>
-                                </FormItem>
-                            )}
-                        />
+                        <h1 className="text-2xl p-3 my-2">Valider la commander</h1>
+
                         <div className="flex gap-2">
-                            <Button variant="destructive">Annuler</Button>
+                            <Button variant="destructive" type="button"  onClick={() => window.location.href = "/orders"} >Annuler</Button>
                             <Button className="bg-green-500" type="submit">Commander</Button>
                         </div>
                     </div>
