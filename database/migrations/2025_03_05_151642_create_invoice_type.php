@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('invoice_types', function (Blueprint $table) {
+        Schema::create('invoice_statuses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->timestamps();
         });
         Schema::table('invoices', function (Blueprint $table) {
-            $table->foreignId('status_id')->constrained("invoice_types");
+            $table->foreignId('status_id')->constrained("invoice_statuses");
             $table->dropColumn('status');
         });
     }
@@ -27,11 +27,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('invoice_type');
+        Schema::dropIfExists('invoice_statuses');
         Schema::table('invoices', function (Blueprint $table) {
             $table->string('status');
-            $table->dropForeign(['invoice_type_id']);
-            $table->dropColumn('invoice_type_id');
+            $table->dropForeign(['invoice_status_id']);
+            $table->dropColumn('invoice_status_id');
         });
     }
 };

@@ -4,13 +4,14 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-
+use App\Enums\InvoiceStatusEnum;
 use App\Enums\PaymentTypesEnum;
 use App\Enums\PersonTypesEnum;
 use Illuminate\Database\Seeder;
 use App\Models\Address;
 use App\Models\City;
 use App\Models\DeliveryGuySchedule;
+use App\Models\InvoiceStatus;
 use App\Models\Order;
 use App\Models\PaymentTypes;
 use App\Models\Person;
@@ -28,6 +29,7 @@ class DatabaseSeeder extends Seeder
         DeliveryGuySchedule::factory(20)->create();
         PersonType::factory(count(PersonTypesEnum::cases()))->create();
         PaymentTypes::factory(count(PaymentTypesEnum::cases()))->create();
+        InvoiceStatus::factory(count(InvoiceStatusEnum::cases()))->create();
         Person::factory(100)->create();
         Order::factory(100)->create();
 
