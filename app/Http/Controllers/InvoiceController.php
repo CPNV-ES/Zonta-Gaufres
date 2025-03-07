@@ -6,6 +6,7 @@ use App\Enums\InvoiceStatusEnum;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Http\Controllers\strtolower;
 
 class InvoiceController extends Controller
 {
@@ -15,7 +16,7 @@ class InvoiceController extends Controller
 
         $transformed = $invoices->map(function ($invoice) {
 
-            $InvoiceStatus = InvoiceStatusEnum::fromCase($invoice->status->name);
+            $invoiceStatus = InvoiceStatusEnum::from($invoice->invoiceStatus->name);
 
             return [
                 /*mettre les "values" dans chaque colonne*/
@@ -24,8 +25,8 @@ class InvoiceController extends Controller
                 "client" => $invoice->client->firstname . ' ' . $invoice->client->lastname,
                 "total" => $invoice->order->total_price(),
                 "status" => [
-                    "key" => strtolower($InvoiceStatus->name),
-                    "name" => $InvoiceStatus->value
+                    "key" => strtolower($invoiceStatus->name),
+                    "name" => $invoiceStatus->displayName()
                 ],
                 "creation_date" => $invoice->created_at,
                 "payment_date" => $invoice->payment_date,

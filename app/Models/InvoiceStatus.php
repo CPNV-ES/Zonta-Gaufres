@@ -10,7 +10,7 @@ class InvoiceStatus extends Model
 {
     public $timestamps = false;
     use HasFactory;
-    public function Invoice(): BelongsToMany
+    public function invoice(): BelongsToMany
     {
         return $this->belongsToMany(Invoice::class);
     }
