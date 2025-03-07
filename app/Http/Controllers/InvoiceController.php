@@ -14,6 +14,8 @@ class InvoiceController extends Controller
     {
         $invoices = Invoice::with('order', 'client')->get();
 
+        $invoices->load('order.contact');
+
         $transformed = $invoices->map(function ($invoice) {
 
             $invoiceStatus = InvoiceStatusEnum::from($invoice->invoiceStatus->name);
@@ -30,7 +32,7 @@ class InvoiceController extends Controller
                 ],
                 "creation_date" => $invoice->created_at,
                 "payment_date" => $invoice->payment_date,
-                "contact" => $invoice->contact->firstname . ' ' . $invoice->contact->lastname,
+                "contact" => $invoice->order->contact->firstname . ' ' . $invoice->order->contact->lastname,
             ];
         });
 
