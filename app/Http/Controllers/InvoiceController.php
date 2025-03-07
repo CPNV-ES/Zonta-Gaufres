@@ -26,11 +26,8 @@ class InvoiceController extends Controller
                 "company" => $invoice->client->company,
                 "client" => $invoice->client->firstname . ' ' . $invoice->client->lastname,
                 "total" => $invoice->order->total_price(),
-                "status" => [
-                    "key" => strtolower($invoiceStatus->name),
-                    "name" => $invoiceStatus->displayName()
-                ],
-                "creation_date" => $invoice->created_at,
+                "status" => $invoiceStatus->displayName(),
+                "creation_date" => $invoice->creation_date,
                 "payment_date" => $invoice->payment_date,
                 "contact" => $invoice->order->contact->firstname . ' ' . $invoice->order->contact->lastname,
             ];
