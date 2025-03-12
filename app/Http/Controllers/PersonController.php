@@ -61,6 +61,7 @@ class PersonController extends Controller
             'company' => 'nullable',
             'email' => 'nullable|email',
             'phone_number' => 'required',
+            'roles' => 'required|array|min:1',
         ]);
         DB::transaction(function () use ($request) {
             $person = Person::create($request->all());
