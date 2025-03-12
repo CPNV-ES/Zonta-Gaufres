@@ -59,6 +59,7 @@ const Index = (orders) => {
                     action: "Créer une commande",
                     variant: "green",
                     handler: (a) => window.location.href = "/orders/create",
+                    alwaysOn: true
                 }}
                 onClickHandler={(row) => console.log(row.id)}
             />

@@ -101,7 +101,8 @@ const Invoices = () => {
                     icon: "download",
                     action: "Télécharger",
                     item: "Facture",
-                    variant: "red"
+                    variant: "red",
+                    alwaysOn: false,
                 }}
             />
         </MainLayout>
