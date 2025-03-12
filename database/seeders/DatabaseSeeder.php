@@ -16,6 +16,7 @@ use App\Models\Order;
 use App\Models\PaymentTypes;
 use App\Models\Person;
 use App\Models\PersonType;
+use App\Models\Invoice;
 
 class DatabaseSeeder extends Seeder
 {
@@ -32,6 +33,7 @@ class DatabaseSeeder extends Seeder
         InvoiceStatus::factory(count(InvoiceStatusEnum::cases()))->create();
         Person::factory(100)->create();
         Order::factory(100)->create();
+        Invoice::factory(50)->create();
 
         foreach (DeliveryGuySchedule::all() as $deliverySchedule) {
             $deliverySchedule->city()->attach(City::all()->random());
