@@ -57,42 +57,7 @@ const columnHeaders = [
 
 const columns = builder.buildColumns(columnHeaders);
 
-// ! TODO - Replace with actual data pulled from the database
-/*const inputData = [
-    {
-        invoice_id: 1,
-        company: "Company 1",
-        client: "Client 1",
-        creation_date: "2021-01-01",
-        payment_date: "2021-01-01",
-        status: "Paid",
-        contact: "John Doe",
-        total: 100,
-    },
-    {
-        invoice_id: 2,
-        company: "Company 2",
-        client: "Client 2",
-        creation_date: "2021-01-01",
-        payment_date: "2021-01-01",
-        status: "Paid",
-        contact: "John Doe",
-        total: 100,
-    },
-    {
-        invoice_id: 3,
-        company: "Company 3",
-        client: "Client 3",
-        creation_date: "2021-01-01",
-        payment_date: "2021-01-01",
-        status: "Paid",
-        contact: "John Doe",
-        total: 100,
-    },
-];*/
-
-const Index = (invoices/*here data to put from controller*/ ) => {
-    /*check how it is send, if needed -> datas.datas*/
+const Index = (invoices) => {
     console.log('Invoices data:', invoices);
 
     invoices = invoices.invoices;
@@ -100,7 +65,7 @@ const Index = (invoices/*here data to put from controller*/ ) => {
         <MainLayout color="red" subject="Factures">
             <DataTable
                 columns={columns}
-                inputData={invoices/*replace here by datas*/}
+                inputData={invoices}
                 buttonsOptions={{
                     icon: "download",
                     action: "Télécharger",
