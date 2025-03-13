@@ -75,7 +75,10 @@ class Order extends Model
     {
         return $this->belongsTo(PaymentTypes::class);
     }
-
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
     public function newCollection(array $models = [])
     {
         return new OrderCollection($models);

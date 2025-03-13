@@ -36,6 +36,10 @@ class Person extends BaseModel
     {
         return $this->hasMany(Order::class, 'contact_id');
     }
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'client_id');
+    }
     public function deliveryGuySchedule()
     {
         return $this->hasMany(DeliveryGuySchedule::class, 'person_id');
