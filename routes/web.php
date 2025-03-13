@@ -4,6 +4,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\DeliveryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PersonController;
+use App\Http\Controllers\InvoiceController;
 use Inertia\Inertia;
 
 /*
@@ -27,6 +28,8 @@ Route::get('/invoices', function () {
     return Inertia::render('Invoices');
 });
 
+Route::resource("invoices", InvoiceController::class)->only(["index"]);
+Route::get('/invoices/print', [InvoiceController::class, 'printInvoice']);
 Route::resource("deliveries", DeliveryController::class)->only(["index", "editAll"]);
 Route::get('/deliveries/print_labels', [DeliveryController::class, 'printLabels']);
 Route::resource("orders", OrderController::class)->only(["index", "store", "create", "update"]);

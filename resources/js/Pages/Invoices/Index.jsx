@@ -1,5 +1,5 @@
 import React from "react";
-import MainLayout from "../Layouts/MainLayout";
+import MainLayout from "../../Layouts/MainLayout";
 import DataTable from "@/Components/DataTable";
 
 import { ColumnBuilder } from "@/Builder/ColumnBuilder";
@@ -44,46 +44,15 @@ const columnHeaders = [
 
 const columns = builder.buildColumns(columnHeaders);
 
-// ! TODO - Replace with actual data pulled from the database
-const inputData = [
-    {
-        invoice_id: 1,
-        company: "Company 1",
-        client: "Client 1",
-        creation_date: "2021-01-01",
-        payment_date: "2021-01-01",
-        status: "Paid",
-        contact: "John Doe",
-        total: 100,
-    },
-    {
-        invoice_id: 2,
-        company: "Company 2",
-        client: "Client 2",
-        creation_date: "2021-01-01",
-        payment_date: "2021-01-01",
-        status: "Paid",
-        contact: "John Doe",
-        total: 100,
-    },
-    {
-        invoice_id: 3,
-        company: "Company 3",
-        client: "Client 3",
-        creation_date: "2021-01-01",
-        payment_date: "2021-01-01",
-        status: "Paid",
-        contact: "John Doe",
-        total: 100,
-    },
-];
+const Index = (invoices) => {
+    console.log('Invoices data:', invoices);
 
-const Invoices = () => {
+    invoices = invoices.invoices;
     return (
         <MainLayout color="red" subject="Factures">
             <DataTable
                 columns={columns}
-                inputData={inputData}
+                inputData={invoices}
                 buttonsOptions={{
                     icon: "download",
                     action: "Télécharger",
@@ -96,4 +65,4 @@ const Invoices = () => {
     );
 };
 
-export default Invoices;
+export default Index;
