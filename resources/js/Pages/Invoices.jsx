@@ -39,20 +39,7 @@ const columnHeaders = [
     { accessor: "status" },
     { accessor: "contact" },
     { accessor: "total" },
-    {
-        accessor: "actions",
-        cell: (
-            <div className="flex gap-3">
-                <button>
-                    <Icon name="archive" />
-                </button>
-                <button>
-                    <Icon name="download" />
-                </button>
 
-            </div>
-        ),
-    },
 ];
 
 const columns = builder.buildColumns(columnHeaders);
