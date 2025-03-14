@@ -5,6 +5,7 @@ import DataTable from "@/Components/DataTable";
 import { ColumnBuilder } from "@/Builder/ColumnBuilder";
 import { Checkbox } from "@/Components/ui/checkbox";
 import Icon from "@/Components/Icon";
+import { RowSelection } from "@tanstack/react-table";
 
 const builder = new ColumnBuilder();
 
@@ -45,9 +46,22 @@ const columnHeaders = [
 const columns = builder.buildColumns(columnHeaders);
 
 const Index = (invoices) => {
-    console.log('Invoices data:', invoices);
-
     invoices = invoices.invoices;
+
+    const handleInvoicesPrint = (rowSelection) => {
+        const selectedRows = Object.keys(rowSelection).filter(key=> rowSelection[key]);
+        console.log(selectedRows + " e");
+        if(selectedRows.length === 0) {
+            return;
+        }
+        const selectedIds= selectedRows.map(row => invoices[row].invoice_id);
+        console.log(selectedIds + " f");
+
+
+        window.location.href = `/invoices/print_invoices?invoices=${selectedIds.join(",")}`;
+    };
+//TODO: link produce : invoices/print_invoices?invoices=* (* -> nothing in), correct it + route to make
+
     return (
         <MainLayout color="red" subject="Factures">
             <DataTable
@@ -58,6 +72,7 @@ const Index = (invoices) => {
                     action: "Télécharger",
                     item: "Facture",
                     variant: "red",
+                    handler: handleInvoicesPrint,
                     alwaysOn: false,
                 }}
             />
