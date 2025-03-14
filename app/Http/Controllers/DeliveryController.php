@@ -77,6 +77,6 @@ class DeliveryController extends Controller
     public function printLabels(Request $request)
     {
         $orders = Order::findMany(explode(',', $request->query('deliveries')));
-        return $orders->generateLabelsPDF()->download('invoice.pdf');
+        return $orders->generateLabelsPDF()->download('label.pdf');
     }
 }
