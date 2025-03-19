@@ -29,6 +29,13 @@ const FilterButton = ({ children = "Filtrer", columns, onApply }) => {
                             [columns]: value,
                         };
                     }
+                    if (getColumns(value).type === "date") {
+                        return {
+                            ...filter,
+                            value: new Date().toISOString().split('T')[0],
+                            [columns]: value,
+                        };
+                    }
                     return {
                         ...filter,
                         value: "",
@@ -81,12 +88,14 @@ const FilterButton = ({ children = "Filtrer", columns, onApply }) => {
                                 className='w-32'
                                 onChange={(e) => handleChange("operator", index, e.target.value)}
                             >
-                                <option value="=">Equals</option>
-                                { getColumns(filter.column).type === "number" && <option value=">">Greater Than</option> }
-                                { getColumns(filter.column).type === "number" && <option value=">=">Greater Than or Equals</option> }
-                                { getColumns(filter.column).type === "number" && <option value="<">Less Than</option> }
-                                { getColumns(filter.column).type === "number" && <option value="<=">Less Than or Equals</option> }
-                                <option value="!=">Not Equals</option>
+                                <option value="=">Égal</option>
+                                { getColumns(filter.column).type === "number" && <option value=">">Supérieur à</option> }
+                                { getColumns(filter.column).type === "date" && <option value="<=">Avant</option> }
+                                { getColumns(filter.column).type === "date" && <option value=">=">Après</option> }
+                                { getColumns(filter.column).type === "number" && <option value=">=">Supérieur ou égal à</option> }
+                                { getColumns(filter.column).type === "number" && <option value="<">Inférieur à</option> }
+                                { getColumns(filter.column).type === "number" && <option value="<=">Inférieur ou égal à</option> }
+                                <option value="!=">Pas égal</option>
                             </select>
                             { getColumns(filter.column).type === "multi" ? (
                                 <select
@@ -98,7 +107,9 @@ const FilterButton = ({ children = "Filtrer", columns, onApply }) => {
                                         <option key={i} value={option.key}>{option.name}</option>
                                     ))}
                                 </select>
-                            ) : (
+                            ) : getColumns(filter.column).type === "date" ? (
+                                <Input type="date" value={filter.value} onChange={(e) => handleChange("value", index, e.target.value)} />
+                            ) :  (
                                 <Input value={filter.value} onChange={(e) => handleChange("value", index, e.target.value)} />
                             )}
                         </div>
