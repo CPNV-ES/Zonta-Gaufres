@@ -18,6 +18,7 @@ import {
 import { Button } from "@/Components/ui/button";
 
 import Icon from "@/Components/Icon";
+import FilterButton from "@/Components/Filter";
 
 /**
  * @typedef {Object} ButtonOptions
@@ -68,6 +69,56 @@ const DataTable = ({ inputData, columns, buttonsOptions, onClickHandler }) => {
         : (buttonsOptions = [
               { ...buttonsOptions, id: buttonsOptions?.id || "default" },
           ]);
+
+    const getColumns = (id) => {
+        return columns.find(column => column.id === id);
+    }
+
+    const filterMultiColumn = (row, column, value) => {
+        if (getColumns(column).type === 'multi') {
+            if (Array.isArray(row[column])) {
+                for (const item of row[column]) {
+                    if (item.key == value) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            if (row[column].key == value) {
+                return true;
+            }
+            return false;
+        }
+        return row[column] == value;
+    };
+
+    const filterOnApply = (filters) => {
+        setData(inputData);
+        filters.forEach(element => {
+            if (element.column && element.operator && element.value !== undefined) {
+                setData((prevData) =>
+                    prevData.filter((row) => {
+                        switch (element.operator) {
+                            case '=':
+                                return filterMultiColumn(row, element.column, element.value);
+                            case '!=':
+                                return !filterMultiColumn(row, element.column, element.value);
+                            case '>':
+                                return row[element.column] > element.value;
+                            case '<':
+                                return row[element.column] < element.value;
+                            case '>=':
+                                return row[element.column] >= element.value;
+                            case '<=':
+                                return row[element.column] <= element.value;                                
+                            default:
+                                return true;
+                        }
+                    })
+                );
+            }
+        });
+    }
 
     const footer_buttons = buttonsOptions.map((buttonOptions) => (
         <Button
@@ -157,7 +208,10 @@ const DataTable = ({ inputData, columns, buttonsOptions, onClickHandler }) => {
                             ? " résultats"
                             : " résultat"}
                     </span>
-                    <div className="flex gap-2">{footer_buttons}</div>
+                    <div className="flex gap-2">
+                        {footer_buttons}
+                        <FilterButton columns={columns} onApply={filterOnApply} />
+                    </div>
                 </div>
             </div>
         </>

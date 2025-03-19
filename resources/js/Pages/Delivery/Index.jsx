@@ -33,34 +33,42 @@ const columnHeaders = [
     {
         accessor: "delivery_id",
         header: "#",
+        type: "number",
     },
     {
         accessor: "delivery_guy",
         header: "Livreur",
+        type: "string",
     },
     {
         accessor: "company",
         header: "Entreprise",
+        type: "string",
     },
     {
         accessor: "buyer",
         header: "Personne livrée",
+        type: "string",
     },
     {
         accessor: "address",
         header: "Adresse",
+        type: "string",
     },
     {
         accessor: "postal_code",
         header: "NPA",
+        type: "number",
     },
     {
         accessor: "locality",
         header: "Localité",
+        type: "string",
     },
     {
         accessor: "phone_number",
         header: "Téléphone",
+        type: "string",
     },
 ];
 

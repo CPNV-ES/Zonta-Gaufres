@@ -34,6 +34,8 @@ export class ColumnBuilder {
                     cell: colDef.cell ?? ((info) => info.renderValue()),
                     footer: colDef.footer ?? ((info) => info.column.id),
                     size: colDef.size ?? null,
+                    type: colDef.type ?? "string",
+                    multi: colDef.multi ?? null,
                 })
             );
         });
