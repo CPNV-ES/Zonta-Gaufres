@@ -2,11 +2,11 @@
 
 namespace App\Enums;
 
-enum PaymentTypesEnum: int
+enum PaymentTypesEnum: string
 {
-    case UPSTREAM = 1; //en amont
-    case DELIVERY = 2; //livraison
-    case INVOICE = 3; //facture
+    case UPSTREAM = "En amont"; 
+    case DELIVERY = "Livraison"; 
+    case INVOICE = "Facture";
 
     public static function fromCase(string $case): self
     {
