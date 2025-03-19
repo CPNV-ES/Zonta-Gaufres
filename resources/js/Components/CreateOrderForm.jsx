@@ -9,6 +9,7 @@ import {useForm} from "react-hook-form";
 import axios from "axios";
 import {format} from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
+import { PHONENUMBER_REGEX } from "@/lib/regex";
 
 const formSchema = z.object({
     order: z.object({
@@ -41,7 +42,7 @@ const formSchema = z.object({
     person: z.object({
         phone_number: z.string({
             required_error: "Ce champ est requis.",
-        }).regex(/^\d{3} \d{3} \d{2} \d{2}$/, {
+        }).regex(PHONENUMBER_REGEX, {
             message: "Le numéro de téléphone doit être au format 078 947 23 17.",
         }),
         lastname: z.string({

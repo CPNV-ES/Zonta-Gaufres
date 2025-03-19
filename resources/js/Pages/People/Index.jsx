@@ -12,6 +12,8 @@ import MultipleSelector from "@/Components/MultipleSelector";
 
 import { router } from "@inertiajs/react";
 
+import { PHONENUMBER_REGEX, EMAIL_REGEX } from "@/lib/regex";
+
 const People = (people) => {
     const builder = new ColumnBuilder();
     
@@ -105,6 +107,7 @@ const People = (people) => {
     });
     const [isEditing, setIsEditing] = useState(false);
     const [currentPersonId, setCurrentPersonId] = useState(null);
+    const [errors, setErrors] = useState({});
 
     const handleEdit = (person) => {
         setInput({
@@ -120,7 +123,30 @@ const People = (people) => {
         setIsDialogOpen(true);
     };
 
+    const validateInputs = () => {
+        const newErrors = {};
+        if (!input.firstname) newErrors.firstname = "Prénom est requis";
+        if (!input.lastname) newErrors.lastname = "Nom est requis";
+        if (!input.email) {
+            newErrors.email = "Email est requis";
+        } else if (!EMAIL_REGEX.test(input.email)) {
+            newErrors.email = "Email invalide";
+        }
+        if (!input.phone_number) {
+            newErrors.phone_number = "Téléphone est requis";
+        } else if (!PHONENUMBER_REGEX.test(input.phone_number)) {
+            newErrors.phone_number = "Téléphone invalide";
+        }
+        if (input.roles.length === 0) {
+            newErrors.roles = "Au moins un rôle est requis";
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleSubmit = () => {
+        if (!validateInputs()) return;
+
         if (isEditing) {
             router.put(`/people/${currentPersonId}`, {
                 firstname: input.firstname,
@@ -194,6 +220,9 @@ const People = (people) => {
                         setInput({ ...input, firstname: e.target.value })
                     }
                 />
+                {errors.firstname && (
+                    <p className="text-red-500">{errors.firstname}</p>
+                )}
                 <Input
                     id="lastname"
                     placeholder="Nom"
@@ -202,6 +231,9 @@ const People = (people) => {
                         setInput({ ...input, lastname: e.target.value })
                     }
                 />
+                {errors.lastname && (
+                    <p className="text-red-500">{errors.lastname}</p>
+                )}
                 <Input
                     id="email"
                     placeholder="Email"
@@ -210,6 +242,7 @@ const People = (people) => {
                         setInput({ ...input, email: e.target.value })
                     }
                 />
+                {errors.email && <p className="text-red-500">{errors.email}</p>}
                 <Input
                     id="company"
                     placeholder="Entreprise"
@@ -220,12 +253,15 @@ const People = (people) => {
                 />
                 <Input
                     id="phone_number"
-                    placeholder="Téléphone"
+                    placeholder="Téléphone (Format: 024 102 33 04)"
                     value={input.phone_number}
                     onChange={(e) =>
                         setInput({ ...input, phone_number: e.target.value })
                     }
                 />
+                {errors.phone_number && (
+                    <p className="text-red-500">{errors.phone_number}</p>
+                )}
                 <MultipleSelector
                     defaultOptions={OPTIONS}
                     placeholder="Sélectionner le(s) rôle(s)"
@@ -243,6 +279,7 @@ const People = (people) => {
                         setInput({ ...input, roles: e.map((el) => el.value) });
                     }}
                 />
+                {errors.roles && <p className="text-red-500">{errors.roles}</p>}
             </Dialog>
         </MainLayout>
     );

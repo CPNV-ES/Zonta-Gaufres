@@ -41,7 +41,7 @@ const Dialog = ({
                 <DialogFooter>
                     <Button
                         onClick={() => {
-                            action(), setIsOpen(false);
+                            action() && setIsOpen(false);
                         }}
                         type="submit"
                     >
