@@ -31,14 +31,14 @@ const columnHeaders = [
             />
         ),
     },
-    { accessor: "invoice_id", header: "#" },
-    { accessor: "company", header: "Entreprise" },
-    { accessor: "client", header: "Client" },
-    { accessor: "creation_date", header: "Date de création" },
-    { accessor: "payment_date", header: "Date de paiment" },
-    { accessor: "status" },
-    { accessor: "contact" },
-    { accessor: "total" },
+    { accessor: "invoice_id", header: "#", type: "number" },
+    { accessor: "company", header: "Entreprise", type: "string" },
+    { accessor: "client", header: "Client", type: "string" },
+    { accessor: "creation_date", header: "Date de création", type: "date" },
+    { accessor: "payment_date", header: "Date de paiment", type: "date" },
+    { accessor: "status", header: "Statut", type: "string" },
+    { accessor: "contact", header: "Contact", type: "string" },
+    { accessor: "total", header: "Total", type: "number" },
     {
         accessor: "actions",
         cell: (
@@ -49,7 +49,6 @@ const columnHeaders = [
                 <button>
                     <Icon name="download" />
                 </button>
-
             </div>
         ),
     },
@@ -101,7 +100,7 @@ const Invoices = () => {
                     icon: "download",
                     action: "Télécharger",
                     item: "Facture",
-                    variant: "red"
+                    variant: "red",
                 }}
             />
         </MainLayout>
