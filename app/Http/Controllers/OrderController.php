@@ -47,11 +47,11 @@ class OrderController extends Controller
                 "waffles_number" => $order->waffle_quantity,
                 "total" => $order->total_price(),
                 "status" => [
-                    "key" => "paid",
+                    "key" => "PAID",
                     "name" => "Payée"
                 ],
                 "payment_type" => [
-                    "key" => strtolower($paymentType->name),
+                    "key" => $paymentType->name,
                     "name" => $paymentType->value
                 ]
             ];
