@@ -3,16 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Enums\PaymentTypesEnum;
-use App\Enums\PersonTypesEnum;
 use App\Models\Address;
-use App\Models\DeliveryGuySchedule;
 use App\Models\Order;
 use App\Models\Person;
 use App\Models\City;
-use App\Models\PersonType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 
@@ -50,10 +46,7 @@ class OrderController extends Controller
                     "key" => "PAID",
                     "name" => "Payée"
                 ],
-                "payment_type" => [
-                    "key" => $paymentType->name,
-                    "name" => $paymentType->value
-                ]
+                "payment_type" => $paymentType->toArray(),
             ];
         });
 

@@ -17,11 +17,7 @@ class PersonController extends Controller
 
         $transformed = $people->map(function ($person) {
             $types = $person->personType->map(function ($type) {
-                $case = PersonTypesEnum::fromCase($type->name);
-                return [
-                    "name" => $case->value,
-                    "key" => $case->name,
-                ];
+                return PersonTypesEnum::fromCase($type->name)->toArray();
             });
 
             return [

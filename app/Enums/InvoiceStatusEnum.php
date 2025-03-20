@@ -13,4 +13,12 @@ enum InvoiceStatusEnum: string
     {
         return constant("self::$case");
     }
+
+    public function toArray(): array
+    {
+        return [
+            'name' => $this->value,
+            'key' => $this->name,
+        ];
+    }
 }
