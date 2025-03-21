@@ -105,7 +105,7 @@ class InvoiceCollection extends \Illuminate\Database\Eloquent\Collection
 
         //html ici
         return '
-            <div style="padding-top: 385px; margin-left:-50px; margin-bottom:-100px">
+            <div style="padding-top: 385px; margin-left:-45px; margin-bottom:-100px">
                 <img src="/public/images/pdf_down.png" style="width: 108%; ">
             </div>
         ';
