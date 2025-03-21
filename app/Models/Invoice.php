@@ -42,10 +42,11 @@ class InvoiceCollection extends \Illuminate\Database\Eloquent\Collection
     public function generateInvoicesPDF()
     {
         $pdf = App::make('dompdf.wrapper');
-        $html = '<body font-family: Arial, sans-serif; font-size: 14px; margin-top: 150px;>';
+        $html = '<body style="font-family: Arial, sans-serif; font-size:14px";>';
 
         foreach ($this as $invoice) {
             $html .= $this->generateUpper($invoice, 50);
+            $html .= $this->generateLower($invoice, 50);
         }
         $html .= '</body>';
 
@@ -69,26 +70,25 @@ class InvoiceCollection extends \Illuminate\Database\Eloquent\Collection
         setlocale(LC_TIME, 'fr_FR.utf8', 'fra');
 
         $dateformat = utf8_encode(strftime('%e %B %Y', strtotime($date)));
-
+        //https://stackoverflow.com/questions/9067892/how-to-align-two-elements-on-the-same-line-without-changing-html work maybe ?
 
         return "
-        <div style='padding-top:200px; padding-left:400px '>
-            $company
-            $fullname<br>
-            $address<br>
-            $city
-        </div>
-        <div style='display:flex; flex-wrap:nowrap'>
-            <div style='padding-top:75px; padding-left:75px;'>
-                <p style='font-size:30px'>Facture gaufres - $dateformat</p>
-                <p style='line-height:0.8'><b>Livraison de $quantity gaufres à CHF $pricePerUnit </b></p>
-                <p style='line-height:3'><b><span><b>Un grand Merci de votre soutien </b></span> </b></p>
-                <p>Avec nos meilleures salutations</p>
+            <div style='padding-top:200px; padding-left:400px '>
+                $company
+                $fullname<br>
+                $address<br>
+                $city
             </div>
-            <div style='text-align:right; padding-right:125px'>
-                <span><b>CHF $total</b></span>
-            </div>
-        </div>
+                <div style='padding-top:75px; padding-left:75px; float:left'>
+                    <p style='font-size:25px'>Facture gaufres - $dateformat</p>
+                    <p style='line-height:0.8'><b>Livraison de $quantity gaufres à CHF $pricePerUnit </b></p>
+                    <p style='line-height:3'><b><span><b>Un grand Merci de votre soutien </b></span> </b></p>
+                    <p>Avec nos meilleures salutations</p>
+                </div>
+                <div style='text-align:right; padding-right:115px; padding-top:170px; float:right '>
+                    <span><b>CHF $total</b></span>
+                </div>
+
         ";
     }
 
@@ -102,10 +102,12 @@ class InvoiceCollection extends \Illuminate\Database\Eloquent\Collection
         $city =  $invoice->order->address->city->zip_code . ' ' . $invoice->order->address->city->name;
         $infoSupp = $invoice->order->remark != null ? "<b> " . $invoice->order->remark . '</b><br>' : '';
 
-        return "
 
-
-
-        ";
+        //html ici
+        return '
+            <div style="padding-top: 385px; margin-left:-50px; margin-bottom:-100px">
+                <img src="/public/images/pdf_down.png" style="width: 108%; ">
+            </div>
+        ';
     }
 }
