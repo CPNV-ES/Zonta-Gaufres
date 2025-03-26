@@ -60,7 +60,7 @@ class InvoiceCollection extends \Illuminate\Database\Eloquent\Collection
         $total = $invoice->total;
         $date = $invoice->creation_date;
         $quantity = $invoice->order->waffle_quantity;
-        $pricePerUnit = $total / $quantity;
+        $pricePerUnit = number_format($total / $quantity, 2, '.', ' ');
         $company = $invoice->order->buyer->company != null ? $invoice->order->buyer->company . '<br>' : '';
         $fullname = $invoice->order->buyer->firstname . ' ' . $invoice->order->buyer->lastname;
         $address = $invoice->order->address->street . ' ' . $invoice->order->address->number;
