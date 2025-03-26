@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\App;
 use DateTime;
@@ -24,6 +23,9 @@ class Order extends Model
         'start_delivery_time',
         'end_delivery_time',
         'real_delivery_time',
+        'total',
+        'status_id',
+        'payment_date',
     ];
 
     public function total_price($price = 2)
@@ -67,6 +69,10 @@ class Order extends Model
     {
         return $this->belongsTo(Address::class, 'address_id');
     }
+    public function invoiceStatus()
+    {
+        return $this->belongsTo(InvoiceStatus::class, "status_id");
+    }
     public function deliveryGuySchedule()
     {
         return $this->belongsTo(DeliveryGuySchedule::class);
@@ -74,10 +80,6 @@ class Order extends Model
     public function paymentType()
     {
         return $this->belongsTo(PaymentTypes::class);
-    }
-    public function invoice()
-    {
-        return $this->hasOne(Invoice::class);
     }
     public function newCollection(array $models = [])
     {
