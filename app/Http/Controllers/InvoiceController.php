@@ -39,5 +39,9 @@ class InvoiceController extends Controller
     }
 
 
-    public function printInvoice() {}
+    public function printInvoices(Request $request)
+    {
+        $invoices = Invoice::findMany(explode(',', $request->query('invoices')));
+        return $invoices->generateInvoicesPDF()->download('invoices.pdf');
+    }
 }

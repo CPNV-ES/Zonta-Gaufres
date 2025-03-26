@@ -188,6 +188,7 @@ const People = (people) => {
                     icon: "plus",
                     action: "Ajouter une personne",
                     variant: "yellow",
+                    alwaysOn: true,
                     handler: () => {
                         setInput({
                             firstname: "",

@@ -116,7 +116,8 @@ const Deliveries = ({ initDeliveries }) => {
                         icon: "pencil",
                         action: "Modifier les livraisons",
                         variant: "blue",
-                        handler: () => window.location.href = '/deliveries/edit'
+                        handler: () => window.location.href = '/deliveries/edit',
+                        alwaysOn: true
                     },
                     {
                         id: "print_labels",
@@ -125,13 +126,15 @@ const Deliveries = ({ initDeliveries }) => {
                         item: "série d'étiquettes",
                         itemPlural: "séries d'étiquettes",
                         variant: "blue",
-                        handler: handleLabelsPrint
+                        handler: handleLabelsPrint,
+                        alwaysOn: false
                     },
                     {
                         id: "print_delivery_sheet",
                         icon: "printer",
                         action: "Imprimer des fiches de livraions",
                         variant: "blue",
+                        alwaysOn: true
                     },
                 ]}
             />

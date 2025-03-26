@@ -5,6 +5,7 @@ import DataTable from "@/Components/DataTable";
 import { ColumnBuilder } from "@/Builder/ColumnBuilder";
 import { Checkbox } from "@/Components/ui/checkbox";
 import Icon from "@/Components/Icon";
+import { RowSelection } from "@tanstack/react-table";
 
 const builder = new ColumnBuilder();
 
@@ -31,35 +32,36 @@ const columnHeaders = [
             />
         ),
     },
-    { accessor: "invoice_id", header: "#", type: "number" },
-    { accessor: "company", header: "Entreprise", type: "string" },
-    { accessor: "client", header: "Client", type: "string" },
-    { accessor: "creation_date", header: "Date de création", type: "date" },
-    { accessor: "payment_date", header: "Date de paiment", type: "date" },
-    { accessor: "status", header: "Statut", type: "string" },
-    { accessor: "contact", header: "Contact", type: "string" },
-    { accessor: "total", header: "Total", type: "number" },
-    {
-        accessor: "actions",
-        cell: (
-            <div className="flex gap-3">
-                <button>
-                    <Icon name="archive" />
-                </button>
-                <button>
-                    <Icon name="download" />
-                </button>
-            </div>
-        ),
-    },
+    { accessor: "invoice_id", header: "#" },
+    { accessor: "company", header: "Entreprise" },
+    { accessor: "client", header: "Client" },
+    { accessor: "creation_date", header: "Date de création" },
+    { accessor: "payment_date", header: "Date de paiment" },
+    { accessor: "status" },
+    { accessor: "contact" },
+    { accessor: "total" },
+
 ];
 
 const columns = builder.buildColumns(columnHeaders);
 
 const Index = (invoices) => {
-    console.log('Invoices data:', invoices);
-
     invoices = invoices.invoices;
+
+    const handleInvoicesPrint = (rowSelection) => {
+        const selectedRows = Object.keys(rowSelection).filter(key=> rowSelection[key]);
+        console.log(selectedRows + " e");
+        if(selectedRows.length === 0) {
+            return;
+        }
+        const selectedIds= selectedRows.map(row => invoices[row].invoice_id);
+        console.log(selectedIds + " f");
+
+
+        window.location.href = `/invoices/print_invoices?invoices=${selectedIds.join(",")}`;
+    };
+//TODO: link produce : invoices/print_invoices?invoices=* (* -> nothing in), correct it + route to make
+
     return (
         <MainLayout color="red" subject="Factures">
             <DataTable
@@ -70,6 +72,8 @@ const Index = (invoices) => {
                     action: "Télécharger",
                     item: "Facture",
                     variant: "red",
+                    handler: handleInvoicesPrint,
+                    alwaysOn: false,
                 }}
             />
         </MainLayout>
