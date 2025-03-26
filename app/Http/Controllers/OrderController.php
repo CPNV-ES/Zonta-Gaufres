@@ -7,6 +7,7 @@ use App\Models\Address;
 use App\Models\Order;
 use App\Models\Person;
 use App\Models\City;
+use App\Models\PaymentTypes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -42,10 +43,7 @@ class OrderController extends Controller
                 "contact" => $order->contact->firstname,
                 "waffles_number" => $order->waffle_quantity,
                 "total" => $order->total_price(),
-                "status" => [
-                    "key" => "PAID",
-                    "name" => "Payée"
-                ],
+                "status" => $order->invoiceStatus !== null ? $order->invoiceStatus->enum()->toArray() : [],
                 "payment_type" => $paymentType->toArray(),
             ];
         });
@@ -96,7 +94,7 @@ class OrderController extends Controller
             'person_id' => $person->id,
             'address_id' => $address->id,
             'buyer_id' => $person->id,
-            'payment_type_id' => PaymentTypesEnum::fromCase($orderData['payment'])->value,
+            'payment_type_id' => PaymentTypes::where('name', PaymentTypesEnum::fromCase($orderData['payment'])->name)->first()->id,
             'contact_id' => $orderData['contact'],
             'real_delivery_time' => $realDeliveryTime,
         ]));
