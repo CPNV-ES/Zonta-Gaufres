@@ -10,6 +10,7 @@ import Dialog from "@/Components/dialog";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/Components/ui/select";
 import { Input } from "@/Components/ui/input";
 import { router } from "@inertiajs/react";
+import { RowSelection } from "@tanstack/react-table";
 
 const Index = (invoices) => {
     const builder = new ColumnBuilder();
@@ -108,6 +109,19 @@ const Index = (invoices) => {
     
     const columns = builder.buildColumns(columnHeaders);
 
+    const handleInvoicesPrint = (rowSelection) => {
+        const selectedRows = Object.keys(rowSelection).filter(key=> rowSelection[key]);
+        console.log(selectedRows + " e");
+        if(selectedRows.length === 0) {
+            return;
+        }
+        const selectedIds= selectedRows.map(row => invoices[row].invoice_id);
+        console.log(selectedIds + " f");
+
+
+        window.location.href = `/invoices/print_invoices?invoices=${selectedIds.join(",")}`;
+    };
+
     return (
         <MainLayout color="red" subject="Factures">
             <DataTable
@@ -118,6 +132,8 @@ const Index = (invoices) => {
                     action: "Télécharger",
                     item: "Facture",
                     variant: "red",
+                    handler: handleInvoicesPrint,
+                    alwaysOn: false,
                 }}
             />
             <Dialog

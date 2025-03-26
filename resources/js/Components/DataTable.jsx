@@ -18,6 +18,7 @@ import {
 import { Button } from "@/Components/ui/button";
 
 import Icon from "@/Components/Icon";
+import { object } from "zod";
 import FilterButton from "@/Components/Filter";
 
 /**
@@ -110,7 +111,7 @@ const DataTable = ({ inputData, columns, buttonsOptions, onClickHandler }) => {
                             case '>=':
                                 return row[element.column] >= element.value;
                             case '<=':
-                                return row[element.column] <= element.value;                                
+                                return row[element.column] <= element.value;
                             default:
                                 return true;
                         }
@@ -120,26 +121,31 @@ const DataTable = ({ inputData, columns, buttonsOptions, onClickHandler }) => {
         });
     }
 
-    const footer_buttons = buttonsOptions.map((buttonOptions) => (
-        <Button
-            key={buttonOptions?.id}
-            className="flex gap-2"
-            variant={buttonOptions?.variant || "default"}
-            onClick={() => buttonOptions.handler(rowSelection)}
-        >
-            {buttonOptions?.icon ? <Icon name={buttonOptions.icon} /> : null}
-            {buttonOptions?.action ? buttonOptions.action + " " : null}
-            {buttonOptions?.item
-                ? Object.keys(rowSelection).length +
-                  (table.getSelectedRowModel().rows.length > 1
-                      ? " " +
-                        (buttonOptions.itemPlural
-                            ? buttonOptions.itemPlural
-                            : buttonOptions.item + "s")
-                      : " " + buttonOptions.item)
-                : null}
-        </Button>
-    ));
+    const footer_buttons = buttonsOptions.map((buttonOptions) => {
+        const selectedRowCount = Object.keys(rowSelection).length;
+        const isVisible = selectedRowCount > 0 || buttonOptions.alwaysOn;
+
+        return isVisible ? (
+            <Button
+                key={buttonOptions?.id}
+                className="flex gap-2"
+                variant={buttonOptions?.variant || "default"}
+                onClick={() => buttonOptions.handler(rowSelection)}
+            >
+                {buttonOptions?.icon ? <Icon name={buttonOptions.icon} /> : null}
+                {buttonOptions?.action ? buttonOptions.action + " " : null}
+                {buttonOptions?.item
+                    ? selectedRowCount +
+                      (table.getSelectedRowModel().rows.length > 1
+                          ? " " +
+                            (buttonOptions.itemPlural
+                                ? buttonOptions.itemPlural
+                                : buttonOptions.item + "s")
+                          : " " + buttonOptions.item)
+                    : null}
+            </Button>
+        ) : null;
+    });
 
     return (
         <>

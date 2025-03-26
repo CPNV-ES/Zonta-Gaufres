@@ -6,7 +6,6 @@ use App\Enums\InvoiceStatusEnum;
 use App\Models\Order;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Models\InvoiceStatus;
 
 class InvoiceController extends Controller
@@ -45,5 +44,9 @@ class InvoiceController extends Controller
     }
 
 
-    public function printInvoice() {}
+    public function printInvoices(Request $request)
+    {
+        $invoices = Order::findMany(explode(',', $request->query('invoices')));
+        return $invoices->generateInvoicesPDF()->download('invoices.pdf');
+    }
 }
