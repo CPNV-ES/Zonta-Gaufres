@@ -16,15 +16,29 @@ import { PHONENUMBER_REGEX, EMAIL_REGEX } from "@/lib/regex";
 
 const People = (people) => {
     const builder = new ColumnBuilder();
+    
+    const typesAvailable = () => {
+        let types = [];
+        people.people.forEach(person => {
+            return person.types.map((type) => {
+                if (!types.find((el) => el.key === type.key)) {
+                    types.push({ key: type.key, name: type.name });
+                }
+            });
+        });
+        return types;
+    }
 
     const columnHeaders = [
         {
             accessor: "lastname",
             header: "Nom",
+            type: "string",
         },
         {
             accessor: "firstname",
             header: "Prénom",
+            type: "string",
         },
         {
             accessor: "types",
@@ -38,18 +52,23 @@ const People = (people) => {
                     ))}
                 </div>
             ),
+            type: "multi",
+            multi: typesAvailable(),
         },
         {
             accessor: "phone_number",
             header: "Téléphone",
+            type: "string",
         },
         {
             accessor: "email",
             header: "Email",
+            type: "string",
         },
         {
             accessor: "orders_count",
             header: "Nb commandes",
+            type: "number",
         },
         {
             accessor: "actions",

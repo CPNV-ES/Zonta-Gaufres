@@ -19,6 +19,7 @@ import { Button } from "@/Components/ui/button";
 
 import Icon from "@/Components/Icon";
 import { object } from "zod";
+import FilterButton from "@/Components/Filter";
 
 /**
  * @typedef {Object} ButtonOptions
@@ -70,31 +71,81 @@ const DataTable = ({ inputData, columns, buttonsOptions, onClickHandler }) => {
               { ...buttonsOptions, id: buttonsOptions?.id || "default" },
           ]);
 
-          const footer_buttons = buttonsOptions.map((buttonOptions) => {
-            const selectedRowCount = Object.keys(rowSelection).length;
-            const isVisible = selectedRowCount > 0 || buttonOptions.alwaysOn;
+    const getColumns = (id) => {
+        return columns.find(column => column.id === id);
+    }
 
-            return isVisible ? (
-                <Button
-                    key={buttonOptions?.id}
-                    className="flex gap-2"
-                    variant={buttonOptions?.variant || "default"}
-                    onClick={() => buttonOptions.handler(rowSelection)}
-                >
-                    {buttonOptions?.icon ? <Icon name={buttonOptions.icon} /> : null}
-                    {buttonOptions?.action ? buttonOptions.action + " " : null}
-                    {buttonOptions?.item
-                        ? selectedRowCount +
-                          (table.getSelectedRowModel().rows.length > 1
-                              ? " " +
-                                (buttonOptions.itemPlural
-                                    ? buttonOptions.itemPlural
-                                    : buttonOptions.item + "s")
-                              : " " + buttonOptions.item)
-                        : null}
-                </Button>
-            ) : null;
+    const filterMultiColumn = (row, column, value) => {
+        if (getColumns(column).type === 'multi') {
+            if (Array.isArray(row[column])) {
+                for (const item of row[column]) {
+                    if (item.key == value) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            if (row[column].key == value) {
+                return true;
+            }
+            return false;
+        }
+        return row[column] == value;
+    };
+
+    const filterOnApply = (filters) => {
+        setData(inputData);
+        filters.forEach(element => {
+            if (element.column && element.operator && element.value !== undefined) {
+                setData((prevData) =>
+                    prevData.filter((row) => {
+                        switch (element.operator) {
+                            case '=':
+                                return filterMultiColumn(row, element.column, element.value);
+                            case '!=':
+                                return !filterMultiColumn(row, element.column, element.value);
+                            case '>':
+                                return row[element.column] > element.value;
+                            case '<':
+                                return row[element.column] < element.value;
+                            case '>=':
+                                return row[element.column] >= element.value;
+                            case '<=':
+                                return row[element.column] <= element.value;
+                            default:
+                                return true;
+                        }
+                    })
+                );
+            }
         });
+    }
+
+    const footer_buttons = buttonsOptions.map((buttonOptions) => {
+        const selectedRowCount = Object.keys(rowSelection).length;
+        const isVisible = selectedRowCount > 0 || buttonOptions.alwaysOn;
+
+        return isVisible ? (
+            <Button
+                key={buttonOptions?.id}
+                className="flex gap-2"
+                variant={buttonOptions?.variant || "default"}
+                onClick={() => buttonOptions.handler(rowSelection)}
+            >
+                {buttonOptions?.icon ? <Icon name={buttonOptions.icon} /> : null}
+                {buttonOptions?.action ? buttonOptions.action + " " : null}
+                {buttonOptions?.item
+                    ? selectedRowCount +
+                      (table.getSelectedRowModel().rows.length > 1
+                          ? " " +
+                            (buttonOptions.itemPlural
+                                ? buttonOptions.itemPlural
+                                : buttonOptions.item + "s")
+                          : " " + buttonOptions.item)
+                    : null}
+            </Button>
+        ) : null;
+    });
 
     return (
         <>
@@ -163,7 +214,10 @@ const DataTable = ({ inputData, columns, buttonsOptions, onClickHandler }) => {
                             ? " résultats"
                             : " résultat"}
                     </span>
-                    <div className="flex gap-2">{footer_buttons}</div>
+                    <div className="flex gap-2">
+                        {footer_buttons}
+                        <FilterButton columns={columns} onApply={filterOnApply} />
+                    </div>
                 </div>
             </div>
         </>
