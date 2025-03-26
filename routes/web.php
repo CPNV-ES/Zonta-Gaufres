@@ -28,7 +28,7 @@ Route::get('/invoices', function () {
     return Inertia::render('Invoices');
 });
 
-Route::resource("invoices", InvoiceController::class)->only(["index"]);
+Route::resource("invoices", InvoiceController::class)->only(["index", "update"]);
 Route::get('/invoices/print', [InvoiceController::class, 'printInvoice']);
 Route::resource("deliveries", DeliveryController::class)->only(["index", "editAll"]);
 Route::get('/deliveries/print_labels', [DeliveryController::class, 'printLabels']);

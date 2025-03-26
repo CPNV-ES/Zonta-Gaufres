@@ -5,6 +5,7 @@ import { ColumnBuilder } from "@/Builder/ColumnBuilder";
 
 import { Badge } from "@/Components/ui/badge";
 import { Input } from "@/Components/ui/input";
+import Icon from "@/Components/Icon";
 
 import DataTable from "@/Components/DataTable";
 import Dialog from "@/Components/Dialog";
@@ -77,9 +78,8 @@ const People = (people) => {
                 <div className="flex gap-2">
                     <button
                         onClick={() => handleEdit(row.row.original)}
-                        className="text-blue-500 hover:underline"
                     >
-                        Editer
+                        <Icon name="pencil" />
                     </button>
                 </div>
             ),
@@ -88,7 +88,6 @@ const People = (people) => {
 
     const columns = builder.buildColumns(columnHeaders);
 
-    // values must be in French to allow search by French words
     const OPTIONS = [
         { label: "Bénévole", value: "Bénévole" },
         { label: "Livreur", value: "Livreur" },

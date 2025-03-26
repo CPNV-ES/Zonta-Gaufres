@@ -3,37 +3,45 @@
 namespace App\Http\Controllers;
 
 use App\Enums\InvoiceStatusEnum;
-use App\Models\Invoice;
+use App\Models\Order;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Models\InvoiceStatus;
 
 class InvoiceController extends Controller
 {
     public function index()
     {
-        $invoices = Invoice::with('order', 'client')->get();
+        $orders = Order::all();
 
-        $invoices->load('order.contact');
-
-        $transformed = $invoices->map(function ($invoice) {
-
-            $invoiceStatus = InvoiceStatusEnum::fromCase($invoice->invoiceStatus->name);
-
+        $transformed = $orders->map(function ($order) {
             return [
                 /*mettre les "values" dans chaque colonne*/
-                "invoice_id" => $invoice->id,
-                "company" => $invoice->client->company,
-                "client" => $invoice->client->firstname . ' ' . $invoice->client->lastname,
-                "total" => $invoice->order->total_price(),
-                "status" => $invoiceStatus->toArray(),
-                "creation_date" => $invoice->creation_date,
-                "payment_date" => $invoice->payment_date,
-                "contact" => $invoice->order->contact->firstname . ' ' . $invoice->order->contact->lastname,
+                "id" => $order->id,
+                "invoice_id" => $order->id,
+                "company" => $order->buyer->company,
+                "client" => $order->buyer->firstname . ' ' . $order->buyer->lastname,
+                "total" => $order->total_price(),
+                "status" => $order->invoiceStatus->enum()->toArray(),
+                "creation_date" => $order->created_at,
+                "payment_date" => $order->payment_date,
+                "contact" => $order->contact->getFullnameAttribute(),
             ];
         });
 
         return Inertia::render('Invoices/Index', [
             "invoices" => $transformed,
         ]);
+    }
+
+    public function update($id, Request $request)
+    {
+        $order = Order::find($id);
+
+        $order->status_id = InvoiceStatus::where('name', InvoiceStatusEnum::fromCase($request['status'])->name)->first()->id;
+        $order->payment_date = $request['payment_date'];
+        $order->save();
     }
 
 
