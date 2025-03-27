@@ -3,33 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Enums\InvoiceStatusEnum;
-use App\Models\Invoice;
-use Illuminate\Http\Request;
+use App\Models\Order;
 use Inertia\Inertia;
-use App\Http\Controllers\strtolower;
+use Illuminate\Http\Request;
+use App\Models\InvoiceStatus;
 
 class InvoiceController extends Controller
 {
     public function index()
     {
-        $invoices = Invoice::with('order', 'client')->get();
+        $orders = Order::all();
 
-        $invoices->load('order.contact');
-
-        $transformed = $invoices->map(function ($invoice) {
-
-            $invoiceStatus = InvoiceStatusEnum::from($invoice->invoiceStatus->name);
-
+        $transformed = $orders->map(function ($order) {
             return [
                 /*mettre les "values" dans chaque colonne*/
-                "invoice_id" => $invoice->id,
-                "company" => $invoice->client->company,
-                "client" => $invoice->client->firstname . ' ' . $invoice->client->lastname,
-                "total" => $invoice->order->total_price(),
-                "status" => $invoiceStatus->displayName(),
-                "creation_date" => $invoice->creation_date,
-                "payment_date" => $invoice->payment_date,
-                "contact" => $invoice->order->contact->firstname . ' ' . $invoice->order->contact->lastname,
+                "id" => $order->id,
+                "invoice_id" => $order->id,
+                "company" => $order->buyer->company,
+                "client" => $order->buyer->firstname . ' ' . $order->buyer->lastname,
+                "total" => $order->total_price(),
+                "status" => $order->invoiceStatus->enum()->toArray(),
+                "creation_date" => $order->created_at,
+                "payment_date" => $order->payment_date,
+                "contact" => $order->contact->getFullnameAttribute(),
             ];
         });
 
@@ -38,10 +34,19 @@ class InvoiceController extends Controller
         ]);
     }
 
+    public function update($id, Request $request)
+    {
+        $order = Order::find($id);
+
+        $order->status_id = InvoiceStatus::where('name', InvoiceStatusEnum::fromCase($request['status'])->name)->first()->id;
+        $order->payment_date = $request['payment_date'];
+        $order->save();
+    }
+
 
     public function printInvoices(Request $request)
     {
-        $invoices = Invoice::findMany(explode(',', $request->query('invoices')));
+        $invoices = Order::findMany(explode(',', $request->query('invoices')));
         return $invoices->generateInvoicesPDF()->download('invoices.pdf');
     }
 }
