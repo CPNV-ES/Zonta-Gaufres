@@ -129,13 +129,7 @@ const Deliveries = ({ initDeliveries }) => {
                         handler: handleLabelsPrint,
                         alwaysOn: false
                     },
-                    {
-                        id: "print_delivery_sheet",
-                        icon: "printer",
-                        action: "Imprimer des fiches de livraions",
-                        variant: "blue",
-                        alwaysOn: true
-                    },
+
                 ]}
             />
         </MainLayout>

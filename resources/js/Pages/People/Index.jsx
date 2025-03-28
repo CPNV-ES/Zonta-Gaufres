@@ -14,9 +14,12 @@ import { router } from "@inertiajs/react";
 
 import { PHONENUMBER_REGEX, EMAIL_REGEX } from "@/lib/regex";
 
+import { Checkbox } from "@/Components/ui/checkbox";
+
+
 const People = (people) => {
     const builder = new ColumnBuilder();
-    
+
     const typesAvailable = () => {
         let types = [];
         people.people.forEach(person => {
@@ -30,6 +33,35 @@ const People = (people) => {
     }
 
     const columnHeaders = [
+        {
+            accessor: "select",
+            header: ({ table }) => (
+                <Checkbox
+                    {...{
+                        checked:
+                            table.getIsAllRowsSelected() ||
+                            (table.getIsSomePageRowsSelected() && "indeterminate"),
+                        onCheckedChange: (value) =>
+                            table.toggleAllPageRowsSelected(!!value),
+                    }}
+                />
+            ),
+            cell: ({ row }) => {
+                const hasLivreurRole = row.original.types.some(
+                    (type) => type.name === "Livreur"
+                );
+
+                return hasLivreurRole ? (
+                    <Checkbox
+                        {...{
+                            checked: row.getIsSelected(),
+                            onCheckedChange: row.getToggleSelectedHandler(),
+                        }}
+                    />
+                ) : null;
+            },
+        },
+
         {
             accessor: "lastname",
             header: "Nom",
@@ -179,29 +211,51 @@ const People = (people) => {
         window.location.reload();
     };
 
+    const handleDevliverySheet = (RowSelection)=> {
+        const SelectedRows = Object.keys(RowSelection).filter(key => RowSelection[key]);
+        if(SelectedRows.length === 0){
+            return;
+        }
+        const selectedIds = selectedRows.map(row=> people[row].id);
+        window.location.href=`/invoices/print_delivery_sheet?sheets=${selectedIds.join(",")}`;
+
+    };
+
     return (
         <MainLayout color="yellow" subject="Personnel">
             <DataTable
                 columns={columns}
                 inputData={people.people}
-                buttonsOptions={{
-                    icon: "plus",
-                    action: "Ajouter une personne",
-                    variant: "yellow",
-                    alwaysOn: true,
-                    handler: () => {
-                        setInput({
-                            firstname: "",
-                            lastname: "",
-                            email: "",
-                            company: "",
-                            phone_number: "",
-                            roles: [],
-                        });
-                        setIsEditing(false);
-                        setIsDialogOpen(true);
+                buttonsOptions={[
+                    {
+                        icon: "plus",
+                        action: "Ajouter une personne",
+                        variant: "yellow",
+                        alwaysOn: true,
+                        handler: () => {
+                            setInput({
+                                firstname: "",
+                                lastname: "",
+                                email: "",
+                                company: "",
+                                phone_number: "",
+                                roles: [],
+                            });
+                            setIsEditing(false);
+                            setIsDialogOpen(true);
+                        },
                     },
-                }}
+                    {
+                        id: "print_delivery_sheet",
+                        icon: "printer",
+                        action: "Imprimer",
+                        item:"fiche de livraison",
+                        itemPlural:"fiches de livraison",
+                        handle: handleDevliverySheet,
+                        variant: "yellow",
+                        alwaysOn: false
+                    },
+                ]}
             />
             <Dialog
                 title={
