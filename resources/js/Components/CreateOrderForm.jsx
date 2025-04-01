@@ -8,7 +8,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
 import axios from "axios";
 import {format} from "date-fns";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "@/Components/ui/textarea";
 import { PHONENUMBER_REGEX } from "@/lib/regex";
 
 const formSchema = z.object({

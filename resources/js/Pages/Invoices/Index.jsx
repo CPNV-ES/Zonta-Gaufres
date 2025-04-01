@@ -6,7 +6,7 @@ import { ColumnBuilder } from "@/Builder/ColumnBuilder";
 import { Checkbox } from "@/Components/ui/checkbox";
 import Icon from "@/Components/Icon";
 import { Badge } from "@/Components/ui/badge";
-import Dialog from "@/Components/dialog";
+import Dialog from "@/Components/Dialog";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/Components/ui/select";
 import { Input } from "@/Components/ui/input";
 import { router } from "@inertiajs/react";
