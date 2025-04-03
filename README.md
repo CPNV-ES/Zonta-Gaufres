@@ -26,7 +26,9 @@
 
 # About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+The whole project which is not yet finished is a management system for Zonta waffles sells. It's a school project for the CPNV.
+
+Most of the project is still under development. You might want to switch to develop branch to see the latest changes and be able to run and contribute to the project.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -48,8 +50,30 @@
 
 # Getting Started
 
-## Development
+=======
 
+
+
+## Built With
+
+[![Laravel][Laravel.com]][Laravel-url]
+[![React][React.js]][React-url]
+[![Shadcn][ShadCn.com]][ShadCn-url]
+[![Inertia.js][Inertia.js]][Inertia-url]
+[![Vite][Vite]][Vite-url]
+[![Docker][Docker.com]][Docker-url]
+[![mysql][mysql]][mysql-url]
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Environment
+
+[![VSCode][VSCode]][VSCode-url]
+[![PHPStorm][PHPStorm]][PHPStorm-url]
+[![Windows][Windows]][Windows-url]
+
+# Getting Started
+## Development
 ### Prerequisites
 
 [![Docker][Docker.com]][Docker-url]
@@ -90,7 +114,6 @@
     ```
 
 ### Runnning the project
-
 #### Install dependencies
 
 Now that you are in the container, you can run the following command to install all the dependencies at once.
