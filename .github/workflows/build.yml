@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create PHPDesktop directory
+        run: mkdir -p ../PHPDesktop
+
+      - name: Get PHP desktop
+        working-directory: ../PHPDesktop
+        run: wget https://github.com/cztomczak/phpdesktop/releases/download/chrome-v130.1/phpdesktop-chrome-130.1-php-8.3.zip
+
+      - name: Unzip PHP desktop
+        working-directory: ../PHPDesktop
+        run: unzip phpdesktop-chrome-130.1-php-8.3.zip
+
+      - name: Copy .env.example to .env
+        run: cp .env.example .env
+
+      - name: Install dependencies
+        run: composer install --no-dev --optimize-autoloader
+
+      - name: Generate key
+        run: php artisan key:generate
+
+      - name: Run migrations
+        run: php artisan migrate
+
+      - name: node install
+        run: npm install
+
+      - name: node build
+        run: npm run build
+
+      - name: Delete all in www
+        run: rm -rf ../PHPDesktop/phpdesktop-chrome-130.1-php-8.3/www/*
+
+      - name: copy code to phpdesktop
+        run: cp -r . ../PHPDesktop/phpdesktop-chrome-130.1-php-8.3/www
+
+      - name: Copy PHP desktop config
+        run: cp settings.json ../PHPDesktop/phpdesktop-chrome-130.1-php-8.3/settings.json
+
+      - name: rename phpdesktop
+        working-directory: ../PHPDesktop
+        run: mv phpdesktop-chrome-130.1-php-8.3 zonta_gauffre
+
+      - name: generate zip file
+        working-directory: ../PHPDesktop
+        run: zip -r phpdesktop.zip zonta_gauffre/
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: r${{ github.run_number }}
+          release_name: Release r${{ github.run_number }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ../PHPDesktop/phpdesktop.zip
+          asset_name: zonta_gauffre-win.zip
+          asset_content_type: application/zip

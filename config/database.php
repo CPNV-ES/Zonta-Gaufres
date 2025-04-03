@@ -2,6 +2,16 @@
 
 use Illuminate\Support\Str;
 
+$connection_name = env('DB_CONNECTION', 'sqlite');
+
+// Check if the SQLite database file exists, if not, create it
+$dbPathSqlite = env('DB_DATABASE', database_path('database.sqlite'));
+if ($connection_name === 'sqlite') {
+    if (!file_exists($dbPathSqlite)) {
+        touch($dbPathSqlite);
+    }
+}
+
 return [
 
     /*
@@ -15,7 +25,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => $connection_name,
 
     /*
     |--------------------------------------------------------------------------
@@ -38,7 +48,7 @@ return [
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DATABASE_URL'),
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
+            'database' => $dbPathSqlite,
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
