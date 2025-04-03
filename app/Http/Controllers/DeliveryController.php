@@ -24,30 +24,6 @@ class DeliveryController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function editAll()
@@ -56,22 +32,6 @@ class DeliveryController extends Controller
             'initOrders' => Order::with('address.city', 'buyer', 'deliveryGuySchedule.person')->get(),
             'deliveryGuys' => DeliveryGuySchedule::with('person', 'city', 'order.address.city')->get()
         ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 
     public function printLabels(Request $request)

@@ -38,6 +38,15 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('invoices', function (Blueprint $table) {
+            $table->dropForeign(['order_id']);
+            $table->dropForeign(['client_id']);
+        });
+
+        Schema::table('invoices', function (Blueprint $table) {
+            $table->dropColumn(['order_id', 'client_id']);
+        });
+
+        Schema::table('invoices', function (Blueprint $table) {
             $table->string('contact');
         });
 
@@ -47,22 +56,6 @@ return new class extends Migration
 
         Schema::table('invoices', function (Blueprint $table) {
             $table->string('client');
-        });
-
-        Schema::table('invoices', function (Blueprint $table) {
-            $table->dropForeign(['order_id']);
-        });
-
-        Schema::table('invoices', function (Blueprint $table) {
-            $table->dropForeign(['client_id']);
-        });
-
-        Schema::table('invoices', function (Blueprint $table) {
-            $table->dropColumn('order_id');
-        });
-
-        Schema::table('invoices', function (Blueprint $table) {
-            $table->dropColumn('client_id');
         });
     }
 };

@@ -17,11 +17,7 @@ class PersonController extends Controller
 
         $transformed = $people->map(function ($person) {
             $types = $person->personType->map(function ($type) {
-                $case = PersonTypesEnum::fromCase($type->name);
-                return [
-                    "name" => $case->value,
-                    "key" => $case->name,
-                ];
+                return PersonTypesEnum::fromCase($type->name)->toArray();
             });
 
             return [
@@ -40,14 +36,6 @@ class PersonController extends Controller
         return Inertia::render('People/Index', [
             'people' => $transformed,
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -73,22 +61,6 @@ class PersonController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
@@ -110,13 +82,5 @@ class PersonController extends Controller
                 $person->personType()->attach(PersonType::where('name', PersonTypesEnum::from($type)->name)->first());
             }
         });
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

@@ -26,9 +26,33 @@
 
 # About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+The whole project which is not yet finished is a management system for Zonta waffles sells. It's a school project for the CPNV.
+
+Most of the project is still under development. You might want to switch to develop branch to see the latest changes and be able to run and contribute to the project.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Built With
+
+[![Laravel][Laravel.com]][Laravel-url]
+[![React][React.js]][React-url]
+[![Shadcn][ShadCn.com]][ShadCn-url]
+[![Inertia.js][Inertia.js]][Inertia-url]
+[![Vite][Vite]][Vite-url]
+[![mysql][mysql]][mysql-url]
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Environment
+
+[![VSCode][VSCode]][VSCode-url]
+[![Windows][Windows]][Windows-url]
+
+# Getting Started
+
+=======
+
+
 
 ## Built With
 
@@ -49,9 +73,7 @@
 [![Windows][Windows]][Windows-url]
 
 # Getting Started
-
 ## Development
-
 ### Prerequisites
 
 [![Docker][Docker.com]][Docker-url]
@@ -83,33 +105,15 @@
     ```sh
      cp .env.example .env
      ```
-
-4. Build docker containers (optional)
+4. Generate the application key
+5. Run the migrations
 
     ```sh
-    docker compose up -d --build
+    php artisan key:generate
+    php artisan migrate
     ```
 
 ### Runnning the project
-
-#### Using Docker and devcontainer
-
-As the project is using Docker container with a devcontainer, you can simply run the dev container using the `vscode` extension `ms-vscode-remote.remote-containers`.
-
-Open the project in vscode. It should ask you to reopen in the container. If it doesn't, you can click on `ctrl + shit + p` and type `reopen in container` then press enter.
-
-The devcontainer contains extensions to allow any dev to work with the same formatting and have a better collaboration.
-
-##### Not using VSCode ?
-
-If you are using another IDE which has a `limited support for devcontainers`, you might no be able to run the devcontainer at its current state. Therefore, you can still run the container with the following command.
-
-```sh
-docker compose up -d
-```
-
-> `-d` stands for detached mode, meaning that the container will run in the background.
-
 #### Install dependencies
 
 Now that you are in the container, you can run the following command to install all the dependencies at once.
@@ -248,9 +252,6 @@ The project uses [Vite][Vite-url] as a development server.
 │   │   └── OthersMigrations.php
 │   └── seeders
 │       └── DatabaseSeeder.php
-├── .devcontainer
-│   └── devcontainer.json
-├── docker-compose.yml
 ├── .env.example
 ├── .gitignore
 ├── jsconfig.json

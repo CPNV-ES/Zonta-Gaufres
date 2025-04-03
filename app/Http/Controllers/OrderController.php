@@ -3,16 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Enums\PaymentTypesEnum;
-use App\Enums\PersonTypesEnum;
 use App\Models\Address;
-use App\Models\DeliveryGuySchedule;
 use App\Models\Order;
 use App\Models\Person;
 use App\Models\City;
-use App\Models\PersonType;
+use App\Models\PaymentTypes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 
@@ -46,14 +43,8 @@ class OrderController extends Controller
                 "contact" => $order->contact->firstname,
                 "waffles_number" => $order->waffle_quantity,
                 "total" => $order->total_price(),
-                "status" => [
-                    "key" => "paid",
-                    "name" => "Payée"
-                ],
-                "payment_type" => [
-                    "key" => strtolower($paymentType->name),
-                    "name" => $paymentType->value
-                ]
+                "status" => $order->invoiceStatus !== null ? $order->invoiceStatus->enum()->toArray() : [],
+                "payment_type" => $paymentType->toArray(),
             ];
         });
 
@@ -103,28 +94,12 @@ class OrderController extends Controller
             'person_id' => $person->id,
             'address_id' => $address->id,
             'buyer_id' => $person->id,
-            'payment_type_id' => PaymentTypesEnum::fromCase($orderData['payment'])->value,
+            'payment_type_id' => PaymentTypes::where('name', PaymentTypesEnum::fromCase($orderData['payment'])->name)->first()->id,
             'contact_id' => $orderData['contact'],
             'real_delivery_time' => $realDeliveryTime,
         ]));
 
         return redirect()->route('orders.index');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**
@@ -134,14 +109,6 @@ class OrderController extends Controller
     {
         $order = Order::find($id);
         $order->update($request->all());
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 
     private function getContactPeopleNames()

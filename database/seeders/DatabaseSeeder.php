@@ -28,12 +28,8 @@ class DatabaseSeeder extends Seeder
         City::factory(50)->create();
         Address::factory(10)->create();
         DeliveryGuySchedule::factory(20)->create();
-        PersonType::factory(count(PersonTypesEnum::cases()))->create();
-        PaymentTypes::factory(count(PaymentTypesEnum::cases()))->create();
-        InvoiceStatus::factory(count(InvoiceStatusEnum::cases()))->create();
         Person::factory(100)->create();
         Order::factory(100)->create();
-        Invoice::factory(50)->create();
 
         foreach (DeliveryGuySchedule::all() as $deliverySchedule) {
             $deliverySchedule->city()->attach(City::all()->random());

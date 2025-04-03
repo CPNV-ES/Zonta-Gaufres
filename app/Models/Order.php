@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\App;
 use DateTime;
@@ -24,6 +23,9 @@ class Order extends Model
         'start_delivery_time',
         'end_delivery_time',
         'real_delivery_time',
+        'total',
+        'status_id',
+        'payment_date',
     ];
 
     public function total_price($price = 2)
@@ -67,6 +69,10 @@ class Order extends Model
     {
         return $this->belongsTo(Address::class, 'address_id');
     }
+    public function invoiceStatus()
+    {
+        return $this->belongsTo(InvoiceStatus::class, "status_id");
+    }
     public function deliveryGuySchedule()
     {
         return $this->belongsTo(DeliveryGuySchedule::class);
@@ -74,10 +80,6 @@ class Order extends Model
     public function paymentType()
     {
         return $this->belongsTo(PaymentTypes::class);
-    }
-    public function invoice()
-    {
-        return $this->hasOne(Invoice::class);
     }
     public function newCollection(array $models = [])
     {
@@ -144,5 +146,75 @@ class OrderCollection extends \Illuminate\Database\Eloquent\Collection
                 </tr>
             </table>
         ";
+    }
+
+    public function generateInvoicesPDF()
+    {
+        $pdf = App::make('dompdf.wrapper');
+        $html = '<body style="font-family: Arial, sans-serif; font-size:14px";>';
+
+        foreach ($this as $invoice) {
+            $html .= $this->generateUpper($invoice, 50);
+            $html .= $this->generateLower($invoice, 50);
+        }
+        $html .= '</body>';
+
+        $pdf->loadHTML($html);
+
+        return $pdf;
+    }
+
+    private function generateUpper($invoice, $percent)
+    {
+        $total = number_format($invoice->total_price(), 2, thousands_separator: ' ');
+        $date = $invoice->creation_date;
+        $quantity = $invoice->waffle_quantity;
+        $pricePerUnit = number_format($total / $quantity, 2, thousands_separator: ' ');
+        $company = $invoice->buyer->company != null ? $invoice->buyer->company . '<br>' : '';
+        $fullname = $invoice->buyer->firstname . ' ' . $invoice->buyer->lastname;
+        $address = $invoice->address->street . ' ' . $invoice->address->number;
+        $city =  $invoice->address->city->zip_code . ' ' . $invoice->address->city->name;
+
+
+        setlocale(LC_TIME, 'fr_FR.utf8', 'fra');
+
+        $dateformat = utf8_encode(strftime('%e %B %Y', strtotime($date)));
+        //https://stackoverflow.com/questions/9067892/how-to-align-two-elements-on-the-same-line-without-changing-html work maybe ?
+
+        return "
+            <div style='padding-top:200px; padding-left:400px '>
+                $company
+                $fullname<br>
+                $address<br>
+                $city
+            </div>
+                <div style='padding-top:75px; padding-left:75px; float:left'>
+                    <p style='font-size:25px'>Facture gaufres - $dateformat</p>
+                    <p style='line-height:0.8'><b>Livraison de $quantity gaufres à CHF $pricePerUnit </b></p>
+                    <p style='line-height:3'><b><span><b>Un grand Merci de votre soutien </b></span> </b></p>
+                    <p>Avec nos meilleures salutations</p>
+                </div>
+                <div style='text-align:right; padding-right:115px; padding-top:170px; float:right '>
+                    <span><b>CHF $total</b></span>
+                </div>
+
+        ";
+    }
+
+    private function generateLower($invoice, $percent)
+    {
+        $total = number_format($invoice->total_price(), 2, thousands_separator: ' ');
+        $company = $invoice->buyer->company != null ? "<b>" . $invoice->buyer->company . '</b><br>' : '';
+        $fullname = $invoice->buyer->firstname . ' ' . $invoice->buyer->lastname;
+        $address = $invoice->address->street . ' ' . $invoice->address->number;
+        $city =  $invoice->address->city->zip_code . ' ' . $invoice->address->city->name;
+        $infoSupp = $invoice->remark != null ? "<b> " . $invoice->remark . '</b><br>' : '';
+
+        //html ici
+        return '
+            <div style="padding-top: 385px; margin-left:-45px; margin-bottom:-100px">
+                <img src="/public/images/pdf_down.png" style="width: 108%; ">
+            </div>
+        ';
     }
 }
