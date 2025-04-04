@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::dropIfExists('order_address');
 
         Schema::table('orders', function (Blueprint $table) {
-            $table->foreign('payment_type_id')->references(columns: 'id')->on('payment_types');
+            $table->foreignId('payment_type_id')->constrained('payment_types');
             $table->integer('waffle_quantity');
             $table->foreignId('address_id')->constrained();
         });
