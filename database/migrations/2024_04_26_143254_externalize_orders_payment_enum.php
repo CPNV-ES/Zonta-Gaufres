@@ -17,7 +17,6 @@ return new class extends Migration
         });
 
         Schema::table('orders', function (Blueprint $table) {
-            $table->unsignedBigInteger('payment_type_id');
             $table->dropColumn('payment');
         });
     }
