@@ -210,14 +210,13 @@ const People = (people) => {
         window.location.reload();
     };
 
-    const handleDevliverySheet = (RowSelection)=> {
-        const SelectedRows = Object.keys(RowSelection).filter(key => RowSelection[key]);
-        if(SelectedRows.length === 0){
+    const handleDevliverySheet = (rowSelection)=> {
+        const selectedRows = Object.keys(rowSelection).filter(key => rowSelection[key]);
+        if(selectedRows.length === 0){
             return;
         }
-        const selectedIds = selectedRows.map(row=> people[row].id);
-        window.location.href=`/invoices/print_delivery_sheet?sheets=${selectedIds.join(",")}`;
-
+        const selectedIds = selectedRows.map(row => people.people[row].id);
+        window.location.href=`/people/print_delivery_sheet?sheets=${selectedIds.join(",")}`;
     };
 
     return (
@@ -227,6 +226,7 @@ const People = (people) => {
                 inputData={people.people}
                 buttonsOptions={[
                     {
+                        id : "create_person",
                         icon: "plus",
                         action: "Ajouter une personne",
                         variant: "yellow",
@@ -250,7 +250,7 @@ const People = (people) => {
                         action: "Imprimer",
                         item:"fiche de livraison",
                         itemPlural:"fiches de livraison",
-                        handle: handleDevliverySheet,
+                        handler: handleDevliverySheet,
                         variant: "yellow",
                         alwaysOn: false
                     },

@@ -40,4 +40,10 @@ class Person extends BaseModel
     {
         return $this->hasMany(DeliveryGuySchedule::class, 'person_id');
     }
+    public function newCollection(array $models = [])
+    {
+        return new PersonCollection($models);
+    }
+}
+
 }

@@ -83,4 +83,10 @@ class PersonController extends Controller
             }
         });
     }
+
+    public function printDeliverySheet(Request $request)
+    {
+        $people = Person::findMany(explode(',', $request->query('sheets')));
+        return $people->generateSheetPDF()->download('delivery_sheet.pdf');
+    }
 }
