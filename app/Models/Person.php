@@ -82,6 +82,7 @@ class PersonCollection extends Collection
         width: 100%;
         table-layout: fixed; /* Ensures the table stays within the page bounds */
         word-wrap: break-word; /* Forces long text to wrap within cells */
+        font-size: 10px
 
     }
     th, td {
