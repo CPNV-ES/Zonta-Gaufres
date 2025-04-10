@@ -76,18 +76,34 @@ class PersonCollection extends Collection
         $fullname = $person->fullname;
 
         return "
-        <style>
-            table, th, td, tr {
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        table-layout: fixed; /* Ensures the table stays within the page bounds */
+        word-wrap: break-word; /* Forces long text to wrap within cells */
 
-        </style>
-        <div style='text-align: center; font-size: 26px; background-color: yellow;'>
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 4px;
+        vertical-align: top;
+    }
+    th {
+        background-color: #f2f2f2;
+        text-align: center;
+    }
+    div.page {
+        width: 100%;
+        overflow: hidden; /* Prevents content from overflowing the page */
+    }
+
+</style>
+        <div style='text-align: center; font-size: 26px; background-color: yellow; width: 100%'>
             $fullname
         </div>
         <br>
-        <div>
+        <div style='page-break-after: always'>
             <table>
                 <tr>
                     <th>Entreprises</th>
@@ -99,21 +115,33 @@ class PersonCollection extends Collection
                     <th>Hre livraison</th>
                     <th>Nbre gaufres</th>
                     <th>CHF =</th>
-                    <th>Status du payment</th>
+                    <th>L (livraison) ou F (facture) ou E (encaisé)</th>
                     <th>A encaisser à la livraison</th>
                 </tr>
         ";
     }
     private function generateDataTable($person)
     {
-
         $schedulePersonOrder = $person->deliveryGuySchedule()
             ->with('order')
             ->get();
         $personOrder = $schedulePersonOrder->pluck('order');
         $orders = $personOrder->first(); // should get all orders from the person (as delivery guy)
-        $countQuantity = $orders->sum('waffle_quantity');
-        $totalPrice = $orders->sum('waffle_quantity') * 2;
+
+
+        if (!($orders)) {
+            return "
+                        <tr>
+                            <td colspan='11' style='text-align:center;'>Aucune commande trouvée pour $person->fullname</td>
+                        </tr>
+                    </table>
+                </div>";
+        }
+
+
+
+        $countQuantity = $orders->sum('waffle_quantity') ?? "";
+        $totalPrice = $orders->sum('waffle_quantity') * 2 ?? "";
         $totalPriceToCash = 0;
 
         $html = '';
@@ -139,14 +167,23 @@ class PersonCollection extends Collection
 
             if ($payment_type == 'Livraison') {
                 $priceToCash = $price;
+                $payment_type = "L";
                 $totalPriceToCash += $priceToCash;
+                $background = "#FFFFCC";
             } else {
                 $priceToCash = "-";
+                $background = "#FFFFFF";
+                if ($payment_type == 'Facture') $payment_type = "F";
+                else {
+                    $payment_type = "E";
+                }
             }
+
+
 
             $html .= "
             <?php foreach($orders as $order): ?>
-                        <tr>
+                        <tr style='background-color: $background'>
                             <td>$buyer</td>
                             <td>$contact</td>
                             <td>$address</td>
@@ -166,13 +203,19 @@ class PersonCollection extends Collection
             "
                     <tr>
                         <td> <b>Totaux : </b> </td>
-                        <td> <b>$countQuantity</b> </td>
-                        <td> <b>$totalPrice</b> </td>
-                        <td> <b>$totalPriceToCash</b> </td>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                        <td> </td>
+                        <td style:colspan='3'><b>$countQuantity ($pricePerUnit)</b></td>
+                        <td style:colspan='3'><b>$totalPrice</b></td>
+                        <td style:colspan='3'></td>
+                        <td style:colspan='3'><b>$totalPriceToCash</b></td>
                     </tr>
                 </table>
                 </div>";
-
         return $html;
     }
 }
