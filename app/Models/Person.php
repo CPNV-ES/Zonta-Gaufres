@@ -2,9 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Enums\PersonTypesEnum;
+use App\Enums\PaymentTypesEnum;
+use Illuminate\Support\Facades\App;
+
 
 class Person extends BaseModel
 {
@@ -46,4 +50,129 @@ class Person extends BaseModel
     }
 }
 
+class PersonCollection extends Collection
+{
+
+
+    public function generateSheetPDF()
+    {
+        $pdf = App::make('dompdf.wrapper');
+
+        $html = '<body style="font-family: Arial, sans-serif; font-size:14px";>';
+
+        foreach ($this as $person) {
+            $html .= $this->generateTopTable($person, 50);
+            $html .= $this->generateDataTable($person);
+        }
+        $html .= '</body>';
+
+        $pdf->loadHTML($html);
+
+        return $pdf;
+    }
+
+    private function generateTopTable($person, $percent)
+    {
+        $fullname = $person->fullname;
+
+        return "
+        <style>
+            table, th, td, tr {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        </style>
+        <div style='text-align: center; font-size: 26px; background-color: yellow;'>
+            $fullname
+        </div>
+        <br>
+        <div>
+            <table>
+                <tr>
+                    <th>Entreprises</th>
+                    <th>Personne de contact</th>
+                    <th>Adresse</th>
+                    <th>NPA</th>
+                    <th>Localité</th>
+                    <th>Remarque</th>
+                    <th>Hre livraison</th>
+                    <th>Nbre gaufres</th>
+                    <th>CHF =</th>
+                    <th>Status du payment</th>
+                    <th>A encaisser à la livraison</th>
+                </tr>
+        ";
+    }
+    private function generateDataTable($person)
+    {
+
+        $schedulePersonOrder = $person->deliveryGuySchedule()
+            ->with('order')
+            ->get();
+        $personOrder = $schedulePersonOrder->pluck('order');
+        $orders = $personOrder->first(); // should get all orders from the person (as delivery guy)
+        $countQuantity = $orders->sum('waffle_quantity');
+        $totalPrice = $orders->sum('waffle_quantity') * 2;
+        $totalPriceToCash = 0;
+
+        $html = '';
+        foreach ($orders as $order) {
+            $order->load('buyer', 'contact', 'address.city', 'paymentType');
+
+            $paymentType = PaymentTypesEnum::fromCase(case: $order->paymentType->name);
+
+            $buyer = $order->buyer->fullname;
+            $contact = $order->contact->fullname;
+            $address = $order->address->street;
+            $zip_code = $order->address->city->zip_code;
+            $city = $order->address->city->name;
+            $remark = $order->remark;
+            $real_delivery_time = $order->real_delivery_time;
+            $waffle_quantity = $order->waffle_quantity;
+
+            $payment_types = $paymentType->toArray();
+            $payment_type = $payment_types['name'];
+
+            $price = $order->waffle_quantity * 2;
+            $pricePerUnit = number_format($price / $waffle_quantity, 2, thousands_separator: ' ');
+
+            if ($payment_type == 'Livraison') {
+                $priceToCash = $price;
+                $totalPriceToCash += $priceToCash;
+            } else {
+                $priceToCash = "-";
+            }
+
+            $html .= "
+            <?php foreach($orders as $order): ?>
+                        <tr>
+                            <td>$buyer</td>
+                            <td>$contact</td>
+                            <td>$address</td>
+                            <td>$zip_code</td>
+                            <td>$city</td>
+                            <td>$remark</td>
+                            <td>$real_delivery_time</td>
+                            <td>$waffle_quantity</td>
+                            <td>$price</td>
+                            <td>$payment_type</td>
+                            <td>$priceToCash</td>
+                        </tr>
+                    <?php endforeach; ?>
+            ";
+        }
+        $html .=
+            "
+                    <tr>
+                        <td> <b>Totaux : </b> </td>
+                        <td> <b>$countQuantity</b> </td>
+                        <td> <b>$totalPrice</b> </td>
+                        <td> <b>$totalPriceToCash</b> </td>
+                    </tr>
+                </table>
+                </div>";
+
+        return $html;
+    }
 }
