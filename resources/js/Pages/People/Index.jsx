@@ -36,7 +36,7 @@ const People = (people) => {
     const columnHeaders = [
         {
             accessor: "select",
-            header: ({ table }) => (
+            cell: ({ row }) => (
                 <Checkbox
                     {...{
                         checked:
