@@ -45,6 +45,7 @@ class OrderController extends Controller
                 "total" => $order->total_price(),
                 "status" => $order->invoiceStatus !== null ? $order->invoiceStatus->enum()->toArray() : [],
                 "payment_type" => $paymentType->toArray(),
+                "free" => $order->free ? $order->free : false,
             ];
         });
 

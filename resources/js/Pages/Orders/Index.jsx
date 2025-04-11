@@ -44,7 +44,14 @@ const Index = (orders) => {
         {
             accessor: "total",
             header: "Total",
-            cell: (info) => `${info.renderValue()} CHF`,
+            cell: (info) => {
+                const isFree = info.row.original.free; // Assuming `free` is a boolean in the row data
+                return (
+                    <span style={{ color: isFree ? "red" : "black" }}>
+                        {info.renderValue()} CHF
+                    </span>
+                );
+            },
             type: "number",
         },
         {

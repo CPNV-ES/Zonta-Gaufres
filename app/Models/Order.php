@@ -26,6 +26,7 @@ class Order extends Model
         'total',
         'status_id',
         'payment_date',
+        'free',
     ];
 
     public function total_price($price = 2)
