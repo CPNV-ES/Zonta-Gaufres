@@ -17,9 +17,8 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::with('deliveryGuySchedule', 'contact', 'buyer', 'paymentType', 'address')->get();
+        $orders = Order::with('contact', 'buyer', 'paymentType', 'address')->get();
 
-        $orders->load('deliveryGuySchedule.person');
         $orders->load('address.city');
 
         $transformed = $orders->map(function ($order) {
@@ -38,8 +37,7 @@ class OrderController extends Controller
                 "city" => $order->address->city->name,
                 "note" => $order->remark,
                 "gifted_by" => $order->gifted_by,
-                "delivery_guy" => $order->deliveryGuySchedule !== null ? $order->deliveryGuySchedule->person->firstname . ' ' . $order->deliveryGuySchedule->person->lastname : "",
-                "time_slot" => $order->deliveryGuySchedule !== null ? $order->deliveryGuySchedule->start_delivery_time_window . ' - ' . $order->deliveryGuySchedule->end_delivery_time_window : "",
+                "time_slot" => "{$order->start_delivery_time} - {$order->end_delivery_time}",
                 "contact" => $order->contact->firstname,
                 "waffles_number" => $order->waffle_quantity,
                 "total" => $order->total_price(),
@@ -88,7 +86,6 @@ class OrderController extends Controller
 
         $address = Address::findOrCreate(array_merge($addressData, ['city_id' => $city->id]));
 
-        $realDeliveryTime =  Order::calculateTimeDifference($orderData['start_delivery_time'], $orderData['end_delivery_time']);
 
         Order::create(array_merge($orderData, [
             'person_id' => $person->id,
@@ -96,7 +93,6 @@ class OrderController extends Controller
             'buyer_id' => $person->id,
             'payment_type_id' => PaymentTypes::where('name', PaymentTypesEnum::fromCase($orderData['payment'])->name)->first()->id,
             'contact_id' => $orderData['contact'],
-            'real_delivery_time' => $realDeliveryTime,
         ]));
 
         return redirect()->route('orders.index');

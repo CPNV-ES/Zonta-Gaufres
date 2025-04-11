@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
-use App\Models\DeliveryGuySchedule;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Person;
 
 
 class DeliveryController extends Controller
@@ -18,7 +18,7 @@ class DeliveryController extends Controller
         return Inertia::render(
             'Delivery/Index',
             [
-                'initDeliveries' => Order::whereNotNull('real_delivery_time')->with('deliveryGuySchedule.person', 'buyer', 'address.city')->get()
+                'initDeliveries' => Order::whereNotNull('real_delivery_time')->with('buyer', 'address.city', 'deliveryGuy')->get()
             ]
         );
     }
@@ -29,8 +29,10 @@ class DeliveryController extends Controller
     public function editAll()
     {
         return Inertia::render('Delivery/Edit', [
-            'initOrders' => Order::with('address.city', 'buyer', 'deliveryGuySchedule.person')->get(),
-            'deliveryGuys' => DeliveryGuySchedule::with('person', 'city', 'order.address.city')->get()
+            'initOrders' => Order::with('address.city', 'buyer')->whereNull("delivery_guy_id")->get(),
+            'deliveryGuys' => Person::whereHas('personType', function ($query) {
+                $query->where('name', 'DELIVERY_GUY');
+            })->with(['ordersToDeliver.address.city'])->get(),
         ]);
     }
 
