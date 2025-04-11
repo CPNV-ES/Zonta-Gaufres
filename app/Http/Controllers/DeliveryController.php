@@ -18,7 +18,7 @@ class DeliveryController extends Controller
         return Inertia::render(
             'Delivery/Index',
             [
-                'initDeliveries' => Order::whereNotNull('real_delivery_time')->with('buyer', 'address.city', 'deliveryGuy')->get()
+                'initDeliveries' => Order::whereNotNull('delivery_guy_id')->with('buyer', 'address.city', 'deliveryGuy')->get()
             ]
         );
     }
