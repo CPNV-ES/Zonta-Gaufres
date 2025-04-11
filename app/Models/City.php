@@ -19,8 +19,4 @@ class City extends BaseModel
     {
         return $this->hasMany(Address::class);
     }
-    public function deliveryGuySchedule()
-    {
-        return $this->belongsToMany(DeliveryGuySchedule::class);
-    }
 }

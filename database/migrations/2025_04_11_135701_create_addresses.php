@@ -4,22 +4,30 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        //TODO: Ecrire dans la documentation la particularité de la clé unique
+        Schema::create('cities', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('zip_code');
+            $table->timestamps();
+        });
+
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->string('street', '150');
-            $table->string('street_number', '50');
-            $table->string('country', '150');
-            $table->string('region', '150');
+            $table->string('street');
+            $table->string('street_number');
+            $table->string('country');
+            $table->string('region');
             $table->string('complement')->nullable();
-            $table->foreignId('city_id')->constrained();
+            $table->unsignedBigInteger('city_id');
             $table->timestamps();
+            $table->foreign('city_id')->references('id')->on('cities');
             $table->unique(['street', 'street_number', 'country', 'region', 'complement', 'city_id'], 'address_unique');
         });
     }
@@ -30,5 +38,6 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::dropIfExists('addresses');
+        Schema::dropIfExists('cities');
     }
 };

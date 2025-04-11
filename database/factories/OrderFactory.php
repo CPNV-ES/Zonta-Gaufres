@@ -37,7 +37,6 @@ final class OrderFactory extends Factory
             'real_delivery_time' => fake()->time(),
             'remark' => fake()->optional()->sentence(),
             'gifted_by' => fake()->optional()->firstName(),
-            'delivery_guy_schedule_id' => DeliveryGuySchedule::all()->random()->id,
             'contact_id' => Person::all()->random()->id,
             'buyer_id' => Person::all()->random()->id,
             'payment_type_id' => PaymentTypes::all()->random()->id,

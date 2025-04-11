@@ -32,13 +32,13 @@ const Deliveries = ({ initOrders = [], deliveryGuys = [] }) => {
         draggedOrder.deliveryGuy = selectedDeliveryGuy
 
         let updatedFields = {
-            delivery_guy_schedule_id: selectedDeliveryGuy.id,
+            delivery_guy_id: selectedDeliveryGuy.id,
             real_delivery_time: `${time}:00` // The format is ${HH:mm}:ss
         }
 
         router.put(`/orders/${draggedOrder.id}`, updatedFields, {
             onSuccess: () => {
-                selectedDeliveryGuy.order.push(draggedOrder)
+                selectedDeliveryGuy.orders_to_deliver.push(draggedOrder)
                 setOrders(orders.filter(order => order !== draggedOrder))
                 sortDeliveriesByTime(selectedDeliveryGuy)
                 setDraggedOrder(null)
@@ -48,22 +48,20 @@ const Deliveries = ({ initOrders = [], deliveryGuys = [] }) => {
 
     const unlinkOrderToPerson = async (delivery) => {
         let updatedFields = {
-            delivery_guy_schedule_id: null,
+            delivery_guy_id: null,
             real_delivery_time: null
-        }
+        }        
 
         router.put(`/orders/${delivery.id}`, updatedFields, {
             onSuccess: () => {
-                selectedDeliveryGuy.order = (selectedDeliveryGuy.order.filter(d => d !== delivery))
-                setOrders([...orders, delivery])
-                setDraggedOrder(null)
+                window.location.reload()
             }
         })
     }
 
     function sortDeliveriesByTime(deliveryGuy) {
         try {
-            deliveryGuy.order.sort((a, b) => a.real_delivery_time.localeCompare(b.real_delivery_time))
+            deliveryGuy.orders_to_deliver.sort((a, b) => a.real_delivery_time.localeCompare(b.real_delivery_time))
         } catch {
         }
     }
@@ -90,7 +88,7 @@ const Deliveries = ({ initOrders = [], deliveryGuys = [] }) => {
                 setIsOpen={setIsDialogOpened}
                 isOpen={isDialogOpened}
             >
-                <TimePicker time={choosenTime} setTime={setChoosenTime} onValidate={() => linkOrderToPerson(choosenTime)}></TimePicker>
+                <TimePicker time={choosenTime} setTime={setChoosenTime} onValidate={() => linkOrderToPerson(choosenTime)}/>
             </Dialog>
             <div className='flex h-full gap-4 p-4'>
                 <section className='flex flex-col flex-1 h-full gap-4 p-4 border-2 rounded-lg bg-slate-200'>
@@ -112,7 +110,7 @@ const Deliveries = ({ initOrders = [], deliveryGuys = [] }) => {
                             <span className='z-10 px-4 bg-slate-200'>8:00</span>
                         </div> */}
 
-                        {selectedDeliveryGuy.order.map((delivery, index) => {
+                        {(selectedDeliveryGuy ?? {orders_to_deliver: []}).orders_to_deliver.map((delivery, index) => {
                             return <DeliveryItem key={index} delivery={delivery} unlink={() => unlinkOrderToPerson(delivery)} />
                         })}
                     </div>
@@ -122,7 +120,7 @@ const Deliveries = ({ initOrders = [], deliveryGuys = [] }) => {
                     <div className='flex flex-col flex-1 gap-4 pr-2 overflow-y-auto transition-all duration-500'>
                         {orders.map((order, index) => {
                             return (
-                                <Draggable key={index} onDragStart={() => { setDraggedOrder(order), setIsDragging(true) }} onDragEnd={() => setIsDragging(false)}>
+                                <Draggable key={index} onDragStart={() => { setDraggedOrder(order),setChoosenTime(order.start_delivery_time.split(':')[0].lenght !== 2 ? order.start_delivery_time : `0${order.start_delivery_time}`), setIsDragging(true) }} onDragEnd={() => setIsDragging(false)}>
                                     <OrderCard order={order}> </OrderCard>
                                 </Draggable>
                             )
