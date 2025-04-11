@@ -28,6 +28,10 @@ class Person extends BaseModel
     {
         return $this->belongsToMany(PersonType::class);
     }
+    public function ordersToDeliver()
+    {
+        return $this->hasMany(Order::class, 'delivery_guy_id');
+    }
     public function orders()
     {
         return $this->hasMany(Order::class, 'buyer_id');
@@ -35,9 +39,5 @@ class Person extends BaseModel
     public function contacts()
     {
         return $this->hasMany(Order::class, 'contact_id');
-    }
-    public function deliveryGuySchedule()
-    {
-        return $this->hasMany(DeliveryGuySchedule::class, 'person_id');
     }
 }
