@@ -163,6 +163,13 @@ class PersonCollection extends Collection
             $payment_types = $paymentType->toArray();
             $payment_type = $payment_types['name'];
 
+            if ($order->free) {
+                $colorText = "red";
+            } else {
+                $colorText = "black";
+            }
+
+
             $price = $order->waffle_quantity * 2;
             $pricePerUnit = number_format($price / $waffle_quantity, 2, thousands_separator: ' ');
 
@@ -211,7 +218,7 @@ class PersonCollection extends Collection
                         <td> </td>
                         <td> </td>
                         <td style:colspan='3'><b>$countQuantity ($pricePerUnit)</b></td>
-                        <td style:colspan='3'><b>$totalPrice</b></td>
+                        <td style='color:$colorText,colspan=3' ><b>$totalPrice</b></td>
                         <td style:colspan='3'></td>
                         <td style:colspan='3'><b>$totalPriceToCash</b></td>
                     </tr>
