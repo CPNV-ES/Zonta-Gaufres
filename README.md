@@ -344,7 +344,7 @@ Project Link: [https://github.com/CPNV-ES/Zonta-Gaufres](https://github.com/CPNV
 [GitFlow-url]: https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
 [SemVer-url]: https://semver.org/
 [Commit-url]: https://www.conventionalcommits.org/
-[php]: https://img.shields.io/badge/php%208.2-20232A?style=for-the-badge&logo=php&logoColor=php
+[php]: https://img.shields.io/badge/php%208.4-20232A?style=for-the-badge&logo=php&logoColor=php
 [php-url]: https://www.php.net/
 [Inertia.js]: https://img.shields.io/badge/Inertia.js-20232A?style=for-the-badge&logo=inertia&logoColor=inertia
 [Inertia-url]: https://inertiajs.com/
