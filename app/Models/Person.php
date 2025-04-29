@@ -58,7 +58,11 @@ class PersonCollection extends Collection
     {
         $pdf = App::make('dompdf.wrapper');
 
-        $html = '<body style="font-family: Arial, sans-serif; font-size:14px";>';
+        $html = '
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        </head>
+        <body style="font-family: Arial, sans-serif; font-size:14px";>';
 
         foreach ($this as $person) {
             $html .= $this->generateTopTable($person, 50);
@@ -100,6 +104,7 @@ class PersonCollection extends Collection
     }
 
 </style>
+
         <div style='text-align: center; font-size: 26px; background-color: yellow; width: 100%'>
             $fullname
         </div>
