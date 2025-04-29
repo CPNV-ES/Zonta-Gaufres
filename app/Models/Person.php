@@ -107,7 +107,7 @@ class PersonCollection extends Collection
         <div style='page-break-after: always'>
             <table>
                 <tr>
-                    <th>Entreprises</th>
+                    <th>Entreprise</th>
                     <th>Personne de contact</th>
                     <th>Adresse</th>
                     <th>NPA</th>
@@ -142,7 +142,7 @@ class PersonCollection extends Collection
 
 
         $countQuantity = $orders->sum('waffle_quantity') ?? "";
-        $totalPrice = $orders->sum('waffle_quantity') * 2 ?? "";
+        $totalPrice = $orders->filter(fn($order) => $order->free === 0)->sum('waffle_quantity') * 2 ?? "";
         $totalPriceToCash = 0;
 
         $html = '';
@@ -163,7 +163,7 @@ class PersonCollection extends Collection
             $payment_types = $paymentType->toArray();
             $payment_type = $payment_types['name'];
 
-            if ($order->free) {
+            if ($order->free == 1) {
                 $colorText = "red";
             } else {
                 $colorText = "black";
@@ -181,13 +181,17 @@ class PersonCollection extends Collection
             } else {
                 $priceToCash = "-";
                 $background = "#FFFFFF";
-                if ($payment_type == 'Facture') $payment_type = "F";
+                if ($payment_type == 'Facture')
+                    $payment_type = "F";
                 else {
                     $payment_type = "E";
                 }
             }
 
-
+            if ($order->free == 1) {
+                $payment_type = " ";
+                $price = " ";
+            }
 
             $html .= "
             <?php foreach($orders as $order): ?>
@@ -199,7 +203,7 @@ class PersonCollection extends Collection
                             <td>$city</td>
                             <td>$remark</td>
                             <td>$real_delivery_time</td>
-                            <td>$waffle_quantity</td>
+                            <td  style='color:$colorText'>$waffle_quantity</td>
                             <td>$price</td>
                             <td>$payment_type</td>
                             <td>$priceToCash</td>
@@ -218,7 +222,7 @@ class PersonCollection extends Collection
                         <td> </td>
                         <td> </td>
                         <td style:colspan='3'><b>$countQuantity ($pricePerUnit)</b></td>
-                        <td style='color:$colorText,colspan=3' ><b>$totalPrice</b></td>
+                        <td style:colspan='3'><b>$totalPrice</b></td>
                         <td style:colspan='3'></td>
                         <td style:colspan='3'><b>$totalPriceToCash</b></td>
                     </tr>
