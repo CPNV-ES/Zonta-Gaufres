@@ -32,7 +32,7 @@ final class PersonTypeFactory extends Factory
         $personTypeArray = array_column(PersonTypesEnum::cases(), "name");
         $name = $personTypeArray[self::$counter++];
         return [
-            'name' => $name . '_' . uniqid(),
+            'name' => $name,
         ];
     }
 }
