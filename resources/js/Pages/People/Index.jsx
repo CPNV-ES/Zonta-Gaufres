@@ -17,10 +17,10 @@ import { PHONENUMBER_REGEX, EMAIL_REGEX } from "@/lib/regex";
 
 const People = (people) => {
     const builder = new ColumnBuilder();
-    
+
     const typesAvailable = () => {
         let types = [];
-        people.people.forEach(person => {
+        people.people.forEach((person) => {
             return person.types.map((type) => {
                 if (!types.find((el) => el.key === type.key)) {
                     types.push({ key: type.key, name: type.name });
@@ -28,7 +28,7 @@ const People = (people) => {
             });
         });
         return types;
-    }
+    };
 
     const columnHeaders = [
         {
@@ -76,9 +76,7 @@ const People = (people) => {
             header: "Actions",
             cell: (row) => (
                 <div className="flex gap-2">
-                    <button
-                        onClick={() => handleEdit(row.row.original)}
-                    >
+                    <button onClick={() => handleEdit(row.row.original)}>
                         <Icon name="pencil" />
                     </button>
                 </div>
@@ -213,17 +211,6 @@ const People = (people) => {
                 setIsOpen={setIsDialogOpen}
             >
                 <Input
-                    id="firstname"
-                    placeholder="Prénom"
-                    value={input.firstname}
-                    onChange={(e) =>
-                        setInput({ ...input, firstname: e.target.value })
-                    }
-                />
-                {errors.firstname && (
-                    <p className="text-red-500">{errors.firstname}</p>
-                )}
-                <Input
                     id="lastname"
                     placeholder="Nom"
                     value={input.lastname}
@@ -233,6 +220,17 @@ const People = (people) => {
                 />
                 {errors.lastname && (
                     <p className="text-red-500">{errors.lastname}</p>
+                )}
+                <Input
+                    id="firstname"
+                    placeholder="Prénom"
+                    value={input.firstname}
+                    onChange={(e) =>
+                        setInput({ ...input, firstname: e.target.value })
+                    }
+                />
+                {errors.firstname && (
+                    <p className="text-red-500">{errors.firstname}</p>
                 )}
                 <Input
                     id="email"
