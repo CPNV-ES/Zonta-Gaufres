@@ -93,12 +93,6 @@ const formSchema = z.object({
         npa: z.string({
             required_error: "Ce champ est requis.",
         }),
-        region: z.string({
-            required_error: "Ce champ est requis.",
-        }),
-        country: z.string({
-            required_error: "Ce champ est requis.",
-        }),
     }),
 });
 
@@ -399,35 +393,6 @@ const CreateOrderForm = (contactPeopleNames) => {
                                 )}
                             />
                         </div>
-                        <FormField
-                            control={form.control}
-                            name="deliveryAddress.region"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Région*</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Région"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="deliveryAddress.country"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Pays*</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Pays" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
                         <FormLabel className="py-2">
                             Plage horaire de livraison*
                         </FormLabel>
