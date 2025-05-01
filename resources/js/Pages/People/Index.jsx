@@ -132,8 +132,7 @@ const People = (base_people) => {
         } else if (!EMAIL_REGEX.test(input.email)) {
             newErrors.email = "Email invalide";
         }
-        if (!input.phone_number) {
-        } else if (!PHONENUMBER_REGEX.test(input.phone_number)) {
+        if (!PHONENUMBER_REGEX.test(input.phone_number) && input.phone_number) {
             newErrors.phone_number = "Téléphone invalide";
         }
         if (input.types.length === 0) {

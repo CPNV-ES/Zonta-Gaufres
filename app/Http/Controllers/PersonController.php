@@ -70,7 +70,7 @@ class PersonController extends Controller
             'lastname' => 'nullable',
             'email' => 'email',
             'company' => 'nullable',
-            'phone_number' => 'required',
+            'phone_number' => 'nullable',
         ]);
 
         DB::transaction(function () use ($request, $id) {
