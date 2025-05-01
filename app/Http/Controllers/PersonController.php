@@ -48,7 +48,7 @@ class PersonController extends Controller
             'lastname' => 'nullable',
             'company' => 'nullable',
             'email' => 'required|email',
-            'phone_number' => 'required',
+            'phone_number' => 'nullable',
             'types' => 'required|array|min:1',
         ]);
         DB::transaction(function () use ($request) {

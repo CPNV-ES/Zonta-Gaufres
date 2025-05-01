@@ -133,7 +133,6 @@ const People = (base_people) => {
             newErrors.email = "Email invalide";
         }
         if (!input.phone_number) {
-            newErrors.phone_number = "Téléphone est requis";
         } else if (!PHONENUMBER_REGEX.test(input.phone_number)) {
             newErrors.phone_number = "Téléphone invalide";
         }
