@@ -178,6 +178,8 @@ class PersonCollection extends Collection
             $price = number_format($order->waffle_quantity * 2, 2, '.', '');
             $pricePerUnit = number_format($price / $waffle_quantity, 2, thousands_separator: ' ');
 
+
+
             if ($payment_type == 'Livraison') {
                 $priceToCash = $price;
                 $payment_type = "L";
@@ -196,7 +198,7 @@ class PersonCollection extends Collection
             if ($order->free == 1) {
                 $payment_type = " ";
                 $price = " ";
-                $totalPriceToCash = $totalPriceToCash - $priceToCash;
+                $totalPriceToCash = is_int($priceToCash) ? $totalPriceToCash - $priceToCash : $totalPriceToCash;
                 $priceToCash = "-";
                 $background = "#FFFFFF";
             }
