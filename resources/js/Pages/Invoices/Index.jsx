@@ -7,7 +7,13 @@ import { Checkbox } from "@/Components/ui/checkbox";
 import Icon from "@/Components/Icon";
 import { Badge } from "@/Components/ui/badge";
 import Dialog from "@/Components/Dialog";
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/Components/ui/select";
+import {
+    Select,
+    SelectTrigger,
+    SelectContent,
+    SelectItem,
+    SelectValue,
+} from "@/Components/ui/select";
 import { Input } from "@/Components/ui/input";
 import { router } from "@inertiajs/react";
 import { RowSelection } from "@tanstack/react-table";
@@ -22,9 +28,12 @@ const Index = (invoices) => {
     const statusAvailable = () => {
         let statuses = [];
 
-        invoices.forEach(invoice => {
+        invoices.forEach((invoice) => {
             if (!statuses.find((el) => el.key === invoice.status.key)) {
-                statuses.push({ key: invoice.status.key, name: invoice.status.name });
+                statuses.push({
+                    key: invoice.status.key,
+                    name: invoice.status.name,
+                });
             }
         });
         return statuses;
@@ -41,7 +50,7 @@ const Index = (invoices) => {
         status: OPTIONS[0].value,
         payment_date: null,
     });
-    
+
     const columnHeaders = [
         {
             accessor: "select",
@@ -50,7 +59,8 @@ const Index = (invoices) => {
                     {...{
                         checked:
                             table.getIsAllRowsSelected() ||
-                            (table.getIsSomePageRowsSelected() && "indeterminate"),
+                            (table.getIsSomePageRowsSelected() &&
+                                "indeterminate"),
                         onCheckedChange: (value) =>
                             table.toggleAllPageRowsSelected(!!value),
                     }}
@@ -70,11 +80,17 @@ const Index = (invoices) => {
         { accessor: "client", header: "Client", type: "string" },
         { accessor: "creation_date", header: "Date de création", type: "date" },
         { accessor: "payment_date", header: "Date de paiment", type: "date" },
-        { accessor: "status", header: "Statut", cell: (row) => (
-            <Badge variant={row.renderValue().key}>
-                {row.renderValue().name}
-            </Badge>
-        ), type: "multi", multi: statusAvailable() },
+        {
+            accessor: "status",
+            header: "Statut",
+            cell: (row) => (
+                <Badge variant={row.renderValue().key}>
+                    {row.renderValue().name}
+                </Badge>
+            ),
+            type: "multi",
+            multi: statusAvailable(),
+        },
         { accessor: "contact", header: "Contact", type: "string" },
         { accessor: "total", header: "Total", type: "number" },
         {
@@ -90,7 +106,6 @@ const Index = (invoices) => {
     ];
 
     const handleEdit = (invoice) => {
-        console.log(invoice);
         setInput({
             status: invoice.status.key,
             payment_date: invoice.payment_date,
@@ -101,25 +116,32 @@ const Index = (invoices) => {
     };
 
     const handleSubmit = () => {
-        console.log(input);
-        router.put(`/invoices/${currentIncoiceId}`, input);
-        setIsDialogOpen(false);
-        window.location.reload();
-    }
-    
+        router.put(`/invoices/${currentIncoiceId}`, input, {
+            onSuccess: () => {
+                setIsDialogOpen(false);
+                window.location.reload();
+            },
+            preserveState: true,
+            preserveScroll: true,
+        });
+    };
+
     const columns = builder.buildColumns(columnHeaders);
 
     const handleInvoicesPrint = (rowSelection) => {
-        const selectedRows = Object.keys(rowSelection).filter(key=> rowSelection[key]);
+        const selectedRows = Object.keys(rowSelection).filter(
+            (key) => rowSelection[key]
+        );
         console.log(selectedRows + " e");
-        if(selectedRows.length === 0) {
+        if (selectedRows.length === 0) {
             return;
         }
-        const selectedIds= selectedRows.map(row => invoices[row].invoice_id);
+        const selectedIds = selectedRows.map((row) => invoices[row].invoice_id);
         console.log(selectedIds + " f");
 
-
-        window.location.href = `/invoices/print_invoices?invoices=${selectedIds.join(",")}`;
+        window.location.href = `/invoices/print_invoices?invoices=${selectedIds.join(
+            ","
+        )}`;
     };
 
     return (
@@ -137,18 +159,21 @@ const Index = (invoices) => {
                 }}
             />
             <Dialog
-                title={
-                    "Modifier"
-                }
+                title={"Modifier"}
                 description=""
                 buttonLabel="Mettre à jour"
                 action={handleSubmit}
                 isOpen={isDialogOpen}
                 setIsOpen={setIsDialogOpen}
             >
-                <Select defaultValue={input.status} onValueChange={(e) => setInput((prev) => ({ ...prev, status: e }))}>
+                <Select
+                    defaultValue={input.status}
+                    onValueChange={(e) =>
+                        setInput((prev) => ({ ...prev, status: e }))
+                    }
+                >
                     <SelectTrigger>
-                        <SelectValue/>
+                        <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                         {OPTIONS.map((status) => (
@@ -158,7 +183,16 @@ const Index = (invoices) => {
                         ))}
                     </SelectContent>
                 </Select>
-                <Input type="date" defaultValue={input.payment_date} onChange={(e) => setInput((prev) => ({ ...prev, payment_date: e.target.value }))} />
+                <Input
+                    type="date"
+                    defaultValue={input.payment_date}
+                    onChange={(e) =>
+                        setInput((prev) => ({
+                            ...prev,
+                            payment_date: e.target.value,
+                        }))
+                    }
+                />
             </Dialog>
         </MainLayout>
     );
