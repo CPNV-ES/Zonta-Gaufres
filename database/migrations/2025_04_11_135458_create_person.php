@@ -22,13 +22,12 @@ return new class extends Migration
         });
         Schema::create('people', function (Blueprint $table) {
             $table->id();
-            $table->string('firstname');
-            $table->string('lastname');
+            $table->string('firstname')->nullable();
+            $table->string('lastname')->nullable();
             $table->string('email')->nullable();
             $table->string('company')->nullable();
             $table->string('phone_number');
             $table->timestamps();
-            $table->unique(['firstname', 'lastname', 'phone_number'], 'people_unique');
         });
         Schema::create('person_person_type', function (Blueprint $table) {
             $table->id();
