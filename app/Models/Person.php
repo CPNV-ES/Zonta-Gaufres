@@ -147,7 +147,7 @@ class PersonCollection extends Collection
 
 
         $countQuantity = $orders->sum('waffle_quantity') ?? "";
-        $totalPrice = $orders->filter(fn($order) => $order->free === 0)->sum('waffle_quantity') * 2 ?? "";
+        $totalPrice = number_format($orders->filter(fn($order) => $order->free === 0)->sum('waffle_quantity') * 2 ?? "", 2, '.', '');
         $totalPriceToCash = 0;
 
         $html = '';
@@ -175,7 +175,7 @@ class PersonCollection extends Collection
             }
 
 
-            $price = $order->waffle_quantity * 2;
+            $price = number_format($order->waffle_quantity * 2, 2, '.', '');
             $pricePerUnit = number_format($price / $waffle_quantity, 2, thousands_separator: ' ');
 
             if ($payment_type == 'Livraison') {
@@ -196,7 +196,13 @@ class PersonCollection extends Collection
             if ($order->free == 1) {
                 $payment_type = " ";
                 $price = " ";
+                $totalPriceToCash = $totalPriceToCash - $priceToCash;
+                $priceToCash = "-";
+                $background = "#FFFFFF";
             }
+
+            $totalPriceToCash = number_format($totalPriceToCash, 2, '.', '');
+            //$priceToCash = $priceToCash == null ? " " : number_format($priceToCash, 2, '.', '');
 
             $html .= "
             <?php foreach($orders as $order): ?>
