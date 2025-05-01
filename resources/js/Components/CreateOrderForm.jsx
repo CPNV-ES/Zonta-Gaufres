@@ -60,14 +60,21 @@ const formSchema = z.object({
         date: z.string().optional(),
     }),
     person: z.object({
-        phone_number: z.regex(PHONENUMBER_REGEX, {
-            message:
-                "Le numéro de téléphone doit être au format 078 947 23 17.",
-        }),
+        phone_number: z
+            .string()
+            .regex(PHONENUMBER_REGEX, {
+                message:
+                    "Le numéro de téléphone doit être au format 078 947 23 17.",
+            })
+            .optional(),
         lastname: z.string({
             required_error: "Ce champ est requis.",
         }),
         firstname: z.string({
+            required_error: "Ce champ est requis.",
+        }),
+        email: z.string().email({
+            message: "L'email doit être au format valide.",
             required_error: "Ce champ est requis.",
         }),
         company: z.string().optional(),
@@ -183,6 +190,23 @@ const CreateOrderForm = (contactPeopleNames) => {
                                     <FormControl>
                                         <Input
                                             placeholder="Prénom"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="person.email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Email*</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="Email*"
+                                            type="email"
                                             {...field}
                                         />
                                     </FormControl>
