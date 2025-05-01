@@ -486,7 +486,7 @@ const CreateOrderForm = (contactPeopleNames) => {
                             name="order.remark"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Remark</FormLabel>
+                                    <FormLabel>Remarque</FormLabel>
                                     <FormControl>
                                         <Textarea
                                             placeholder="Ajouter des remarques si nécessaire"
