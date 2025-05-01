@@ -197,8 +197,8 @@ class PersonCollection extends Collection
 
             if ($order->free == 1) {
                 $payment_type = " ";
+                $totalPriceToCash = is_numeric($priceToCash) ? $totalPriceToCash - $priceToCash : $totalPriceToCash;
                 $price = " ";
-                $totalPriceToCash = is_int($priceToCash) ? $totalPriceToCash - $priceToCash : $totalPriceToCash;
                 $priceToCash = "-";
                 $background = "#FFFFFF";
             }
