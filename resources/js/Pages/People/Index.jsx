@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MainLayout from "../../Layouts/MainLayout";
 
 import { ColumnBuilder } from "@/Builder/ColumnBuilder";
@@ -14,13 +14,15 @@ import MultipleSelector from "@/Components/MultipleSelector";
 import { router } from "@inertiajs/react";
 
 import { PHONENUMBER_REGEX, EMAIL_REGEX } from "@/lib/regex";
+import { set } from "date-fns";
 
-const People = (people) => {
+const People = (base_people) => {
     const builder = new ColumnBuilder();
+    const [people, setPeople] = useState(base_people.people);
 
     const typesAvailable = () => {
         let types = [];
-        people.people.forEach((person) => {
+        people.forEach((person) => {
             return person.types.map((type) => {
                 if (!types.find((el) => el.key === type.key)) {
                     types.push({ key: type.key, name: type.name });
@@ -87,10 +89,10 @@ const People = (people) => {
     const columns = builder.buildColumns(columnHeaders);
 
     const OPTIONS = [
-        { label: "Bénévole", value: "Bénévole" },
-        { label: "Livreur", value: "Livreur" },
-        { label: "Admin", value: "Admin" },
-        { label: "Client", value: "Client" },
+        { label: "Bénévole", value: "STAFF" },
+        { label: "Livreur", value: "DELIVERY_GUY" },
+        { label: "Admin", value: "ADMIN" },
+        { label: "Client", value: "CLIENT" },
     ];
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -100,7 +102,7 @@ const People = (people) => {
         email: "",
         company: "",
         phone_number: "",
-        roles: [],
+        types: [],
     });
     const [isEditing, setIsEditing] = useState(false);
     const [currentPersonId, setCurrentPersonId] = useState(null);
@@ -113,7 +115,10 @@ const People = (people) => {
             email: person.email,
             company: person.company,
             phone_number: person.phone_number,
-            roles: person.types.map((role) => role.name),
+            types: person.types.map((type) => ({
+                label: type.name,
+                value: type.key,
+            })),
         });
         setCurrentPersonId(person.id);
         setIsEditing(true);
@@ -122,8 +127,6 @@ const People = (people) => {
 
     const validateInputs = () => {
         const newErrors = {};
-        if (!input.firstname) newErrors.firstname = "Prénom est requis";
-        if (!input.lastname) newErrors.lastname = "Nom est requis";
         if (!input.email) {
             newErrors.email = "Email est requis";
         } else if (!EMAIL_REGEX.test(input.email)) {
@@ -134,8 +137,8 @@ const People = (people) => {
         } else if (!PHONENUMBER_REGEX.test(input.phone_number)) {
             newErrors.phone_number = "Téléphone invalide";
         }
-        if (input.roles.length === 0) {
-            newErrors.roles = "Au moins un rôle est requis";
+        if (input.types.length === 0) {
+            newErrors.types = "Au moins un rôle est requis";
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -144,23 +147,26 @@ const People = (people) => {
     const handleSubmit = () => {
         if (!validateInputs()) return;
 
+        const payload = {
+            firstname: input.firstname,
+            lastname: input.lastname,
+            email: input.email,
+            company: input.company,
+            phone_number: input.phone_number,
+            types: input.types.map((role) => role.value),
+        };
+
         if (isEditing) {
-            router.put(`/people/${currentPersonId}`, {
-                firstname: input.firstname,
-                lastname: input.lastname,
-                email: input.email,
-                company: input.company,
-                phone_number: input.phone_number,
-                roles: input.roles,
+            router.put(`/people/${currentPersonId}`, payload, {
+                onSuccess: () => {
+                    window.location.reload();
+                },
             });
         } else {
-            router.post("/people", {
-                firstname: input.firstname,
-                lastname: input.lastname,
-                email: input.email,
-                company: input.company,
-                phone_number: input.phone_number,
-                roles: input.roles,
+            router.post("/people", payload, {
+                onSuccess: () => {
+                    window.location.reload();
+                },
             });
         }
         setIsDialogOpen(false);
@@ -171,16 +177,15 @@ const People = (people) => {
             email: "",
             company: "",
             phone_number: "",
-            roles: [],
+            types: [],
         });
-        window.location.reload();
     };
 
     return (
         <MainLayout color="yellow" subject="Personnel">
             <DataTable
                 columns={columns}
-                inputData={people.people}
+                inputData={people}
                 buttonsOptions={{
                     icon: "plus",
                     action: "Ajouter une personne",
@@ -193,7 +198,7 @@ const People = (people) => {
                             email: "",
                             company: "",
                             phone_number: "",
-                            roles: [],
+                            types: [],
                         });
                         setIsEditing(false);
                         setIsDialogOpen(true);
@@ -269,15 +274,15 @@ const People = (people) => {
                             Aucun rôle trouvé
                         </p>
                     }
-                    inputProps={input.roles}
-                    value={input.roles.map((role) =>
-                        OPTIONS.find((el) => el.value === role)
+                    inputProps={input.types}
+                    value={input.types.map((role) =>
+                        OPTIONS.find((el) => el.value === role.value)
                     )}
                     onChange={(e) => {
-                        setInput({ ...input, roles: e.map((el) => el.value) });
+                        setInput({ ...input, types: e });
                     }}
                 />
-                {errors.roles && <p className="text-red-500">{errors.roles}</p>}
+                {errors.types && <p className="text-red-500">{errors.types}</p>}
             </Dialog>
         </MainLayout>
     );
