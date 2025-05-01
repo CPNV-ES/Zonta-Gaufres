@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('lastname')->nullable();
             $table->string('email')->nullable();
             $table->string('company')->nullable();
-            $table->string('phone_number');
+            $table->string('phone_number')->nullable();
             $table->timestamps();
         });
         Schema::create('person_person_type', function (Blueprint $table) {
