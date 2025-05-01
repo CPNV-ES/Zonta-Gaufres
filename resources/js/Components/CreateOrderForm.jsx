@@ -480,7 +480,7 @@ const CreateOrderForm = (contactPeopleNames) => {
                                 </FormItem>
                             )}
                         />
-                        <h1 className="text-2xl">Remarque sur le commande</h1>
+                        <h1 className="text-2xl">Remarque sur la commande</h1>
                         <FormField
                             control={form.control}
                             name="order.remark"
