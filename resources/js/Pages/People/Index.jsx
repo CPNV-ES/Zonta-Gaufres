@@ -180,7 +180,7 @@ const People = (base_people) => {
     };
 
     return (
-        <MainLayout color="yellow" subject="Personnel">
+        <MainLayout color="yellow" subject="Contacts">
             <DataTable
                 columns={columns}
                 inputData={people}
