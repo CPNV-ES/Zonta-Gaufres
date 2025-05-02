@@ -50,7 +50,7 @@ const Index = () => {
         )
     })
     return (
-        <MainLayout color="green" subject="Commandes">
+        <MainLayout color="purple" subject="Paramètres">
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
