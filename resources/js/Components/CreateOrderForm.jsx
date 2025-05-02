@@ -20,10 +20,10 @@ import {
 } from "@/Components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import { format } from "date-fns";
 import { Textarea } from "@/Components/ui/textarea";
 import { PHONENUMBER_REGEX } from "@/lib/regex";
+import { router } from "@inertiajs/react";
 
 const formSchema = z.object({
     order: z.object({
@@ -57,28 +57,36 @@ const formSchema = z.object({
         payment: z.string({
             required_error: "Ce champ est requis.",
         }),
-        date: z.string().optional(),
+        date: z.string({
+            required_error: "Ce champ est requis.",
+        }),
     }),
-    person: z.object({
-        phone_number: z
-            .string()
-            .regex(PHONENUMBER_REGEX, {
-                message:
-                    "Le numéro de téléphone doit être au format 078 947 23 17.",
-            })
-            .optional(),
-        lastname: z.string({
-            required_error: "Ce champ est requis.",
+    person: z
+        .object({
+            select_user: z.string({
+                required_error: "Ce champ est requis.",
+            }),
+            phone_number: z
+                .string()
+                .regex(PHONENUMBER_REGEX, {
+                    message:
+                        "Le numéro de téléphone doit être au format 078 947 23 17.",
+                })
+                .optional(),
+            lastname: z.string().optional(),
+            firstname: z.string().optional(),
+            email: z
+                .string()
+                .email({
+                    message: "L'email doit être au format valide.",
+                })
+                .optional(),
+            company: z.string().optional(),
+        })
+        .refine((data) => data.select_user !== "new" || data.email, {
+            message: "Les champs Email sont requis pour un nouvel utilisateur.",
+            path: ["email"], // Highlight the first missing field
         }),
-        firstname: z.string({
-            required_error: "Ce champ est requis.",
-        }),
-        email: z.string().email({
-            message: "L'email doit être au format valide.",
-            required_error: "Ce champ est requis.",
-        }),
-        company: z.string().optional(),
-    }),
     deliveryAddress: z.object({
         city: z.string({
             required_error: "Ce champ est requis.",
@@ -96,7 +104,7 @@ const formSchema = z.object({
     }),
 });
 
-const CreateOrderForm = (contactPeopleNames) => {
+const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -107,15 +115,22 @@ const CreateOrderForm = (contactPeopleNames) => {
 
     const onSubmit = (data) => {
         data.order.date = format(new Date(data.order.date), "yyyy-MM-dd");
-        axios
-            .post("/orders", data)
-            .then((response) => {
-                console.log(response);
-                window.location.href = "/orders";
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+        router.post(
+            "/orders",
+            {
+                ...data,
+                order: {
+                    ...data.order,
+                    start_delivery_time: data.order.start_delivery_time + ":00",
+                    end_delivery_time: data.order.end_delivery_time + ":00",
+                },
+            },
+            {
+                onSuccess: () => {
+                    window.location.href = "/orders";
+                },
+            }
+        );
     };
 
     return (
@@ -164,112 +179,36 @@ const CreateOrderForm = (contactPeopleNames) => {
                         <h1 className="text-2xl">Information du client</h1>
                         <FormField
                             control={form.control}
-                            name="person.firstname"
+                            name="person.select_user"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Nom*</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Nom" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="person.lastname"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Prénom*</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Prénom"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="person.email"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Email*</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Email*"
-                                            type="email"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="person.phone_number"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Téléphone*</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            type="tel"
-                                            placeholder="Numéro"
-                                            pattern="\d{3} \d{3} \d{2} \d{2}"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormDescription>
-                                        Format : 079 123 45 67
-                                    </FormDescription>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="person.company"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Entreprise</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="Entreprise"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="order.contact"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Personne de contact*</FormLabel>
+                                    <FormLabel>Utilisateur*</FormLabel>
                                     <FormControl>
                                         <Select
                                             onValueChange={field.onChange}
                                             defaultValue={field.value}
                                         >
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Sélectionner votre personne de contact">
-                                                    {contactPeopleNames.contactPeopleNames.find(
-                                                        (person) =>
-                                                            String(
-                                                                person.id
-                                                            ) ===
-                                                            String(field.value)
-                                                    )?.name ||
-                                                        "Sélectionner votre personne de contact"}
+                                                <SelectValue placeholder="Choisir un utilisateur existant ou en créer un nouveau">
+                                                    {field.value === "new"
+                                                        ? field.innerText
+                                                        : clientPeople.find(
+                                                              (person) =>
+                                                                  String(
+                                                                      person.id
+                                                                  ) ===
+                                                                  String(
+                                                                      field.value
+                                                                  )
+                                                          )?.name ||
+                                                          "Choisir un utilisateur existant ou en créer un nouveau"}
                                                 </SelectValue>
                                             </SelectTrigger>
                                             <SelectContent>
-                                                {contactPeopleNames.contactPeopleNames.map(
+                                                <SelectItem value="new">
+                                                    Créer un nouvel utilisateur
+                                                </SelectItem>
+                                                {clientPeople.map(
                                                     (person, i) => (
                                                         <SelectItem
                                                             key={i}
@@ -286,6 +225,139 @@ const CreateOrderForm = (contactPeopleNames) => {
                                 </FormItem>
                             )}
                         />
+                        {/* If the user is new, show the fields to create a new user */}
+                        {form.watch("person.select_user") === "new" && (
+                            <>
+                                <FormField
+                                    control={form.control}
+                                    name="person.firstname"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Nom*</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder="Nom"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="person.lastname"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Prénom*</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder="Prénom"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="person.email"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Email*</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder="Email*"
+                                                    type="email"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="person.phone_number"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Téléphone*</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    type="tel"
+                                                    placeholder="Numéro"
+                                                    pattern="\d{3} \d{3} \d{2} \d{2}"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormDescription>
+                                                Format : 079 123 45 67
+                                            </FormDescription>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="person.company"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Entreprise</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder="Entreprise"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </>
+                        )}
+                        <FormField
+                            control={form.control}
+                            name="order.contact"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Personne de contact*</FormLabel>
+                                    <FormControl>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                        >
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Sélectionner votre personne de contact">
+                                                    {contactPeopleNames.find(
+                                                        (person) =>
+                                                            String(
+                                                                person.id
+                                                            ) ===
+                                                            String(field.value)
+                                                    )?.name ||
+                                                        "Sélectionner votre personne de contact"}
+                                                </SelectValue>
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {contactPeopleNames.map(
+                                                    (person, i) => (
+                                                        <SelectItem
+                                                            key={i}
+                                                            value={person.id}
+                                                        >
+                                                            {person.name}
+                                                        </SelectItem>
+                                                    )
+                                                )}
+                                            </SelectContent>
+                                        </Select>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
                         <FormField
                             control={form.control}
                             name="order.gifted_by"
