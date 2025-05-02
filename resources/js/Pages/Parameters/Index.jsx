@@ -58,7 +58,8 @@ const Index = () => {
                 >
                     <div className="flex flex-row gap-4">
                         <div className="flex flex-col gap-2">
-                            <h1 className="text-2xl">Commande</h1>
+                            <h1 className="text-2xl">Paramètres</h1>
+                            <h2 className="text-xl">Backup</h2>
                             <FormField
                                 control={form.control}
                                 name="backupPath"
@@ -78,19 +79,26 @@ const Index = () => {
                         </div>
                     </div>
                     <div className="flex gap-2">
-                            <Button
-                                variant="destructive"
-                                type="button"
-                                onClick={() =>
-                                    (window.location.href = "/orders")
-                                }
-                            >
-                                Annuler
-                            </Button>
-                            <Button className="bg-green-500" type="submit">
-                                Commander
-                            </Button>
-                        </div>
+                        <Button
+                            variant="destructive"
+                            type="button"
+                            onClick={() =>
+                                (window.location.href = "/orders")
+                            }
+                        >
+                            Annuler
+                        </Button>
+                        <Button className="bg-green-500" type="submit">
+                            Sauvegarder les données
+                        </Button>
+                        <Button className="bg-blue-500"                                 variant="destructive"
+                            type="button"
+                            onClick={() =>
+                                (window.location.href = "/parameters/restore")
+                            }>
+                            Restaurer les données
+                        </Button>
+                    </div>
                 </form>
             </Form>
         </MainLayout>
