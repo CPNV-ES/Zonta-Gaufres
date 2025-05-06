@@ -45,7 +45,7 @@ const Index = (orders) => {
         { accessor: "gifted_by", header: "Offert par", type: "string" },
         { accessor: "delivery_guy", header: "Livreur", type: "string" },
         { accessor: "time_slot", header: "Plage horaire", type: "string" },
-        { accessor: "contact", header: "Contact année passée", type: "string" },
+        { accessor: "contact", header: "Personne de Contact", type: "string" },
         {
             accessor: "waffles_number",
             header: "Nombre de gaufres",

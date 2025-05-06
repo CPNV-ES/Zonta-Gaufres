@@ -44,9 +44,9 @@ return new class extends Migration
             $table->unsignedBigInteger('address_id');
             $table->date('payment_date')->nullable();
             $table->unsignedBigInteger('status_id')->default(2);
-            $table->foreign('contact_id')->references('id')->on('people');
-            $table->foreign('buyer_id')->references('id')->on('people');
-            $table->foreign('delivery_guy_id')->references('id')->on('people');
+            $table->foreign('contact_id')->references('id')->on('people')->onDelete('set null');
+            $table->foreign('buyer_id')->references('id')->on('people')->onDelete('cascade');
+            $table->foreign('delivery_guy_id')->references('id')->on('people')->onDelete('cascade');
             $table->foreign('payment_type_id')->references('id')->on('payment_types');
             $table->foreign('address_id')->references('id')->on('addresses');
             $table->foreign('status_id')->references('id')->on('invoice_statuses');

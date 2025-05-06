@@ -40,7 +40,7 @@ class OrderController extends Controller
                 "note" => $order->remark,
                 "gifted_by" => $order->gifted_by,
                 "time_slot" => "{$order->start_delivery_time} - {$order->end_delivery_time}",
-                "contact" => $order->contact->firstname,
+                "contact" => $order->contact->firstname ?? '',
                 "waffles_number" => $order->waffle_quantity,
                 "total" => $order->total_price(),
                 "status" => $order->invoiceStatus !== null ? $order->invoiceStatus->enum()->toArray() : [],

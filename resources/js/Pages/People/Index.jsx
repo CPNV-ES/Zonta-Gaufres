@@ -81,6 +81,9 @@ const People = (base_people) => {
                     <button onClick={() => handleEdit(row.row.original)}>
                         <Icon name="pencil" />
                     </button>
+                    <button onClick={() => handleDelete(row.row.original)}>
+                        <Icon name="trash" />
+                    </button>
                 </div>
             ),
         },
@@ -123,6 +126,16 @@ const People = (base_people) => {
         setCurrentPersonId(person.id);
         setIsEditing(true);
         setIsDialogOpen(true);
+    };
+
+    const handleDelete = (person) => {
+        if (confirm("Êtes-vous sûr de vouloir supprimer cette personne ?")) {
+            router.delete(`/people/${person.id}`, {
+                onSuccess: () => {
+                    setPeople((prev) => prev.filter((p) => p.id !== person.id));
+                },
+            });
+        }
     };
 
     const validateInputs = () => {
