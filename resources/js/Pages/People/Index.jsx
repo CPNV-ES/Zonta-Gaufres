@@ -14,11 +14,13 @@ import MultipleSelector from "@/Components/MultipleSelector";
 import { router } from "@inertiajs/react";
 
 import { PHONENUMBER_REGEX, EMAIL_REGEX } from "@/lib/regex";
-import { set } from "date-fns";
 
 const People = (base_people) => {
     const builder = new ColumnBuilder();
     const [people, setPeople] = useState(base_people.people);
+    const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
+        useState(false);
+    const [currentDeletePerson, setCurrentDeletePerson] = useState(null);
 
     const typesAvailable = () => {
         let types = [];
@@ -81,7 +83,12 @@ const People = (base_people) => {
                     <button onClick={() => handleEdit(row.row.original)}>
                         <Icon name="pencil" />
                     </button>
-                    <button onClick={() => handleDelete(row.row.original)}>
+                    <button
+                        onClick={() => {
+                            setCurrentDeletePerson(row.row.original);
+                            setIsDeleteConfirmationOpen(true);
+                        }}
+                    >
                         <Icon name="trash" />
                     </button>
                 </div>
@@ -129,13 +136,11 @@ const People = (base_people) => {
     };
 
     const handleDelete = (person) => {
-        if (confirm("Êtes-vous sûr de vouloir supprimer cette personne ?")) {
-            router.delete(`/people/${person.id}`, {
-                onSuccess: () => {
-                    setPeople((prev) => prev.filter((p) => p.id !== person.id));
-                },
-            });
-        }
+        router.delete(`/people/${person.id}`, {
+            onSuccess: () => {
+                window.location.reload();
+            },
+        });
     };
 
     const validateInputs = () => {
@@ -194,6 +199,23 @@ const People = (base_people) => {
 
     return (
         <MainLayout color="yellow" subject="Contacts">
+            <Dialog
+                title="Êtes-vous sûr de vouloir supprimer cette personne ?"
+                buttonLabel="Supprimer"
+                buttonVariant="red"
+                action={() => {
+                    handleDelete(currentDeletePerson);
+                    setIsDeleteConfirmationOpen(false);
+                }}
+                isOpen={isDeleteConfirmationOpen}
+                setIsOpen={setIsDeleteConfirmationOpen}
+            >
+                <p className="text-sm text-gray-500">
+                    Cette action est irréversible. Vous ne pourrez pas récupérer
+                    cette personne après la suppression. Si cette personne est
+                    lié a une commandes la commandes sera supprimée aussi.
+                </p>
+            </Dialog>
             <DataTable
                 columns={columns}
                 inputData={people}
