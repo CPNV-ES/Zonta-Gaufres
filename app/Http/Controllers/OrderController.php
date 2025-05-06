@@ -45,6 +45,7 @@ class OrderController extends Controller
                 "total" => $order->total_price(),
                 "status" => $order->invoiceStatus !== null ? $order->invoiceStatus->enum()->toArray() : [],
                 "payment_type" => $paymentType->toArray(),
+                "delivery_guy" => $order->deliveryGuy !== null ? $order->deliveryGuy->firstname . ' ' . $order->deliveryGuy->lastname : '',
             ];
         });
 
