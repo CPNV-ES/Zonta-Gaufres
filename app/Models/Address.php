@@ -11,8 +11,6 @@ class Address extends BaseModel
     protected $fillable = [
         'street',
         'street_number',
-        'country',
-        'region',
         'city_id',
     ];
 

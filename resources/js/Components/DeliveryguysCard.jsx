@@ -8,15 +8,11 @@ const DeliveryguysCard = ({ deliveryGuy, onClick, className="bg-white" }) => {
             <div className='overflow-hidden'>
                 <div
                     className="flex w-full gap-2 transition-transform duration-500 transform -translate-y-3/4 hours-container group-hover:translate-y-0">
-                    <Timetable deliveries={deliveryGuy.order} />
+                    <Timetable deliveries={deliveryGuy.orders_to_deliver} />
                 </div>
-                <h1 className="mt-2 ml-3 text-2xl truncate" title={`${deliveryGuy.person.firstname} ${deliveryGuy.person.lastname}`}>{deliveryGuy.person.firstname} {deliveryGuy.person.lastname}</h1>
+                <h1 className="mt-2 ml-3 text-2xl truncate" title={`${deliveryGuy.fullname}`}>{deliveryGuy.fullname}</h1>
             </div>
             <div className="flex justify-between m-3 mb-2">
-                <div className="flex gap-2 max-w-40">
-                    <span className="material-symbols-outlined">location_on</span>
-                    <span className="truncate" title={deliveryGuy.city[0]?.name}>{deliveryGuy.city[0]?.name}</span>
-                </div>
                 <div className="flex flex-row gap-4">
                     <div className="flex gap-2">
                         <span className="material-symbols-outlined">quick_reorder</span>

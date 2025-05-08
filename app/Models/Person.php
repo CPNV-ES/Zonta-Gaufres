@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use App\Enums\PersonTypesEnum;
 use App\Enums\PaymentTypesEnum;
+use App\Enums\PersonTypesEnum;
 use Illuminate\Support\Facades\App;
 
 
@@ -23,14 +23,30 @@ class Person extends BaseModel
         'remark',
     ];
 
+    protected $appends = ['fullname'];
+
+    public function scopeHasType($query, $type)
+    {
+        return $query->whereHas('personType', function ($q) use ($type) {
+            $q->where('name', $type->name);
+        });
+    }
+
     public function getFullnameAttribute()
     {
+        if ($this->firstname == null || $this->lastname == null) {
+            return $this->email;
+        }
         return $this->firstname . ' ' . $this->lastname;
     }
 
     public function personType(): BelongsToMany
     {
         return $this->belongsToMany(PersonType::class);
+    }
+    public function ordersToDeliver()
+    {
+        return $this->hasMany(Order::class, 'delivery_guy_id');
     }
     public function orders()
     {
@@ -40,13 +56,15 @@ class Person extends BaseModel
     {
         return $this->hasMany(Order::class, 'contact_id');
     }
-    public function deliveryGuySchedule()
-    {
-        return $this->hasMany(DeliveryGuySchedule::class, 'person_id');
-    }
     public function newCollection(array $models = [])
     {
         return new PersonCollection($models);
+    }
+    public function getTypesAttribute()
+    {
+        return $this->personType->map(function ($type) {
+            return PersonTypesEnum::fromCase($type->name);
+        });
     }
 }
 
@@ -113,6 +131,7 @@ class PersonCollection extends Collection
             <table>
                 <tr>
                     <th>Entreprise</th>
+                    <th>Acheteur</th>
                     <th>Personne de contact</th>
                     <th>Adresse</th>
                     <th>NPA</th>
@@ -128,14 +147,9 @@ class PersonCollection extends Collection
     }
     private function generateDataTable($person)
     {
-        $schedulePersonOrder = $person->deliveryGuySchedule()
-            ->with('order')
-            ->get();
-        $personOrder = $schedulePersonOrder->pluck('order');
-        $orders = $personOrder->first(); // should get all orders from the person (as delivery guy)
+        $orders = $person->ordersToDeliver()->get();
 
-
-        if (!($orders)) {
+        if ($orders->isEmpty()) {
             return "
                         <tr>
                             <td colspan='11' style='text-align:center;'>Aucune commande trouvée pour $person->fullname</td>
@@ -147,8 +161,9 @@ class PersonCollection extends Collection
 
 
         $countQuantity = $orders->sum('waffle_quantity') ?? "";
-        $totalPrice = number_format($orders->filter(fn($order) => $order->free === 0)->sum('waffle_quantity') * 2 ?? "", 2, '.', '');
+        $totalPrice = number_format($orders->where('free', 0)->sum('waffle_quantity') * 2 ?? "", 2, '.', '');
         $totalPriceToCash = 0;
+        $pricePerUnit = Order::$pricePerUnit;
 
         $html = '';
         foreach ($orders as $order) {
@@ -156,6 +171,7 @@ class PersonCollection extends Collection
 
             $paymentType = PaymentTypesEnum::fromCase(case: $order->paymentType->name);
 
+            $company = $order->buyer->company;
             $buyer = $order->buyer->fullname;
             $contact = $order->contact->fullname;
             $address = $order->address->street;
@@ -165,6 +181,8 @@ class PersonCollection extends Collection
             $real_delivery_time = $order->real_delivery_time;
             $waffle_quantity = $order->waffle_quantity;
 
+            $price = number_format($order->waffle_quantity * 2, 2, '.', '');
+
             $payment_types = $paymentType->toArray();
             $payment_type = $payment_types['name'];
 
@@ -173,12 +191,6 @@ class PersonCollection extends Collection
             } else {
                 $colorText = "black";
             }
-
-
-            $price = number_format($order->waffle_quantity * 2, 2, '.', '');
-            $pricePerUnit = number_format($price / $waffle_quantity, 2, thousands_separator: ' ');
-
-
 
             if ($payment_type == 'Livraison') {
                 $priceToCash = $price;
@@ -209,6 +221,7 @@ class PersonCollection extends Collection
             $html .= "
             <?php foreach($orders as $order): ?>
                         <tr style='background-color: $background'>
+                            <td>$company</td>
                             <td>$buyer</td>
                             <td>$contact</td>
                             <td>$address</td>
@@ -228,6 +241,7 @@ class PersonCollection extends Collection
             "
                     <tr>
                         <td> <b>Totaux : </b> </td>
+                        <td> </td>
                         <td> </td>
                         <td> </td>
                         <td> </td>

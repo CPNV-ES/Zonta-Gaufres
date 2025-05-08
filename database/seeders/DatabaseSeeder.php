@@ -27,13 +27,8 @@ class DatabaseSeeder extends Seeder
     {
         City::factory(50)->create();
         Address::factory(10)->create();
-        DeliveryGuySchedule::factory(20)->create();
         Person::factory(100)->create();
         Order::factory(100)->create();
-
-        foreach (DeliveryGuySchedule::all() as $deliverySchedule) {
-            $deliverySchedule->city()->attach(City::all()->random());
-        }
 
         foreach (Person::all() as $person) {
             $person->personType()->attach(PersonType::all()->random());
