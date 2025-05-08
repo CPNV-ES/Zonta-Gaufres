@@ -82,9 +82,9 @@ const Deliveries = ({ initDeliveries }) => {
             const tmpdelivery = {
                 'delivery_id': d.id,
                 'delivery_guy': d.delivery_guy
-                ? `${d.delivery_guy.firstname} ${d.delivery_guy.lastname}`
+                ? `${d.delivery_guy.email}`
                 : "Aucun livreur",
-                'buyer': `${d.buyer.firstname} ${d.buyer.lastname}`,
+                'buyer': `${d.buyer.email}`,
                 'company': d.buyer.company,
                 'address': `${d.address.street} ${d.address.street_number}`,
                 'postal_code': d.address.city.zip_code,

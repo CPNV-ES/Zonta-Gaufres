@@ -33,19 +33,19 @@ class OrderController extends Controller
             return [
                 "invoice_id" => $order->id,
                 "company" => $order->buyer->company,
-                "client" => $order->buyer->firstname . ' ' . $order->buyer->lastname,
+                "client" => $order->buyer->email,
                 "address" => $order->address->street . ' ' . $order->address->street_number,
                 "zip_code" => $order->address->city->zip_code,
                 "city" => $order->address->city->name,
                 "note" => $order->remark,
                 "gifted_by" => $order->gifted_by,
                 "time_slot" => "{$order->start_delivery_time} - {$order->end_delivery_time}",
-                "contact" => $order->contact->firstname ?? '',
+                "contact" => $order->contact->email ?? '',
                 "waffles_number" => $order->waffle_quantity,
                 "total" => $order->total_price(),
                 "status" => $order->invoiceStatus !== null ? $order->invoiceStatus->enum()->toArray() : [],
                 "payment_type" => $paymentType->toArray(),
-                "delivery_guy" => $order->deliveryGuy !== null ? $order->deliveryGuy->firstname . ' ' . $order->deliveryGuy->lastname : '',
+                "delivery_guy" => $order->deliveryGuy !== null ? $order->deliveryGuy->email : '',
             ];
         });
 
@@ -125,7 +125,7 @@ class OrderController extends Controller
         foreach ($contactPeople as $contactPerson) {
             $contactPerson = [
                 'id' => $contactPerson->id,
-                'name' => $contactPerson->lastname . ' ' . $contactPerson->firstname
+                'name' => $contactPerson->email
             ];
             array_push($contactPeopleNames, $contactPerson);
         }

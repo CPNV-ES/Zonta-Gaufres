@@ -27,11 +27,11 @@ final class PersonFactory extends Factory
     public function definition(): array
     {
         return [
-            'firstname' => fake()->firstName,
-            'lastname' => fake()->lastName,
-            'email' => fake()->optional()->safeEmail,
+            'firstname' => fake()->optional()->firstName,
+            'lastname' => fake()->optional()->lastName,
+            'email' => fake()->safeEmail,
             'company' => fake()->optional()->company,
-            'phone_number' => fake()->mobileNumber,
+            'phone_number' => fake()->optional()->mobileNumber,
         ];
     }
 }
