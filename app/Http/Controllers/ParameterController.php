@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 
 class ParameterController extends BaseController
@@ -18,12 +19,14 @@ class ParameterController extends BaseController
             'Parameters/Index'
         );
     }
-    public function store()
+    public function store(Request $request)
     {
-        //TODO
+        copy("./database/database.sqlite", $request->input("backupPath") . "/database" . date("Y-m-d-H-i-s") . ".sqlite");
     }
     public function restore()
     {
         //TODO
+
+        return redirect()->route('orders.index');
     }
 }

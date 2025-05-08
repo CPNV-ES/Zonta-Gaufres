@@ -12,6 +12,7 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
+    FormDescription,
 } from "@/Components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -61,14 +62,20 @@ const Index = () => {
                                 name="backupPath"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Chemin de sauvegarde</FormLabel>
+                                        <FormLabel>Chemin de sauvegarde complet*</FormLabel>
+
                                         <FormControl>
                                             <Input
-                                                placeholder="Chemin de sauvegarde"
+                                                placeholder="Chemin de sauvegarde (absolu)"
                                                 {...field} // Bind the input to react-hook-form
                                             />
                                         </FormControl>
+                                        Sauvegarder les données sur le chemin spécifié en ou de les restaurer à partir du chemin spécifié.
+                                        Soyez sur que le fichier est nommé "backup.json" dans le cas d'une restauration.
                                         <FormMessage />
+                                        <FormDescription>
+                                        Ex : C:\Users\John\Desktop\pdf
+                                    </FormDescription>
                                     </FormItem>
                                 )}
                             />
