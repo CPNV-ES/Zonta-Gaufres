@@ -233,7 +233,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                     name="person.firstname"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Nom*</FormLabel>
+                                            <FormLabel>Nom</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     placeholder="Nom"
@@ -249,7 +249,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                     name="person.lastname"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Prénom*</FormLabel>
+                                            <FormLabel>Prénom</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     placeholder="Prénom"
@@ -282,7 +282,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                     name="person.phone_number"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Téléphone*</FormLabel>
+                                            <FormLabel>Téléphone</FormLabel>
                                             <FormControl>
                                                 <Input
                                                     type="tel"
