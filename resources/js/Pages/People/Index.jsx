@@ -211,9 +211,9 @@ const People = (base_people) => {
                 setIsOpen={setIsDeleteConfirmationOpen}
             >
                 <p className="text-sm text-gray-500">
-                    Cette action est irréversible. Vous ne pourrez pas récupérer
-                    cette personne après la suppression. Si cette personne est
-                    lié a une commandes la commandes sera supprimée aussi.
+                    Cette action est définitive. Une fois supprimée, cette
+                    personne ne pourra pas être récupérée. Si elle est associée
+                    à une commande, celle-ci sera également supprimée.
                 </p>
             </Dialog>
             <DataTable
