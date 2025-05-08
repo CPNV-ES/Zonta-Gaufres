@@ -36,7 +36,7 @@ const Deliveries = ({ initOrders = [], deliveryGuys = [] }) => {
             real_delivery_time: `${time}:00` // The format is ${HH:mm}:ss
         }
 
-        router.put(`/orders/${draggedOrder.id}`, updatedFields, {
+        router.post(`/orders/${draggedOrder.id}`, { ...updatedFields, _method: 'PUT' }, {
             onSuccess: () => {
                 selectedDeliveryGuy.orders_to_deliver.push(draggedOrder)
                 setOrders(orders.filter(order => order !== draggedOrder))
@@ -52,7 +52,7 @@ const Deliveries = ({ initOrders = [], deliveryGuys = [] }) => {
             real_delivery_time: null
         }        
 
-        router.put(`/orders/${delivery.id}`, updatedFields, {
+        router.post(`/orders/${delivery.id}`, { ...updatedFields, _method: 'PUT' }, {
             onSuccess: () => {
                 window.location.reload()
             }

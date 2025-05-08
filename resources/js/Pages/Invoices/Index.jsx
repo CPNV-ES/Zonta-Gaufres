@@ -116,7 +116,7 @@ const Index = (invoices) => {
     };
 
     const handleSubmit = () => {
-        router.put(`/invoices/${currentIncoiceId}`, input, {
+        router.post(`/invoices/${currentIncoiceId}`, { ...input, _method: 'PUT' }, {
             onSuccess: () => {
                 setIsDialogOpen(false);
                 window.location.reload();
