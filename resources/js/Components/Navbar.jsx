@@ -7,25 +7,25 @@ const Navbar = ({ color, subject }) => {
 
     const NavIcons = [
         {
-            name: "",
+            name: "Commandes",
             icon: "[material-symbols--article-outline]",
             color: "green",
             destination: "/orders",
         },
         {
-            name: "",
+            name: "Livraisons",
             icon: "[mdi--truck-outline]",
             color: "blue",
             destination: "/deliveries",
         },
         {
-            name: "",
+            name: "Contacts",
             icon: "[ic--outline-people]",
             color: "yellow",
             destination: "/people",
         },
         {
-            name: "",
+            name: "Factures",
             icon: "[gravity-ui--file-dollar]",
             color: "red",
             destination: "/invoices",
@@ -87,7 +87,7 @@ const Navbar = ({ color, subject }) => {
                 className="flex flex-col items-start justify-start gap-6 overflow-hidden transition-all duration-700 ease-in-out"
                 style={{ maxWidth: `${maxNavWidth}px` }}
             >
-                <NavIcon name="" icon="[mdi--cog]" destination={"/parameters"} color="purple" />
+                <NavIcon name="Paramètres" icon="[mdi--cog]" destination={"/parameters"} color="purple" />
             </div>
         </nav>
     );
