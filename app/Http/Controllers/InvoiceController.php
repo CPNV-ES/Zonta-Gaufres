@@ -20,12 +20,12 @@ class InvoiceController extends Controller
                 "id" => $order->id,
                 "invoice_id" => $order->id,
                 "company" => $order->buyer->company,
-                "client" => $order->buyer->email,
+                "client" => $order->buyer->fullname,
                 "total" => $order->total_price(),
                 "status" => $order->invoiceStatus->enum()->toArray(),
                 "creation_date" => $order->created_at,
                 "payment_date" => $order->payment_date,
-                "contact" => $order->contact->email,
+                "contact" => $order->contact->fullname,
             ];
         });
 

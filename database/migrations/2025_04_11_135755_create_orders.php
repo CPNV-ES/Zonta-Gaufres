@@ -37,6 +37,7 @@ return new class extends Migration
             $table->time('end_delivery_time');
             $table->time('real_delivery_time')->nullable();
             $table->string('remark', 255)->nullable();
+            $table->boolean('free')->default(false);
             $table->string('gifted_by', 255)->nullable();
             $table->timestamps();
             $table->unsignedBigInteger('payment_type_id');

@@ -23,6 +23,7 @@ import { useForm } from "react-hook-form";
 import { format } from "date-fns";
 import { Textarea } from "@/Components/ui/textarea";
 import { PHONENUMBER_REGEX } from "@/lib/regex";
+import { Checkbox } from "@/Components/ui/checkbox";
 import { router } from "@inertiajs/react";
 
 const formSchema = z.object({
@@ -47,6 +48,7 @@ const formSchema = z.object({
             required_error: "Ce champ est requis.",
         }),
         remark: z.string().optional(),
+        free: z.boolean().optional(),
         gifted_by: z.string().optional(),
         start_delivery_time: z.string({
             required_error: "Ce champ est requis.",
@@ -550,6 +552,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
+
                             )}
                         />
                         <h1 className="text-2xl">Remarque sur la commande</h1>
@@ -569,6 +572,26 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                 </FormItem>
                             )}
                         />
+                        <FormField
+                            control={form.control}
+                            name="order.free"
+                            render={({field}) => (
+                                <FormItem>
+                                    <FormLabel>Commande gratuite ?   </FormLabel>
+                                    <FormControl>
+                                    <Checkbox
+                                        checked={field.value}
+                                        onCheckedChange={(checked) => {
+                                            field.onChange(checked);
+                                        }}
+                                    >
+                                    </Checkbox>
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+
                     </div>
                 </div>
                 <div className="flex justify-end">

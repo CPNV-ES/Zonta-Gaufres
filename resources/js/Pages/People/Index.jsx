@@ -15,6 +15,9 @@ import { router } from "@inertiajs/react";
 
 import { PHONENUMBER_REGEX, EMAIL_REGEX } from "@/lib/regex";
 
+import { Checkbox } from "@/Components/ui/checkbox";
+
+
 const People = (base_people) => {
     const builder = new ColumnBuilder();
     const [people, setPeople] = useState(base_people.people);
@@ -35,6 +38,35 @@ const People = (base_people) => {
     };
 
     const columnHeaders = [
+        {
+            accessor: "select",
+            cell: ({ row }) => (
+                <Checkbox
+                    {...{
+                        checked:
+                            table.getIsAllRowsSelected() ||
+                            (table.getIsSomePageRowsSelected() && "indeterminate"),
+                        onCheckedChange: (value) =>
+                            table.toggleAllPageRowsSelected(!!value),
+                    }}
+                />
+            ),
+            cell: ({ row }) => {
+                const hasLivreurRole = row.original.types.some(
+                    (type) => type.name === "Livreur"
+                );
+
+                return hasLivreurRole ? (
+                    <Checkbox
+                        {...{
+                            checked: row.getIsSelected(),
+                            onCheckedChange: row.getToggleSelectedHandler(),
+                        }}
+                    />
+                ) : null;
+            },
+        },
+
         {
             accessor: "lastname",
             header: "Nom",
@@ -197,6 +229,15 @@ const People = (base_people) => {
         });
     };
 
+    const handleDevliverySheet = (rowSelection)=> {
+        const selectedRows = Object.keys(rowSelection).filter(key => rowSelection[key]);
+        if(selectedRows.length === 0){
+            return;
+        }
+        const selectedIds = selectedRows.map(row => people[row].id);
+        window.location.href=`/people/print_delivery_sheet?sheets=${selectedIds.join(",")}`;
+    };
+
     return (
         <MainLayout color="yellow" subject="Contacts">
             <Dialog
@@ -219,24 +260,37 @@ const People = (base_people) => {
             <DataTable
                 columns={columns}
                 inputData={people}
-                buttonsOptions={{
-                    icon: "plus",
-                    action: "Ajouter une personne",
-                    variant: "yellow",
-                    alwaysOn: true,
-                    handler: () => {
-                        setInput({
-                            firstname: "",
-                            lastname: "",
-                            email: "",
-                            company: "",
-                            phone_number: "",
-                            types: [],
-                        });
-                        setIsEditing(false);
-                        setIsDialogOpen(true);
+                buttonsOptions={[
+                    {
+                        id : "create_person",
+                        icon: "plus",
+                        action: "Ajouter une personne",
+                        variant: "yellow",
+                        alwaysOn: true,
+                        handler: () => {
+                            setInput({
+                                firstname: "",
+                                lastname: "",
+                                email: "",
+                                company: "",
+                                phone_number: "",
+                                roles: [],
+                            });
+                            setIsEditing(false);
+                            setIsDialogOpen(true);
+                        },
                     },
-                }}
+                    {
+                        id: "print_delivery_sheet",
+                        icon: "printer",
+                        action: "Imprimer",
+                        item:"fiche de livraison",
+                        itemPlural:"fiches de livraison",
+                        handler: handleDevliverySheet,
+                        variant: "yellow",
+                        alwaysOn: false
+                    },
+                ]}
             />
             <Dialog
                 title={

@@ -8,7 +8,7 @@ const DeliveryguysBigCard = ({ deliveryGuy }) => {
             <Timetable deliveries={deliveryGuy.orders_to_deliver}/>
             <div className="flex m-2">
                 <div className="flex flex-col h-full py-4 justify-evenly">
-                <h1 className="mt-4 text-2xl truncate" title={`${deliveryGuy.email}`}>{deliveryGuy.email}</h1>
+                <h1 className="mt-4 text-2xl truncate" title={`${deliveryGuy.fullname}`}>{deliveryGuy.fullname}</h1>
                     <div className="flex gap-2">
                         <span className="material-symbols-outlined">quick_reorder</span>
                         <span>

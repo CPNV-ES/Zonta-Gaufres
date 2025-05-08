@@ -22,7 +22,7 @@ const OrderCard = ({ order }) => {
                 </div>
                 <div className="flex gap-2">
                     <span className="material-symbols-outlined">person</span>
-                    <span>{order.buyer.email}</span>
+                    <span>{order.buyer.fullname}</span>
                 </div>
                 <div className="flex gap-2">
                     <span className="material-symbols-outlined">schedule</span>
