@@ -55,6 +55,13 @@ jobs:
         working-directory: ../PHPDesktop
         run: mv phpdesktop-chrome-130.1-php-8.3 zonta_gaufre
 
+      - name: add extensions to php.ini
+        working-directory: ../PHPDesktop/phpdesktop-chrome-130.1-php-8.3/php/
+        run: |
+          echo "extension=php_mbstring.dll" >> php.ini
+          echo "extension=php_xml.dll" >> php.ini
+          echo "extension=php_gd.dll" >> php.ini
+
       - name: generate zip file
         working-directory: ../PHPDesktop
         run: zip -r phpdesktop.zip zonta_gaufre/
