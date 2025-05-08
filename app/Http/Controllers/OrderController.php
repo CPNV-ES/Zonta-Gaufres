@@ -8,6 +8,8 @@ use App\Models\Order;
 use App\Models\Person;
 use App\Models\City;
 use App\Models\PaymentTypes;
+use App\Models\PersonType;
+use App\Enums\PersonTypesEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -17,9 +19,8 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::with('deliveryGuySchedule', 'contact', 'buyer', 'paymentType', 'address')->get();
+        $orders = Order::with('contact', 'buyer', 'paymentType', 'address')->get();
 
-        $orders->load('deliveryGuySchedule.person');
         $orders->load('address.city');
 
         $transformed = $orders->map(function ($order) {
@@ -32,19 +33,20 @@ class OrderController extends Controller
             return [
                 "invoice_id" => $order->id,
                 "company" => $order->buyer->company,
-                "client" => $order->buyer->firstname . ' ' . $order->buyer->lastname,
+                "client" => $order->buyer->fullname,
                 "address" => $order->address->street . ' ' . $order->address->street_number,
                 "zip_code" => $order->address->city->zip_code,
                 "city" => $order->address->city->name,
                 "note" => $order->remark,
                 "gifted_by" => $order->gifted_by,
-                "delivery_guy" => $order->deliveryGuySchedule !== null ? $order->deliveryGuySchedule->person->firstname . ' ' . $order->deliveryGuySchedule->person->lastname : "",
-                "time_slot" => $order->deliveryGuySchedule !== null ? $order->deliveryGuySchedule->start_delivery_time_window . ' - ' . $order->deliveryGuySchedule->end_delivery_time_window : "",
-                "contact" => $order->contact->firstname,
+                "time_slot" => "{$order->start_delivery_time} - {$order->end_delivery_time}",
+                "contact" => $order->contact->fullname ?? '',
                 "waffles_number" => $order->waffle_quantity,
                 "total" => $order->total_price(),
                 "status" => $order->invoiceStatus !== null ? $order->invoiceStatus->enum()->toArray() : [],
                 "payment_type" => $paymentType->toArray(),
+                "free" => $order->free,
+                "delivery_guy" => $order->deliveryGuy->fullname ?? '',
             ];
         });
 
@@ -58,10 +60,9 @@ class OrderController extends Controller
      */
     public function create()
     {
-        $contactPeopleNames = $this->getContactPeopleNames();
-
         return Inertia::render('Orders/Create', [
-            "contactPeopleNames" => $contactPeopleNames,
+            "contactPeopleNames" => $this->getContactPeopleNames(3),
+            "clientPeople" => $this->getContactPeopleNames(4),
         ]);
     }
 
@@ -77,7 +78,12 @@ class OrderController extends Controller
         $cityName = $addressData['city'];
         $zip = $addressData['npa'];
 
-        $person = Person::findOrCreate($personData);
+        if ($personData['select_user'] === "new") {
+            $person = Person::create($personData);
+            $person->personType()->attach(PersonType::where('name', PersonTypesEnum::CLIENT->name)->first());
+        } else {
+            $person = Person::find($personData['select_user']);
+        }
 
         $city = City::findOrCreate([
             'name' => $cityName,
@@ -88,7 +94,6 @@ class OrderController extends Controller
 
         $address = Address::findOrCreate(array_merge($addressData, ['city_id' => $city->id]));
 
-        $realDeliveryTime =  Order::calculateTimeDifference($orderData['start_delivery_time'], $orderData['end_delivery_time']);
 
         Order::create(array_merge($orderData, [
             'person_id' => $person->id,
@@ -96,7 +101,6 @@ class OrderController extends Controller
             'buyer_id' => $person->id,
             'payment_type_id' => PaymentTypes::where('name', PaymentTypesEnum::fromCase($orderData['payment'])->name)->first()->id,
             'contact_id' => $orderData['contact'],
-            'real_delivery_time' => $realDeliveryTime,
         ]));
 
         return redirect()->route('orders.index');
@@ -111,10 +115,10 @@ class OrderController extends Controller
         $order->update($request->all());
     }
 
-    private function getContactPeopleNames()
+    private function getContactPeopleNames(int $id)
     {
-        $contactPeople = Person::with('personType')->whereHas('personType', function (Builder $query) {
-            $query->where('person_types.id', 3);
+        $contactPeople = Person::with('personType')->whereHas('personType', function (Builder $query) use ($id) {
+            $query->where('person_types.id', $id);
         })->orderBy('lastname', 'asc')->get();
 
         $contactPeopleNames = [];
@@ -122,7 +126,7 @@ class OrderController extends Controller
         foreach ($contactPeople as $contactPerson) {
             $contactPerson = [
                 'id' => $contactPerson->id,
-                'name' => $contactPerson->lastname . ' ' . $contactPerson->firstname
+                'name' => $contactPerson->email
             ];
             array_push($contactPeopleNames, $contactPerson);
         }

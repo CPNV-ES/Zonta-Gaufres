@@ -10,13 +10,16 @@ use DateTime;
 class Order extends Model
 {
     use HasFactory;
+
+    public static $pricePerUnit = 2;
+
     protected $fillable = [
         'waffle_quantity',
         'date',
         'buyer_id',
         'contact_id',
         'address_id',
-        'delivery_guy_schedule_id',
+        'delivery_guy_id',
         'payment_type_id',
         'remark',
         'gifted_by',
@@ -26,35 +29,13 @@ class Order extends Model
         'total',
         'status_id',
         'payment_date',
+        'free',
     ];
 
-    public function total_price($price = 2)
+    public function total_price($price = null)
     {
+        $price = $price ?? self::$pricePerUnit;
         return $this->waffle_quantity * $price;
-    }
-
-    public static function calculateTimeDifference($startTime, $endTime)
-    {
-        $time1 = new DateTime($startTime);
-        $time2 = new DateTime($endTime);
-
-        // Convert times to seconds since midnight
-        $seconds1 = $time1->format('H') * 3600 + $time1->format('i') * 60 + $time1->format('s');
-        $seconds2 = $time2->format('H') * 3600 + $time2->format('i') * 60 + $time2->format('s');
-
-        // Calculate the difference in seconds, accounting for times spanning midnight
-        if ($seconds2 < $seconds1) {
-            $seconds2 += 24 * 3600; // Add 24 hours in seconds to the second time
-        }
-
-        $diffSeconds = $seconds2 - $seconds1;
-
-        // Convert the difference back to hours, minutes, and seconds
-        $hours = floor($diffSeconds / 3600);
-        $minutes = floor(($diffSeconds % 3600) / 60);
-        $seconds = $diffSeconds % 60;
-
-        return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
     }
 
     public function buyer()
@@ -73,9 +54,9 @@ class Order extends Model
     {
         return $this->belongsTo(InvoiceStatus::class, "status_id");
     }
-    public function deliveryGuySchedule()
+    public function deliveryGuy()
     {
-        return $this->belongsTo(DeliveryGuySchedule::class);
+        return $this->belongsTo(Person::class);
     }
     public function paymentType()
     {
@@ -171,14 +152,14 @@ class OrderCollection extends \Illuminate\Database\Eloquent\Collection
         $quantity = $invoice->waffle_quantity;
         $pricePerUnit = number_format($total / $quantity, 2, thousands_separator: ' ');
         $company = $invoice->buyer->company != null ? $invoice->buyer->company . '<br>' : '';
-        $fullname = $invoice->buyer->firstname . ' ' . $invoice->buyer->lastname;
+        $fullname = $invoice->buyer->fullname;
         $address = $invoice->address->street . ' ' . $invoice->address->number;
         $city =  $invoice->address->city->zip_code . ' ' . $invoice->address->city->name;
 
 
         setlocale(LC_TIME, 'fr_FR.utf8', 'fra');
 
-        $dateformat = utf8_encode(strftime('%e %B %Y', strtotime($date)));
+        $dateformat = (new DateTime($date))->format('d F Y');
         //https://stackoverflow.com/questions/9067892/how-to-align-two-elements-on-the-same-line-without-changing-html work maybe ?
 
         return "
@@ -205,7 +186,7 @@ class OrderCollection extends \Illuminate\Database\Eloquent\Collection
     {
         $total = number_format($invoice->total_price(), 2, thousands_separator: ' ');
         $company = $invoice->buyer->company != null ? "<b>" . $invoice->buyer->company . '</b><br>' : '';
-        $fullname = $invoice->buyer->firstname . ' ' . $invoice->buyer->lastname;
+        $fullname = $invoice->buyer->email;
         $address = $invoice->address->street . ' ' . $invoice->address->number;
         $city =  $invoice->address->city->zip_code . ' ' . $invoice->address->city->name;
         $infoSupp = $invoice->remark != null ? "<b> " . $invoice->remark . '</b><br>' : '';

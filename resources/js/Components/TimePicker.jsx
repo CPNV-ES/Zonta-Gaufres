@@ -19,7 +19,8 @@ const TimePicker = ({time, setTime, onValidate}) => {
             <input 
             type="time" 
             id="time"
-            className={`rounded-lg bg-gray-50 border text-gray-900  block flex-1 w-full text-sm p-2.5 outline-none ${isTimeValid? 'border-gray-300' : 'border-red-500'}`}            value={time}
+            className={`rounded-lg bg-gray-50 border text-gray-900  block flex-1 w-full text-sm p-2.5 outline-none ${isTimeValid? 'border-gray-300' : 'border-red-500'}`}
+            value={time}
             onChange={(e) => checkTime(e.target.value)}
             onKeyPress={(e) => {
                 if (e.key === 'Enter') {

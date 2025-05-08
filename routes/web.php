@@ -33,4 +33,5 @@ Route::get('/invoices/print_invoices', [InvoiceController::class, 'printInvoices
 Route::resource("deliveries", DeliveryController::class)->only(["index", "editAll"]);
 Route::get('/deliveries/print_labels', [DeliveryController::class, 'printLabels']);
 Route::resource("orders", OrderController::class)->only(["index", "store", "create", "update"]);
-Route::resource("people", PersonController::class)->only(["index", "store", "update"]);
+Route::resource("people", PersonController::class)->only(["index", "store", "update", "destroy"]);
+Route::get('/people/print_delivery_sheet', [PersonController::class, 'printDeliverySheet']);

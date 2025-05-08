@@ -10,9 +10,12 @@ const Index = (orders) => {
 
     const statusAvailable = () => {
         let statuses = [];
-        orders.orders.forEach(order => {
+        orders.orders.forEach((order) => {
             if (!statuses.find((el) => el.key === order.status.key)) {
-                statuses.push({ key: order.status.key, name: order.status.name });
+                statuses.push({
+                    key: order.status.key,
+                    name: order.status.name,
+                });
             }
         });
         return statuses;
@@ -20,9 +23,12 @@ const Index = (orders) => {
 
     const paymentTypesAvailable = () => {
         let paymentTypes = [];
-        orders.orders.forEach(order => {
+        orders.orders.forEach((order) => {
             if (!paymentTypes.find((el) => el.key === order.payment_type.key)) {
-                paymentTypes.push({ key: order.payment_type.key, name: order.payment_type.name });
+                paymentTypes.push({
+                    key: order.payment_type.key,
+                    name: order.payment_type.name,
+                });
             }
         });
         return paymentTypes;
@@ -30,8 +36,8 @@ const Index = (orders) => {
 
     const columnHeaders = [
         { accessor: "invoice_id", header: "#", type: "number" },
-        { accessor: "company", header: "Entreprise", type: "string" },
         { accessor: "client", header: "Client", type: "string" },
+        { accessor: "company", header: "Entreprise", type: "string" },
         { accessor: "address", header: "Adresse", type: "string" },
         { accessor: "zip_code", header: "NPA", type: "number" },
         { accessor: "city", header: "Localité", type: "string" },
@@ -39,12 +45,23 @@ const Index = (orders) => {
         { accessor: "gifted_by", header: "Offert par", type: "string" },
         { accessor: "delivery_guy", header: "Livreur", type: "string" },
         { accessor: "time_slot", header: "Plage horaire", type: "string" },
-        { accessor: "contact", header: "Contact année passée", type: "string" },
-        { accessor: "waffles_number", header: "Nombre de gaufres", type: "number" },
+        { accessor: "contact", header: "Personne de Contact", type: "string" },
+        {
+            accessor: "waffles_number",
+            header: "Nombre de gaufres",
+            type: "number",
+        },
         {
             accessor: "total",
             header: "Total",
-            cell: (info) => `${info.renderValue()} CHF`,
+            cell: (info) => {
+                const isFree = info.row.original.free; // Assuming `free` is a boolean in the row data
+                return (
+                    <span style={{ color: isFree ? "red" : "black" }}>
+                        {info.renderValue()} CHF
+                    </span>
+                );
+            },
             type: "number",
         },
         {
@@ -83,8 +100,8 @@ const Index = (orders) => {
                     icon: "plus",
                     action: "Créer une commande",
                     variant: "green",
-                    handler: (a) => window.location.href = "/orders/create",
-                    alwaysOn: true
+                    handler: (a) => (window.location.href = "/orders/create"),
+                    alwaysOn: true,
                 }}
                 onClickHandler={(row) => console.log(row.id)}
             />
