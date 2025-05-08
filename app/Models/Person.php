@@ -40,4 +40,25 @@ class Person extends BaseModel
     {
         return $this->hasMany(Order::class, 'contact_id');
     }
+
+    // public function delete()
+    // {
+    //     # Fucking cascade delete
+    //     foreach ($this->orders as $order) {
+    //         $order->delete();
+    //     }
+    //     foreach ($this->contacts as $contact) {
+    //         $contact->contact_id = null;
+    //         $contact->save();
+    //     }
+    //     foreach ($this->ordersToDeliver as $order) {
+    //         $order->delivery_guy_id = null;
+    //         $order->save();
+    //     }
+    //     foreach ($this->personType as $type) {
+    //         $this->personType()->detach($type);
+    //     }
+
+    //     return parent::delete();
+    // }
 }

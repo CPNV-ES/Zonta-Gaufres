@@ -29,8 +29,6 @@ final class AddressFactory extends Factory
         return [
             'street' => fake()->streetName(),
             'street_number' => fake()->buildingNumber(),
-            'country' => "Suisse",
-            'region' => fake()->cantonName(),
             'complement' => fake()->optional()->word(),
             'city_id' => \App\Models\City::factory(),
         ];

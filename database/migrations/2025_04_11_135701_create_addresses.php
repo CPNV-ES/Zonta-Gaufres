@@ -22,13 +22,11 @@ return new class extends Migration
             $table->id();
             $table->string('street');
             $table->string('street_number');
-            $table->string('country');
-            $table->string('region');
             $table->string('complement')->nullable();
             $table->unsignedBigInteger('city_id');
             $table->timestamps();
             $table->foreign('city_id')->references('id')->on('cities');
-            $table->unique(['street', 'street_number', 'country', 'region', 'complement', 'city_id'], 'address_unique');
+            $table->unique(['street', 'street_number', 'complement', 'city_id'], 'address_unique');
         });
     }
 
