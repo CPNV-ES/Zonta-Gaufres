@@ -274,7 +274,7 @@ const People = (base_people) => {
                                 email: "",
                                 company: "",
                                 phone_number: "",
-                                roles: [],
+                                types: [],
                             });
                             setIsEditing(false);
                             setIsDialogOpen(true);
