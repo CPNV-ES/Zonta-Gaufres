@@ -168,7 +168,7 @@ const People = (base_people) => {
     };
 
     const handleDelete = (person) => {
-        router.delete(`/people/${person.id}`, {
+        router.post(`/people/${person.id}`, { _method: "DELETE" }, {
             onSuccess: () => {
                 window.location.reload();
             },
@@ -205,7 +205,7 @@ const People = (base_people) => {
         };
 
         if (isEditing) {
-            router.put(`/people/${currentPersonId}`, payload, {
+            router.post(`/people/${currentPersonId}`, { ...payload, _method: 'PUT' }, {
                 onSuccess: () => {
                     window.location.reload();
                 },
