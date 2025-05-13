@@ -8,7 +8,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
-
+//TODO : Take care of the problem of double redirection on store method
 class ParameterController extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
@@ -47,8 +47,34 @@ class ParameterController extends BaseController
     }
     public function restore()
     {
-        //TODO
+        $backupPath = $_GET["path"];
 
-        return redirect()->route('orders.index');
+        // Check if a file exists in the directory containing "backup" and ending with ".sqlite"
+        $files = glob($backupPath . "\backup*.sqlite");
+
+        if (empty($files)) {
+            // No matching file found
+            return redirect()
+                ->back()
+                ->withErrors(["backupPath" => "Aucun fichier valide n'a été trouvé dans le chemin spécifié."]);
+        }
+
+        //restore the file based of the most recent one
+        usort($files, function ($a, $b) {
+            return filemtime($b) - filemtime($a);
+        });
+
+        try {
+            copy($files[0], base_path("database/database.sqlite"));
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->withErrors(["backupPath" => "Une erreur s'est produite lors de la restauration : " . $e->getMessage()]);
+        }
+
+        //redirect back to parameters with success message
+        return redirect()
+            ->route('parameters.index')
+            ->with("success", "La restauration a été effectuée avec succès avec le fichier : " . $files[0]);
     }
 }
