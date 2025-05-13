@@ -1,28 +1,41 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import MainLayout from "../../Layouts/MainLayout";
 import { z } from "zod";
 import { Input } from "@/Components/ui/input.jsx";
 import { Button } from "@/Components/ui/button";
-
 import {
     Form,
     FormControl,
     FormField,
     FormItem,
     FormLabel,
-    FormMessage,
     FormDescription,
 } from "@/Components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { usePage } from "@inertiajs/react"; // Import Inertia's usePage hook
 
 const Index = () => {
+    const { props } = usePage(); // Access Inertia props
+    const { success, errors } = props; // Extract success and errors messages
+
     const formSchema = z.object({
-        backupPath: z.string().min(1, {
-            message: "Le chemin de sauvegarde est requis",
-        }),
+        backupPath: z
+            .string()
+            .min(1, {
+                message: "Le chemin de sauvegarde est requis",
+            })
+            .refine((path) => !path.endsWith("\\")   , {
+                message: "Le chemin ne doit pas se terminer par un slash (\\)",
+            })
+            .refine((path) => !path.endsWith("/")   , {
+                message: "Le chemin ne doit pas se terminer par un slash (/)",
+            })
+            .refine((path) => !/\.\w+$/.test(path), {
+                message: "Le chemin ne doit pas contenir un fichier (pas d'extension de fichier)",
+            }),
     });
 
     const form = useForm({
@@ -45,9 +58,31 @@ const Index = () => {
                 console.error(error);
             });
     };
+    const handleRestore = () => {
+        const backupPath = form.getValues("backupPath");
+        window.location.href = `/parameters/restore?path=${encodeURIComponent(
+            backupPath
+        )}`;
+    };
 
     return (
         <MainLayout color="purple" subject="Paramètres">
+            <div className="p-4">
+                {/* Display success message */}
+                {success && (
+                    <div className="bg-green-100 text-green-800 p-4 rounded mb-4">
+                        {success}
+                    </div>
+                )}
+                {/* Display error messages */}
+                {errors && (
+                    <div className="bg-red-100 text-red-800 p-4 rounded mb-4">
+                        {Object.values(errors).map((errorArray, index) => (
+                            <p key={index}>{errorArray[0]}</p>
+                        ))}
+                    </div>
+                )}
+            </div>
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
@@ -63,18 +98,17 @@ const Index = () => {
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Chemin de sauvegarde complet*</FormLabel>
-
                                         <FormControl>
                                             <Input
                                                 placeholder="Chemin de sauvegarde (absolu)"
                                                 {...field} // Bind the input to react-hook-form
                                             />
                                         </FormControl>
-                                        Sauvegarder les données sur le chemin spécifié en ou de les restaurer à partir du chemin spécifié.
-                                        Soyez sur que le fichier est nommé "backup.json" dans le cas d'une restauration.
-                                        <FormMessage />
                                         <FormDescription>
-                                        Ex : C:\Users\John\Desktop\pdf
+                                        Sauvegarder les données sur le chemin spécifié ou de les restaurer à partir du chemin spécifié.
+                                        Soyez sur que le fichier est nommé "backup*date*.sqlite" dans le cas d'une restauration.
+                                        Ne mettez pas de slash à la fin du chemin.
+                                        Ex : C:\Users\John\Desktop\backupZonta
                                     </FormDescription>
                                     </FormItem>
                                 )}
@@ -91,15 +125,14 @@ const Index = () => {
                         >
                             Annuler
                         </Button>
-                        <Button className="bg-green-500" type="submit">
+                        <Button className="bg-green-500" type="submit"  disabled={!form.formState.isValid} >
                             Sauvegarder les données
                         </Button>
                         <Button
                             className="bg-blue-500"
                             type="button"
-                            onClick={() =>
-                                (window.location.href = "/parameters/restore")
-                            }
+                            onClick={handleRestore}
+                            disabled={!form.formState.isValid} // Disable the button if the form is invalid
                         >
                             Restaurer les données
                         </Button>
