@@ -17,7 +17,7 @@ class PersonController extends Controller
 
         $transformed = $people->map(function ($person) {
             $types = $person->personType->map(function ($type) {
-                return PersonTypesEnum::fromCase($type->name)->toArray();
+                return $type->enum()->toArray();
             });
 
             return [
@@ -55,7 +55,7 @@ class PersonController extends Controller
             $person = Person::create($request->all());
 
             foreach ($request->types as $type) {
-                $person->personType()->attach(PersonType::where('name', PersonTypesEnum::fromCase($type)->name)->first());
+                $person->personType()->attach(PersonType::fromEnum(PersonTypesEnum::fromCase($type))->first());
             }
         });
     }
@@ -79,7 +79,7 @@ class PersonController extends Controller
 
             $person->personType()->detach();
             foreach ($request->types as $type) {
-                $person->personType()->attach(PersonType::where('name', PersonTypesEnum::fromCase($type)->name)->first());
+                $person->personType()->attach(PersonType::fromEnum(PersonTypesEnum::fromCase($type))->first());
             }
         });
     }

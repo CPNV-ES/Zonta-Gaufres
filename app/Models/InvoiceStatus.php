@@ -19,4 +19,9 @@ class InvoiceStatus extends Model
     {
         return InvoiceStatusEnum::fromCase($this->name);
     }
+
+    public function scopeFromEnum($query, InvoiceStatusEnum $enum)
+    {
+        return $query->where('name', $enum->name);
+    }
 }

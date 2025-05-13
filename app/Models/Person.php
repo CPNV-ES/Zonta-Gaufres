@@ -152,7 +152,7 @@ class PersonCollection extends Collection
         if ($orders->isEmpty()) {
             return "
                         <tr>
-                            <td colspan='11' style='text-align:center;'>Aucune commande trouvée pour $person->fullname</td>
+                            <td colspan='12' style='text-align:center;'>Aucune commande trouvée pour $person->fullname</td>
                         </tr>
                     </table>
                 </div>";
