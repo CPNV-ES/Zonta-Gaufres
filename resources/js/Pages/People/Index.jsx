@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MainLayout from "../../Layouts/MainLayout";
 
 import { ColumnBuilder } from "@/Builder/ColumnBuilder";
@@ -15,12 +15,19 @@ import { router } from "@inertiajs/react";
 
 import { PHONENUMBER_REGEX, EMAIL_REGEX } from "@/lib/regex";
 
-const People = (people) => {
+import { Checkbox } from "@/Components/ui/checkbox";
+
+
+const People = (base_people) => {
     const builder = new ColumnBuilder();
-    
+    const [people, setPeople] = useState(base_people.people);
+    const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
+        useState(false);
+    const [currentDeletePerson, setCurrentDeletePerson] = useState(null);
+
     const typesAvailable = () => {
         let types = [];
-        people.people.forEach(person => {
+        people.forEach((person) => {
             return person.types.map((type) => {
                 if (!types.find((el) => el.key === type.key)) {
                     types.push({ key: type.key, name: type.name });
@@ -28,9 +35,38 @@ const People = (people) => {
             });
         });
         return types;
-    }
+    };
 
     const columnHeaders = [
+        {
+            accessor: "select",
+            cell: ({ row }) => (
+                <Checkbox
+                    {...{
+                        checked:
+                            table.getIsAllRowsSelected() ||
+                            (table.getIsSomePageRowsSelected() && "indeterminate"),
+                        onCheckedChange: (value) =>
+                            table.toggleAllPageRowsSelected(!!value),
+                    }}
+                />
+            ),
+            cell: ({ row }) => {
+                const hasLivreurRole = row.original.types.some(
+                    (type) => type.name === "Livreur"
+                );
+
+                return hasLivreurRole ? (
+                    <Checkbox
+                        {...{
+                            checked: row.getIsSelected(),
+                            onCheckedChange: row.getToggleSelectedHandler(),
+                        }}
+                    />
+                ) : null;
+            },
+        },
+
         {
             accessor: "lastname",
             header: "Nom",
@@ -76,10 +112,16 @@ const People = (people) => {
             header: "Actions",
             cell: (row) => (
                 <div className="flex gap-2">
-                    <button
-                        onClick={() => handleEdit(row.row.original)}
-                    >
+                    <button onClick={() => handleEdit(row.row.original)}>
                         <Icon name="pencil" />
+                    </button>
+                    <button
+                        onClick={() => {
+                            setCurrentDeletePerson(row.row.original);
+                            setIsDeleteConfirmationOpen(true);
+                        }}
+                    >
+                        <Icon name="trash" />
                     </button>
                 </div>
             ),
@@ -89,10 +131,10 @@ const People = (people) => {
     const columns = builder.buildColumns(columnHeaders);
 
     const OPTIONS = [
-        { label: "Bénévole", value: "Bénévole" },
-        { label: "Livreur", value: "Livreur" },
-        { label: "Admin", value: "Admin" },
-        { label: "Client", value: "Client" },
+        { label: "Bénévole", value: "STAFF" },
+        { label: "Livreur", value: "DELIVERY_GUY" },
+        { label: "Admin", value: "ADMIN" },
+        { label: "Client", value: "CLIENT" },
     ];
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -102,7 +144,7 @@ const People = (people) => {
         email: "",
         company: "",
         phone_number: "",
-        roles: [],
+        types: [],
     });
     const [isEditing, setIsEditing] = useState(false);
     const [currentPersonId, setCurrentPersonId] = useState(null);
@@ -115,29 +157,36 @@ const People = (people) => {
             email: person.email,
             company: person.company,
             phone_number: person.phone_number,
-            roles: person.types.map((role) => role.name),
+            types: person.types.map((type) => ({
+                label: type.name,
+                value: type.key,
+            })),
         });
         setCurrentPersonId(person.id);
         setIsEditing(true);
         setIsDialogOpen(true);
     };
 
+    const handleDelete = (person) => {
+        router.post(`/people/${person.id}`, { _method: "DELETE" }, {
+            onSuccess: () => {
+                window.location.reload();
+            },
+        });
+    };
+
     const validateInputs = () => {
         const newErrors = {};
-        if (!input.firstname) newErrors.firstname = "Prénom est requis";
-        if (!input.lastname) newErrors.lastname = "Nom est requis";
         if (!input.email) {
             newErrors.email = "Email est requis";
         } else if (!EMAIL_REGEX.test(input.email)) {
             newErrors.email = "Email invalide";
         }
-        if (!input.phone_number) {
-            newErrors.phone_number = "Téléphone est requis";
-        } else if (!PHONENUMBER_REGEX.test(input.phone_number)) {
+        if (!PHONENUMBER_REGEX.test(input.phone_number) && input.phone_number) {
             newErrors.phone_number = "Téléphone invalide";
         }
-        if (input.roles.length === 0) {
-            newErrors.roles = "Au moins un rôle est requis";
+        if (input.types.length === 0) {
+            newErrors.types = "Au moins un rôle est requis";
         }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -146,23 +195,26 @@ const People = (people) => {
     const handleSubmit = () => {
         if (!validateInputs()) return;
 
+        const payload = {
+            firstname: input.firstname,
+            lastname: input.lastname,
+            email: input.email,
+            company: input.company,
+            phone_number: input.phone_number,
+            types: input.types.map((role) => role.value),
+        };
+
         if (isEditing) {
-            router.put(`/people/${currentPersonId}`, {
-                firstname: input.firstname,
-                lastname: input.lastname,
-                email: input.email,
-                company: input.company,
-                phone_number: input.phone_number,
-                roles: input.roles,
+            router.post(`/people/${currentPersonId}`, { ...payload, _method: 'PUT' }, {
+                onSuccess: () => {
+                    window.location.reload();
+                },
             });
         } else {
-            router.post("/people", {
-                firstname: input.firstname,
-                lastname: input.lastname,
-                email: input.email,
-                company: input.company,
-                phone_number: input.phone_number,
-                roles: input.roles,
+            router.post("/people", payload, {
+                onSuccess: () => {
+                    window.location.reload();
+                },
             });
         }
         setIsDialogOpen(false);
@@ -173,34 +225,72 @@ const People = (people) => {
             email: "",
             company: "",
             phone_number: "",
-            roles: [],
+            types: [],
         });
-        window.location.reload();
+    };
+
+    const handleDevliverySheet = (rowSelection)=> {
+        const selectedRows = Object.keys(rowSelection).filter(key => rowSelection[key]);
+        if(selectedRows.length === 0){
+            return;
+        }
+        const selectedIds = selectedRows.map(row => people[row].id);
+        window.location.href=`/people/print_delivery_sheet?sheets=${selectedIds.join(",")}`;
     };
 
     return (
-        <MainLayout color="yellow" subject="Personnel">
+        <MainLayout color="yellow" subject="Contacts">
+            <Dialog
+                title="Êtes-vous sûr de vouloir supprimer cette personne ?"
+                buttonLabel="Supprimer"
+                buttonVariant="red"
+                action={() => {
+                    handleDelete(currentDeletePerson);
+                    setIsDeleteConfirmationOpen(false);
+                }}
+                isOpen={isDeleteConfirmationOpen}
+                setIsOpen={setIsDeleteConfirmationOpen}
+            >
+                <p className="text-sm text-gray-500">
+                    Cette action est définitive. Une fois supprimée, cette
+                    personne ne pourra pas être récupérée. Si elle est associée
+                    à une commande, celle-ci sera également supprimée.
+                </p>
+            </Dialog>
             <DataTable
                 columns={columns}
-                inputData={people.people}
-                buttonsOptions={{
-                    icon: "plus",
-                    action: "Ajouter une personne",
-                    variant: "yellow",
-                    alwaysOn: true,
-                    handler: () => {
-                        setInput({
-                            firstname: "",
-                            lastname: "",
-                            email: "",
-                            company: "",
-                            phone_number: "",
-                            roles: [],
-                        });
-                        setIsEditing(false);
-                        setIsDialogOpen(true);
+                inputData={people}
+                buttonsOptions={[
+                    {
+                        id : "create_person",
+                        icon: "plus",
+                        action: "Ajouter une personne",
+                        variant: "yellow",
+                        alwaysOn: true,
+                        handler: () => {
+                            setInput({
+                                firstname: "",
+                                lastname: "",
+                                email: "",
+                                company: "",
+                                phone_number: "",
+                                types: [],
+                            });
+                            setIsEditing(false);
+                            setIsDialogOpen(true);
+                        },
                     },
-                }}
+                    {
+                        id: "print_delivery_sheet",
+                        icon: "printer",
+                        action: "Imprimer",
+                        item:"fiche de livraison",
+                        itemPlural:"fiches de livraison",
+                        handler: handleDevliverySheet,
+                        variant: "yellow",
+                        alwaysOn: false
+                    },
+                ]}
             />
             <Dialog
                 title={
@@ -213,17 +303,6 @@ const People = (people) => {
                 setIsOpen={setIsDialogOpen}
             >
                 <Input
-                    id="firstname"
-                    placeholder="Prénom"
-                    value={input.firstname}
-                    onChange={(e) =>
-                        setInput({ ...input, firstname: e.target.value })
-                    }
-                />
-                {errors.firstname && (
-                    <p className="text-red-500">{errors.firstname}</p>
-                )}
-                <Input
                     id="lastname"
                     placeholder="Nom"
                     value={input.lastname}
@@ -233,6 +312,17 @@ const People = (people) => {
                 />
                 {errors.lastname && (
                     <p className="text-red-500">{errors.lastname}</p>
+                )}
+                <Input
+                    id="firstname"
+                    placeholder="Prénom"
+                    value={input.firstname}
+                    onChange={(e) =>
+                        setInput({ ...input, firstname: e.target.value })
+                    }
+                />
+                {errors.firstname && (
+                    <p className="text-red-500">{errors.firstname}</p>
                 )}
                 <Input
                     id="email"
@@ -271,15 +361,15 @@ const People = (people) => {
                             Aucun rôle trouvé
                         </p>
                     }
-                    inputProps={input.roles}
-                    value={input.roles.map((role) =>
-                        OPTIONS.find((el) => el.value === role)
+                    inputProps={input.types}
+                    value={input.types.map((role) =>
+                        OPTIONS.find((el) => el.value === role.value)
                     )}
                     onChange={(e) => {
-                        setInput({ ...input, roles: e.map((el) => el.value) });
+                        setInput({ ...input, types: e });
                     }}
                 />
-                {errors.roles && <p className="text-red-500">{errors.roles}</p>}
+                {errors.types && <p className="text-red-500">{errors.types}</p>}
             </Dialog>
         </MainLayout>
     );

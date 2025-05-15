@@ -10,6 +10,9 @@ use DateTime;
 class Order extends Model
 {
     use HasFactory;
+
+    public static $pricePerUnit = 2;
+
     protected $fillable = [
         'waffle_quantity',
         'date',
@@ -26,10 +29,12 @@ class Order extends Model
         'total',
         'status_id',
         'payment_date',
+        'free',
     ];
 
-    public function total_price($price = 2)
+    public function total_price($price = null)
     {
+        $price = $price ?? self::$pricePerUnit;
         return $this->waffle_quantity * $price;
     }
 
@@ -147,7 +152,7 @@ class OrderCollection extends \Illuminate\Database\Eloquent\Collection
         $quantity = $invoice->waffle_quantity;
         $pricePerUnit = number_format($total / $quantity, 2, thousands_separator: ' ');
         $company = $invoice->buyer->company != null ? $invoice->buyer->company . '<br>' : '';
-        $fullname = $invoice->buyer->firstname . ' ' . $invoice->buyer->lastname;
+        $fullname = $invoice->buyer->fullname;
         $address = $invoice->address->street . ' ' . $invoice->address->number;
         $city =  $invoice->address->city->zip_code . ' ' . $invoice->address->city->name;
 
@@ -181,7 +186,7 @@ class OrderCollection extends \Illuminate\Database\Eloquent\Collection
     {
         $total = number_format($invoice->total_price(), 2, thousands_separator: ' ');
         $company = $invoice->buyer->company != null ? "<b>" . $invoice->buyer->company . '</b><br>' : '';
-        $fullname = $invoice->buyer->firstname . ' ' . $invoice->buyer->lastname;
+        $fullname = $invoice->buyer->email;
         $address = $invoice->address->street . ' ' . $invoice->address->number;
         $city =  $invoice->address->city->zip_code . ' ' . $invoice->address->city->name;
         $infoSupp = $invoice->remark != null ? "<b> " . $invoice->remark . '</b><br>' : '';

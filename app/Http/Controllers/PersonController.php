@@ -44,18 +44,18 @@ class PersonController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'firstname' => 'required',
-            'lastname' => 'required',
+            'firstname' => 'nullable',
+            'lastname' => 'nullable',
             'company' => 'nullable',
-            'email' => 'nullable|email',
-            'phone_number' => 'required',
-            'roles' => 'required|array|min:1',
+            'email' => 'required|email',
+            'phone_number' => 'nullable',
+            'types' => 'required|array|min:1',
         ]);
         DB::transaction(function () use ($request) {
             $person = Person::create($request->all());
 
-            foreach ($request->roles as $type) {
-                $person->personType()->attach(PersonType::where('name', PersonTypesEnum::from($type)->name)->first());
+            foreach ($request->types as $type) {
+                $person->personType()->attach(PersonType::where('name', PersonTypesEnum::fromCase($type)->name)->first());
             }
         });
     }
@@ -66,11 +66,11 @@ class PersonController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'firstname' => 'required',
-            'lastname' => 'required',
-            'email' => 'nullable|email',
+            'firstname' => 'nullable',
+            'lastname' => 'nullable',
+            'email' => 'email',
             'company' => 'nullable',
-            'phone_number' => 'required',
+            'phone_number' => 'nullable',
         ]);
 
         DB::transaction(function () use ($request, $id) {
@@ -78,9 +78,24 @@ class PersonController extends Controller
             $person->update($request->all());
 
             $person->personType()->detach();
-            foreach ($request->roles as $type) {
-                $person->personType()->attach(PersonType::where('name', PersonTypesEnum::from($type)->name)->first());
+            foreach ($request->types as $type) {
+                $person->personType()->attach(PersonType::where('name', PersonTypesEnum::fromCase($type)->name)->first());
             }
         });
+    }
+
+    public function printDeliverySheet(Request $request)
+    {
+        $people = Person::findMany(explode(',', $request->query('sheets')));
+        return $people->generateSheetPDF()->download('delivery_sheet.pdf');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        $person = Person::findOrFail($id);
+        $person->delete();
     }
 }

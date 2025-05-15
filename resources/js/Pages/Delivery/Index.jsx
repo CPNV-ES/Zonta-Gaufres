@@ -82,9 +82,9 @@ const Deliveries = ({ initDeliveries }) => {
             const tmpdelivery = {
                 'delivery_id': d.id,
                 'delivery_guy': d.delivery_guy
-                ? `${d.delivery_guy.firstname} ${d.delivery_guy.lastname}`
+                ? `${d.delivery_guy.fullname}`
                 : "Aucun livreur",
-                'buyer': `${d.buyer.firstname} ${d.buyer.lastname}`,
+                'buyer': `${d.buyer.fullname}`,
                 'company': d.buyer.company,
                 'address': `${d.address.street} ${d.address.street_number}`,
                 'postal_code': d.address.city.zip_code,
@@ -130,13 +130,7 @@ const Deliveries = ({ initDeliveries }) => {
                         handler: handleLabelsPrint,
                         alwaysOn: false
                     },
-                    {
-                        id: "print_delivery_sheet",
-                        icon: "printer",
-                        action: "Imprimer des fiches de livraions",
-                        variant: "blue",
-                        alwaysOn: true
-                    },
+
                 ]}
             />
         </MainLayout>

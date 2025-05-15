@@ -22,20 +22,19 @@ return new class extends Migration
         });
         Schema::create('people', function (Blueprint $table) {
             $table->id();
-            $table->string('firstname');
-            $table->string('lastname');
+            $table->string('firstname')->nullable();
+            $table->string('lastname')->nullable();
             $table->string('email')->nullable();
             $table->string('company')->nullable();
-            $table->string('phone_number');
+            $table->string('phone_number')->nullable();
             $table->timestamps();
-            $table->unique(['firstname', 'lastname', 'phone_number'], 'people_unique');
         });
         Schema::create('person_person_type', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('person_id');
             $table->unsignedBigInteger('person_type_id')->default(4);
             $table->timestamps();
-            $table->foreign('person_id')->references('id')->on('people');
+            $table->foreign('person_id')->references('id')->on('people')->onDelete('cascade');
             $table->foreign('person_type_id')->references('id')->on('person_types');
             $table->index('person_id', 'IDX_6BD38C8A217BBB47');
             $table->index('person_type_id', 'IDX_6BD38C8AE7D23F1A');

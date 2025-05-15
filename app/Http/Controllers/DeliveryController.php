@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PersonTypesEnum;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -30,9 +31,7 @@ class DeliveryController extends Controller
     {
         return Inertia::render('Delivery/Edit', [
             'initOrders' => Order::with('address.city', 'buyer')->whereNull("delivery_guy_id")->get(),
-            'deliveryGuys' => Person::whereHas('personType', function ($query) {
-                $query->where('name', 'DELIVERY_GUY');
-            })->with(['ordersToDeliver.address.city'])->get(),
+            'deliveryGuys' => Person::hasType(PersonTypesEnum::DELIVERY_GUY)->with(['ordersToDeliver.address.city'])->get(),
         ]);
     }
 
