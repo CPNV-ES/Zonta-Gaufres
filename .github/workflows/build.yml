@@ -51,6 +51,13 @@ jobs:
       - name: Copy PHP desktop config
         run: cp settings.json ../PHPDesktop/phpdesktop-chrome-130.1-php-8.3/settings.json
 
+      - name: add extensions to php.ini
+        working-directory: ../PHPDesktop/phpdesktop-chrome-130.1-php-8.3/php
+        run: |
+          echo "extension=php_mbstring.dll" >> php.ini
+          echo "extension=php_xml.dll" >> php.ini
+          echo "extension=php_gd.dll" >> php.ini
+
       - name: rename phpdesktop
         working-directory: ../PHPDesktop
         run: mv phpdesktop-chrome-130.1-php-8.3 zonta_gaufre

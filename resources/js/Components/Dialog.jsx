@@ -15,6 +15,7 @@ const Dialog = ({
     title,
     description,
     buttonLabel,
+    buttonVariant = "default",
     triggerLabel,
     action,
     onClose,
@@ -44,6 +45,7 @@ const Dialog = ({
                             action() && setIsOpen(false);
                         }}
                         type="submit"
+                        variant={buttonVariant}
                     >
                         {buttonLabel}
                     </Button>

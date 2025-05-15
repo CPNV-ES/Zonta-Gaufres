@@ -16,9 +16,15 @@ import { router } from "@inertiajs/react";
 import { PHONENUMBER_REGEX, EMAIL_REGEX } from "@/lib/regex";
 import { set } from "date-fns";
 
+import { Checkbox } from "@/Components/ui/checkbox";
+
+
 const People = (base_people) => {
     const builder = new ColumnBuilder();
     const [people, setPeople] = useState(base_people.people);
+    const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
+        useState(false);
+    const [currentDeletePerson, setCurrentDeletePerson] = useState(null);
 
     const typesAvailable = () => {
         let types = [];
@@ -33,6 +39,35 @@ const People = (base_people) => {
     };
 
     const columnHeaders = [
+        {
+            accessor: "select",
+            cell: ({ row }) => (
+                <Checkbox
+                    {...{
+                        checked:
+                            table.getIsAllRowsSelected() ||
+                            (table.getIsSomePageRowsSelected() && "indeterminate"),
+                        onCheckedChange: (value) =>
+                            table.toggleAllPageRowsSelected(!!value),
+                    }}
+                />
+            ),
+            cell: ({ row }) => {
+                const hasLivreurRole = row.original.types.some(
+                    (type) => type.name === "Livreur"
+                );
+
+                return hasLivreurRole ? (
+                    <Checkbox
+                        {...{
+                            checked: row.getIsSelected(),
+                            onCheckedChange: row.getToggleSelectedHandler(),
+                        }}
+                    />
+                ) : null;
+            },
+        },
+
         {
             accessor: "lastname",
             header: "Nom",
@@ -81,6 +116,14 @@ const People = (base_people) => {
                     <button onClick={() => handleEdit(row.row.original)}>
                         <Icon name="pencil" />
                     </button>
+                    <button
+                        onClick={() => {
+                            setCurrentDeletePerson(row.row.original);
+                            setIsDeleteConfirmationOpen(true);
+                        }}
+                    >
+                        <Icon name="trash" />
+                    </button>
                 </div>
             ),
         },
@@ -125,6 +168,14 @@ const People = (base_people) => {
         setIsDialogOpen(true);
     };
 
+    const handleDelete = (person) => {
+        router.post(`/people/${person.id}`, { _method: "DELETE" }, {
+            onSuccess: () => {
+                window.location.reload();
+            },
+        });
+    };
+
     const validateInputs = () => {
         const newErrors = {};
         if (!input.email) {
@@ -155,7 +206,7 @@ const People = (base_people) => {
         };
 
         if (isEditing) {
-            router.put(`/people/${currentPersonId}`, payload, {
+            router.post(`/people/${currentPersonId}`, { ...payload, _method: 'PUT' }, {
                 onSuccess: () => {
                     window.location.reload();
                 },
@@ -179,29 +230,68 @@ const People = (base_people) => {
         });
     };
 
+    const handleDevliverySheet = (rowSelection)=> {
+        const selectedRows = Object.keys(rowSelection).filter(key => rowSelection[key]);
+        if(selectedRows.length === 0){
+            return;
+        }
+        const selectedIds = selectedRows.map(row => people[row].id);
+        window.location.href=`/people/print_delivery_sheet?sheets=${selectedIds.join(",")}`;
+    };
+
     return (
         <MainLayout color="yellow" subject="Contacts">
+            <Dialog
+                title="Êtes-vous sûr de vouloir supprimer cette personne ?"
+                buttonLabel="Supprimer"
+                buttonVariant="red"
+                action={() => {
+                    handleDelete(currentDeletePerson);
+                    setIsDeleteConfirmationOpen(false);
+                }}
+                isOpen={isDeleteConfirmationOpen}
+                setIsOpen={setIsDeleteConfirmationOpen}
+            >
+                <p className="text-sm text-gray-500">
+                    Cette action est définitive. Une fois supprimée, cette
+                    personne ne pourra pas être récupérée. Si elle est associée
+                    à une commande, celle-ci sera également supprimée.
+                </p>
+            </Dialog>
             <DataTable
                 columns={columns}
                 inputData={people}
-                buttonsOptions={{
-                    icon: "plus",
-                    action: "Ajouter une personne",
-                    variant: "yellow",
-                    alwaysOn: true,
-                    handler: () => {
-                        setInput({
-                            firstname: "",
-                            lastname: "",
-                            email: "",
-                            company: "",
-                            phone_number: "",
-                            types: [],
-                        });
-                        setIsEditing(false);
-                        setIsDialogOpen(true);
+                buttonsOptions={[
+                    {
+                        id : "create_person",
+                        icon: "plus",
+                        action: "Ajouter une personne",
+                        variant: "yellow",
+                        alwaysOn: true,
+                        handler: () => {
+                            setInput({
+                                firstname: "",
+                                lastname: "",
+                                email: "",
+                                company: "",
+                                phone_number: "",
+                                types: [],
+                            });
+                            setIsEditing(false);
+                            setIsDialogOpen(true);
+                        },
                     },
-                }}
+                    {
+                        id: "print_delivery_sheet",
+                        icon: "printer",
+                        action: "Imprimer",
+                        item:"fiche de livraison",
+                        itemPlural:"fiches de livraison",
+                        handler: handleDevliverySheet,
+                        variant: "yellow",
+                        alwaysOn: false
+                    },
+                ]}
             />
             <Dialog
                 title={

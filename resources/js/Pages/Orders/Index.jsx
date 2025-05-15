@@ -45,7 +45,7 @@ const Index = (orders) => {
         { accessor: "gifted_by", header: "Offert par", type: "string" },
         { accessor: "delivery_guy", header: "Livreur", type: "string" },
         { accessor: "time_slot", header: "Plage horaire", type: "string" },
-        { accessor: "contact", header: "Contact année passée", type: "string" },
+        { accessor: "contact", header: "Personne de Contact", type: "string" },
         {
             accessor: "waffles_number",
             header: "Nombre de gaufres",
@@ -54,7 +54,14 @@ const Index = (orders) => {
         {
             accessor: "total",
             header: "Total",
-            cell: (info) => `${info.renderValue()} CHF`,
+            cell: (info) => {
+                const isFree = info.row.original.free; // Assuming `free` is a boolean in the row data
+                return (
+                    <span style={{ color: isFree ? "red" : "black" }}>
+                        {info.renderValue()} CHF
+                    </span>
+                );
+            },
             type: "number",
         },
         {

@@ -30,7 +30,6 @@ const Navbar = ({ color, subject }) => {
             color: "red",
             destination: "/invoices",
         },
-
     ];
 
     useEffect(() => {
@@ -88,7 +87,7 @@ const Navbar = ({ color, subject }) => {
                 style={{ maxWidth: `${maxNavWidth}px` }}
             >
                 <NavIcon name="Paramètres" icon="[mdi--cog]" destination={"/parameters"} color="purple" />
-            </div>
+                </div>
         </nav>
     );
 };
