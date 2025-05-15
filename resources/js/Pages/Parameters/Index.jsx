@@ -21,126 +21,185 @@ const Index = () => {
     const { props } = usePage(); // Access Inertia props
     const { success, errors } = props; // Extract success and errors messages
 
-    const formSchema = z.object({
-        backupPath: z
-            .string()
-            .min(1, {
-                message: "Le chemin de sauvegarde est requis",
-            })
-            .refine((path) => !path.endsWith("\\")   , {
-                message: "Le chemin ne doit pas se terminer par un slash (\\)",
-            })
-            .refine((path) => !path.endsWith("/")   , {
-                message: "Le chemin ne doit pas se terminer par un slash (/)",
-            })
-            .refine((path) => !/\.\w+$/.test(path), {
-                message: "Le chemin ne doit pas contenir un fichier (pas d'extension de fichier)",
-            }),
+   // Separate validation schemas for backupPath and restorePath
+const backupPathSchema = z
+.string()
+.min(1, {
+    message: "Le chemin de sauvegarde est requis",
+})
+.refine((path) => !path.endsWith("\\"), {
+    message: "Le chemin ne doit pas se terminer par un slash (\\)",
+})
+.refine((path) => !path.endsWith("/"), {
+    message: "Le chemin ne doit pas se terminer par un slash (/)",
+})
+.refine((path) => !/\.\w+$/.test(path), {
+    message: "Le chemin ne doit pas contenir un fichier (pas d'extension de fichier)",
+});
+
+const restorePathSchema = z
+.string()
+.min(1, {
+    message: "Le chemin de restauration est requis",
+})
+.refine((path) => path.endsWith(".sqlite"), {
+    message: "Le fichier doit être un fichier SQLite valide (extension .sqlite)",
+});
+
+const form = useForm({
+defaultValues: {
+    backupPath: "", // Default value for the backup input
+    restorePath: "", // Default value for the restore input
+},
+});
+
+const validateBackupPath = (backupPath) => {
+try {
+    backupPathSchema.parse(backupPath);
+    return null; // No errors
+} catch (error) {
+    return error.errors[0].message; // Return the first validation error
+}
+};
+
+const validateRestorePath = (restorePath) => {
+try {
+    restorePathSchema.parse(restorePath);
+    return null; // No errors
+} catch (error) {
+    return error.errors[0].message; // Return the first validation error
+}
+};
+
+const onSubmitBackup = () => {
+const backupPath = form.getValues("backupPath");
+const error = validateBackupPath(backupPath);
+
+if (error) {
+    alert(error); // Display the error message
+    return;
+}
+
+axios
+    .post("/parameters", { backupPath })
+    .then((response) => {
+        console.log(response.data);
+        window.location.href = "/parameters";
+    })
+    .catch((error) => {
+        console.error(error);
     });
+};
 
-    const form = useForm({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            backupPath: "", // Default value for the input
-        },
-    });
+const onSubmitRestore = () => {
+const restorePath = form.getValues("restorePath");
+const error = validateRestorePath(restorePath);
 
-    const onSubmit = (data) => {
-        axios
-            .post("/parameters", data)
-            .then((response) => {
-                console.log("e");
-                console.log(response.data);
-                window.location.href = "/parameters";
-            })
-            .catch((error) => {
-                console.log(data);
-                console.error(error);
-            });
-    };
-    const handleRestore = () => {
-        const backupPath = form.getValues("backupPath");
-        window.location.href = `/parameters/restore?path=${encodeURIComponent(
-            backupPath
-        )}`;
-    };
+if (error) {
+    alert(error); // Display the error message
+    return;
+}
 
-    return (
-        <MainLayout color="purple" subject="Paramètres">
-            <div className="p-4">
-                {/* Display success message */}
-                {success && (
-                    <div className="bg-green-100 text-green-800 p-4 rounded mb-4">
-                        {success}
-                    </div>
-                )}
-                {/* Display error messages */}
-                {errors && (
-                    <div className="bg-red-100 text-red-800 p-4 rounded mb-4">
-                        {Object.values(errors).map((errorArray, index) => (
-                            <p key={index}>{errorArray[0]}</p>
-                        ))}
-                    </div>
-                )}
+window.location.href = `/parameters/restore?path=${encodeURIComponent(restorePath)}`;
+};
+
+// Watch the values of backupPath and restorePath
+const backupPath = form.watch("backupPath");
+const restorePath = form.watch("restorePath");
+
+// Validate the paths dynamically
+const isBackupPathValid = !validateBackupPath(backupPath);
+const isRestorePathValid = !validateRestorePath(restorePath);
+
+return (
+<MainLayout color="purple" subject="Paramètres">
+    <div className="p-1">
+        {/* Display success message */}
+        {success && (
+            <div className="bg-green-100 text-green-800 p-4 rounded mb-4">
+                {success}
             </div>
-            <Form {...form}>
-                <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-8 p-8"
-                >
-                    <div className="flex flex-row gap-4">
-                        <div className="flex flex-col gap-2">
-                            <h1 className="text-2xl">Paramètres</h1>
-                            <h2 className="text-xl">Backup</h2>
-                            <FormField
-                                control={form.control}
-                                name="backupPath"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Chemin de sauvegarde complet*</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="Chemin de sauvegarde (absolu)"
-                                                {...field} // Bind the input to react-hook-form
-                                            />
-                                        </FormControl>
-                                        <FormDescription>
-                                        Sauvegarder les données sur le chemin spécifié ou de les restaurer à partir du chemin spécifié.
-                                        Soyez sur que le fichier est nommé "backup*date*.sqlite" dans le cas d'une restauration.
-                                        Ne mettez pas de slash à la fin du chemin.
-                                        Ex : C:\Users\John\Desktop\backupZonta
-                                    </FormDescription>
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
-                    </div>
-                    <div className="flex gap-2">
-                        <Button
-                            variant="destructive"
-                            type="button"
-                            onClick={() =>
-                                (window.location.href = "/orders")
-                            }
-                        >
-                            Annuler
-                        </Button>
-                        <Button className="bg-green-500" type="submit"  disabled={!form.formState.isValid} >
-                            Sauvegarder les données
-                        </Button>
-                        <Button
-                            className="bg-blue-500"
-                            type="button"
-                            onClick={handleRestore}
-                            disabled={!form.formState.isValid} // Disable the button if the form is invalid
-                        >
-                            Restaurer les données
-                        </Button>
-                    </div>
-                </form>
-            </Form>
-        </MainLayout>
-    );
+        )}
+        {/* Display error messages */}
+        {errors && (
+            <div className="bg-red-100 text-red-800 p-4 rounded mb-4">
+                {Object.values(errors).map((errorArray, index) => (
+                    <p key={index}>{errorArray[0]}</p>
+                ))}
+            </div>
+        )}
+    </div>
+    <Form {...form}>
+        <form className="space-y-4 p-8">
+        <h1 className="text-2xl">Paramètres</h1>
+        <h2 className="text-xl">Backup</h2>
+            <div className="flex flex-row gap-4">
+                <div className="w-1/2 flex flex-col gap-2">
+                    <FormField
+                        control={form.control}
+                        name="backupPath"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Sauvegarder*</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="Chemin du répertoire (absolu)"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormDescription>
+                                    Sauvegarder les données sur le chemin spécifié.
+                                    Ex : C:\Users\John\Desktop\backupZonta
+                                </FormDescription>
+                            </FormItem>
+                        )}
+                    />
+                    <Button
+                        className="bg-green-500 w-1/5"
+                        type="button"
+                        onClick={onSubmitBackup}
+                        disabled={!isBackupPathValid}
+                    >
+                        Sauvegarder
+                    </Button>
+                </div>
+                <div className="w-1/2 flex flex-col gap-2">
+                    <FormField
+                        control={form.control}
+                        name="restorePath"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Restaurer*</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="Chemin du fichier SQL (absolu)"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormDescription>
+                                    Restaure les données à partir du fichier SQL spécifié. <br />
+                                    Ex : C:\Users\John\Desktop\backupZonta\backup2023.sqlite
+                                </FormDescription>
+                                <FormDescription style={{ color: "red" }}>
+                                    Attention : Cette action est irréversible et remplacera toutes les données existantes.
+                                </FormDescription>
+                            </FormItem>
+                        )}
+                    />
+                    <Button
+                        className="bg-blue-500 mt-2 w-1/5"
+                        type="button"
+                        onClick={onSubmitRestore}
+                        disabled={!isRestorePathValid}
+                    >
+                        Restaurer
+                    </Button>
+                </div>
+            </div>
+        </form>
+    </Form>
+</MainLayout>
+);
 };
 
 export default Index;

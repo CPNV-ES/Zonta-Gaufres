@@ -22,59 +22,52 @@ class ParameterController extends BaseController
     }
     public function store(Request $request)
     {
+        $backupFileName = "backup" . date("Y-m-d-H-i-s") . ".sqlite";
+        $destinationPath = $request->input("backupPath") . DIRECTORY_SEPARATOR . $backupFileName;
+
         // Check if the backupPath exists and is a directory
         if (!is_dir($request->input("backupPath"))) {
             return redirect()
-                ->route('parameters.index')
+                ->back()
                 ->withErrors(["backupPath" => "Le chemin de sauvegarde spécifié n'existe pas ou n'est pas un répertoire valide."]);
         }
 
         // Perform the backup operation
         try {
-            $backupFileName = "backup" . date("Y-m-d-H-i-s") . ".sqlite";
-            $destinationPath = $request->input("backupPath") . DIRECTORY_SEPARATOR . $backupFileName;
-
             copy(base_path("database/database.sqlite"), $destinationPath);
-
-            return redirect()
-                ->route('parameters.index')
-                ->with("success", "La sauvegarde a été effectuée avec succès dans : " . $destinationPath);
         } catch (\Exception $e) {
             return redirect()
                 ->route('parameters.index')
                 ->withErrors(["backupPath" => "Une erreur s'est produite lors de la sauvegarde : " . $e->getMessage()]);
         }
+
+        redirect()
+            ->route('parameters.index')
+            ->with("success", "La sauvegarde a été effectuée avec succès dans : " . $destinationPath);
     }
     public function restore()
     {
-        $backupPath = $_GET["path"];
+        $filePath = $_GET["path"];
 
-        // Check if a file exists in the directory containing "backup" and ending with ".sqlite"
-        $files = glob($backupPath . "\backup*.sqlite");
-
-        if (empty($files)) {
-            // No matching file found
+        // Check if the given file exists and contains ".sqlite" in its name
+        if (!file_exists($filePath) || !str_contains($filePath, '.sqlite')) {
             return redirect()
                 ->back()
-                ->withErrors(["backupPath" => "Aucun fichier valide n'a été trouvé dans le chemin spécifié."]);
+                ->withErrors(["backupPath" => "Le fichier spécifié n'existe pas ou n'est pas un fichier SQLite valide."]);
         }
 
-        //restore the file based of the most recent one
-        usort($files, function ($a, $b) {
-            return filemtime($b) - filemtime($a);
-        });
-
         try {
-            copy($files[0], base_path("database/database.sqlite"));
+            // Copy the specified file to replace the current database
+            copy($filePath, base_path("database/database.sqlite"));
         } catch (\Exception $e) {
             return redirect()
                 ->back()
                 ->withErrors(["backupPath" => "Une erreur s'est produite lors de la restauration : " . $e->getMessage()]);
         }
 
-        //redirect back to parameters with success message
+        // Redirect back to parameters with a success message
         return redirect()
             ->route('parameters.index')
-            ->with("success", "La restauration a été effectuée avec succès avec le fichier : " . $files[0]);
+            ->with("success", "La restauration a été effectuée avec succès avec le fichier : " . $filePath);
     }
 }
