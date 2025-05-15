@@ -575,23 +575,21 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                         <FormField
                             control={form.control}
                             name="order.free"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Commande gratuite ?   </FormLabel>
+                                    <FormLabel>Commande gratuite ? </FormLabel>
                                     <FormControl>
                                     <Checkbox
                                         checked={field.value}
                                         onCheckedChange={(checked) => {
                                             field.onChange(checked);
                                         }}
-                                    >
-                                    </Checkbox>
+                                        ></Checkbox>
                                     </FormControl>
-                                    <FormMessage/>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
-
                     </div>
                 </div>
                 <div className="flex justify-end">
