@@ -68,13 +68,8 @@ const People = (base_people) => {
         },
 
         {
-            accessor: "lastname",
+            accessor: "fullname",
             header: "Nom",
-            type: "string",
-        },
-        {
-            accessor: "firstname",
-            header: "Prénom",
             type: "string",
         },
         {
@@ -181,9 +176,15 @@ const People = (base_people) => {
 
     const validateInputs = () => {
         const newErrors = {};
-        if (!input.email) {
-            newErrors.email = "Email est requis";
-        } else if (!EMAIL_REGEX.test(input.email)) {
+        if (!input.email && !input.phone_number) {
+            newErrors.email =
+                "Email ou le numéro de téléphone est requis est requis";
+        }
+        if ((!input.firstname || !input.lastname) && !input.company) {
+            newErrors.firstname =
+                "Nom et prénom ou le nom de l'entreprise est requis";
+        }
+        if (!EMAIL_REGEX.test(input.email) && input.email) {
             newErrors.email = "Email invalide";
         }
         if (!PHONENUMBER_REGEX.test(input.phone_number) && input.phone_number) {

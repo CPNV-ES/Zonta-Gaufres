@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Enums\PaymentTypesEnum;
 use App\Enums\PersonTypesEnum;
 use Illuminate\Support\Facades\App;
+use InvalidArgumentException;
 
 
 class Person extends BaseModel
@@ -35,7 +36,7 @@ class Person extends BaseModel
     public function getFullnameAttribute()
     {
         if ($this->firstname == null || $this->lastname == null) {
-            return $this->email;
+            return $this->company;
         }
         return $this->firstname . ' ' . $this->lastname;
     }
@@ -65,6 +66,17 @@ class Person extends BaseModel
         return $this->personType->map(function ($type) {
             return PersonTypesEnum::fromCase($type->name);
         });
+    }
+
+    public function save(array $options = [])
+    {
+        if ((empty($this->firstname) || empty($this->lastname)) && empty($this->company)) {
+            throw new InvalidArgumentException('Firstname and lastname or company must be filled.');
+        }
+        if (empty($this->email) && empty($this->phone_number)) {
+            throw new InvalidArgumentException('Email or phone number must be filled.');
+        }
+        parent::save($options);
     }
 }
 

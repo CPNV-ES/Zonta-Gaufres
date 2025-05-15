@@ -24,6 +24,7 @@ class PersonController extends Controller
                 'id' => $person->id,
                 'firstname' => $person->firstname,
                 'lastname' => $person->lastname,
+                'fullname' => $person->fullname,
                 'email' => $person->email,
                 'phone_number' => $person->phone_number,
                 'company' => $person->company,
@@ -47,7 +48,7 @@ class PersonController extends Controller
             'firstname' => 'nullable',
             'lastname' => 'nullable',
             'company' => 'nullable',
-            'email' => 'required|email',
+            'email' => 'nullable|email',
             'phone_number' => 'nullable',
             'types' => 'required|array|min:1',
         ]);
