@@ -144,7 +144,7 @@ const isRestorePathValid = !validateRestorePath(restorePath);
                                             />
                                         </FormControl>
                                         <FormDescription>
-                                            Sauvegarder les données sur le chemin spécifié.
+                                            Sauvegarder les données sur le chemin spécifié. <br />
                                             Ex : C:\Users\John\Desktop\backupZonta
                                         </FormDescription>
                                     </FormItem>
@@ -174,7 +174,7 @@ const isRestorePathValid = !validateRestorePath(restorePath);
                                         </FormControl>
                                         <FormDescription>
                                             Restaure les données à partir du fichier SQL spécifié. <br />
-                                            Ex : C:\Users\John\Desktop\backupZonta\backup2023.sqlite
+                                            Ex : C:\Users\John\Desktop\backupZonta\backup2025.sqlite
                                         </FormDescription>
                                         <FormDescription style={{ color: "red" }}>
                                             Attention : Cette action est irréversible et remplacera toutes les données existantes.
