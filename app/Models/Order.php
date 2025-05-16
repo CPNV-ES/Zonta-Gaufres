@@ -32,6 +32,16 @@ class Order extends Model
         'free',
     ];
 
+    public function scopeHasDeliveryGuy($query)
+    {
+        return $query->whereNotNull('delivery_guy_id');
+    }
+
+    public function scopeHasNoDeliveryGuy($query)
+    {
+        return $query->whereNull('delivery_guy_id');
+    }
+
     public function total_price($price = null)
     {
         $price = $price ?? self::$pricePerUnit;

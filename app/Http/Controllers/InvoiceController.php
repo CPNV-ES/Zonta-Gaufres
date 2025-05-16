@@ -38,7 +38,9 @@ class InvoiceController extends Controller
     {
         $order = Order::find($id);
 
-        $order->status_id = InvoiceStatus::where('name', InvoiceStatusEnum::fromCase($request['status'])->name)->first()->id;
+        $order->invoiceStatus()->associate(
+            InvoiceStatus::fromEnum(InvoiceStatusEnum::fromCase($request['status']))->first()
+        );
         $order->payment_date = $request['payment_date'];
         $order->save();
     }

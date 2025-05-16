@@ -17,13 +17,14 @@ class PersonController extends Controller
 
         $transformed = $people->map(function ($person) {
             $types = $person->personType->map(function ($type) {
-                return PersonTypesEnum::fromCase($type->name)->toArray();
+                return $type->enum()->toArray();
             });
 
             return [
                 'id' => $person->id,
                 'firstname' => $person->firstname,
                 'lastname' => $person->lastname,
+                'fullname' => $person->fullname,
                 'email' => $person->email,
                 'phone_number' => $person->phone_number,
                 'company' => $person->company,
@@ -47,7 +48,7 @@ class PersonController extends Controller
             'firstname' => 'nullable',
             'lastname' => 'nullable',
             'company' => 'nullable',
-            'email' => 'required|email',
+            'email' => 'nullable|email',
             'phone_number' => 'nullable',
             'types' => 'required|array|min:1',
         ]);
@@ -55,7 +56,7 @@ class PersonController extends Controller
             $person = Person::create($request->all());
 
             foreach ($request->types as $type) {
-                $person->personType()->attach(PersonType::where('name', PersonTypesEnum::fromCase($type)->name)->first());
+                $person->personType()->attach(PersonType::fromEnum(PersonTypesEnum::fromCase($type))->first());
             }
         });
     }
@@ -79,7 +80,7 @@ class PersonController extends Controller
 
             $person->personType()->detach();
             foreach ($request->types as $type) {
-                $person->personType()->attach(PersonType::where('name', PersonTypesEnum::fromCase($type)->name)->first());
+                $person->personType()->attach(PersonType::fromEnum(PersonTypesEnum::fromCase($type))->first());
             }
         });
     }

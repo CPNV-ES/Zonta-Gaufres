@@ -10,7 +10,7 @@
         "log_file": "debug.log"
     },
     "main_window": {
-        "title": "Zonta-Gauffre",
+        "title": "Zonta-Gaufre",
         "icon": "",
         "default_size": [800, 600],
         "minimum_size": [640, 480],

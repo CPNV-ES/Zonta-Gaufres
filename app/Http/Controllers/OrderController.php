@@ -10,7 +10,6 @@ use App\Models\City;
 use App\Models\PaymentTypes;
 use App\Models\PersonType;
 use App\Enums\PersonTypesEnum;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -25,8 +24,7 @@ class OrderController extends Controller
 
         $transformed = $orders->map(function ($order) {
 
-
-            $paymentType = PaymentTypesEnum::fromCase($order->paymentType->name);
+            $paymentType = $order->paymentType->enum();
 
             $order->load('address.city');
 
@@ -61,8 +59,8 @@ class OrderController extends Controller
     public function create()
     {
         return Inertia::render('Orders/Create', [
-            "contactPeopleNames" => $this->getContactPeopleNames(3),
-            "clientPeople" => $this->getContactPeopleNames(4),
+            "contactPeopleNames" => $this->getPeopleNames(PersonTypesEnum::STAFF),
+            "clientPeople" => $this->getPeopleNames(PersonTypesEnum::CLIENT),
         ]);
     }
 
@@ -80,7 +78,7 @@ class OrderController extends Controller
 
         if ($personData['select_user'] === "new") {
             $person = Person::create($personData);
-            $person->personType()->attach(PersonType::where('name', PersonTypesEnum::CLIENT->name)->first());
+            $person->personType()->attach(PersonType::fromEnum(PersonTypesEnum::CLIENT)->first());
         } else {
             $person = Person::find($personData['select_user']);
         }
@@ -99,7 +97,7 @@ class OrderController extends Controller
             'person_id' => $person->id,
             'address_id' => $address->id,
             'buyer_id' => $person->id,
-            'payment_type_id' => PaymentTypes::where('name', PaymentTypesEnum::fromCase($orderData['payment'])->name)->first()->id,
+            'payment_type_id' => PaymentTypes::fromEnum(PaymentTypesEnum::fromCase($orderData['payment']))->first()->id,
             'contact_id' => $orderData['contact'],
         ]));
 
@@ -115,11 +113,9 @@ class OrderController extends Controller
         $order->update($request->all());
     }
 
-    private function getContactPeopleNames(int $id)
+    private function getPeopleNames(PersonTypesEnum $personType)
     {
-        $contactPeople = Person::with('personType')->whereHas('personType', function (Builder $query) use ($id) {
-            $query->where('person_types.id', $id);
-        })->orderBy('lastname', 'asc')->get();
+        $contactPeople = Person::hasType($personType)->orderBy('lastname', 'asc')->get();
 
         $contactPeopleNames = [];
 

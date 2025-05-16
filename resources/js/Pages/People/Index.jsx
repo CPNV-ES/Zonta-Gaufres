@@ -17,7 +17,6 @@ import { PHONENUMBER_REGEX, EMAIL_REGEX } from "@/lib/regex";
 
 import { Checkbox } from "@/Components/ui/checkbox";
 
-
 const People = (base_people) => {
     const builder = new ColumnBuilder();
     const [people, setPeople] = useState(base_people.people);
@@ -45,7 +44,8 @@ const People = (base_people) => {
                     {...{
                         checked:
                             table.getIsAllRowsSelected() ||
-                            (table.getIsSomePageRowsSelected() && "indeterminate"),
+                            (table.getIsSomePageRowsSelected() &&
+                                "indeterminate"),
                         onCheckedChange: (value) =>
                             table.toggleAllPageRowsSelected(!!value),
                     }}
@@ -68,13 +68,8 @@ const People = (base_people) => {
         },
 
         {
-            accessor: "lastname",
+            accessor: "fullname",
             header: "Nom",
-            type: "string",
-        },
-        {
-            accessor: "firstname",
-            header: "Prénom",
             type: "string",
         },
         {
@@ -168,18 +163,28 @@ const People = (base_people) => {
     };
 
     const handleDelete = (person) => {
-        router.post(`/people/${person.id}`, { _method: "DELETE" }, {
-            onSuccess: () => {
-                window.location.reload();
-            },
-        });
+        router.post(
+            `/people/${person.id}`,
+            { _method: "DELETE" },
+            {
+                onSuccess: () => {
+                    window.location.reload();
+                },
+            }
+        );
     };
 
     const validateInputs = () => {
         const newErrors = {};
-        if (!input.email) {
-            newErrors.email = "Email est requis";
-        } else if (!EMAIL_REGEX.test(input.email)) {
+        if (!input.email && !input.phone_number) {
+            newErrors.email =
+                "Email ou le numéro de téléphone est requis est requis";
+        }
+        if ((!input.firstname || !input.lastname) && !input.company) {
+            newErrors.firstname =
+                "Nom et prénom ou le nom de l'entreprise est requis";
+        }
+        if (!EMAIL_REGEX.test(input.email) && input.email) {
             newErrors.email = "Email invalide";
         }
         if (!PHONENUMBER_REGEX.test(input.phone_number) && input.phone_number) {
@@ -205,11 +210,15 @@ const People = (base_people) => {
         };
 
         if (isEditing) {
-            router.post(`/people/${currentPersonId}`, { ...payload, _method: 'PUT' }, {
-                onSuccess: () => {
-                    window.location.reload();
-                },
-            });
+            router.post(
+                `/people/${currentPersonId}`,
+                { ...payload, _method: "PUT" },
+                {
+                    onSuccess: () => {
+                        window.location.reload();
+                    },
+                }
+            );
         } else {
             router.post("/people", payload, {
                 onSuccess: () => {
@@ -229,13 +238,17 @@ const People = (base_people) => {
         });
     };
 
-    const handleDevliverySheet = (rowSelection)=> {
-        const selectedRows = Object.keys(rowSelection).filter(key => rowSelection[key]);
-        if(selectedRows.length === 0){
+    const handleDevliverySheet = (rowSelection) => {
+        const selectedRows = Object.keys(rowSelection).filter(
+            (key) => rowSelection[key]
+        );
+        if (selectedRows.length === 0) {
             return;
         }
-        const selectedIds = selectedRows.map(row => people[row].id);
-        window.location.href=`/people/print_delivery_sheet?sheets=${selectedIds.join(",")}`;
+        const selectedIds = selectedRows.map((row) => people[row].id);
+        window.location.href = `/people/print_delivery_sheet?sheets=${selectedIds.join(
+            ","
+        )}`;
     };
 
     return (
@@ -262,7 +275,7 @@ const People = (base_people) => {
                 inputData={people}
                 buttonsOptions={[
                     {
-                        id : "create_person",
+                        id: "create_person",
                         icon: "plus",
                         action: "Ajouter une personne",
                         variant: "yellow",
@@ -284,11 +297,11 @@ const People = (base_people) => {
                         id: "print_delivery_sheet",
                         icon: "printer",
                         action: "Imprimer",
-                        item:"fiche de livraison",
-                        itemPlural:"fiches de livraison",
+                        item: "fiche de livraison",
+                        itemPlural: "fiches de livraison",
                         handler: handleDevliverySheet,
                         variant: "yellow",
-                        alwaysOn: false
+                        alwaysOn: false,
                     },
                 ]}
             />

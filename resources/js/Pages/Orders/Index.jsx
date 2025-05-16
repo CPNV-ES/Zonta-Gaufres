@@ -37,7 +37,6 @@ const Index = (orders) => {
     const columnHeaders = [
         { accessor: "invoice_id", header: "#", type: "number" },
         { accessor: "client", header: "Client", type: "string" },
-        { accessor: "company", header: "Entreprise", type: "string" },
         { accessor: "address", header: "Adresse", type: "string" },
         { accessor: "zip_code", header: "NPA", type: "number" },
         { accessor: "city", header: "Localité", type: "string" },
