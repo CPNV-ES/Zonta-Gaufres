@@ -558,7 +558,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                                     Sur facture
                                                 </SelectItem>
                                                 <SelectItem value="UPSTREAM">
-                                                    Sur place
+                                                    Déjà encaissé
                                                 </SelectItem>
                                             </SelectContent>
                                         </Select>
