@@ -25,7 +25,7 @@ class InvoiceController extends Controller
                 "status" => $order->invoiceStatus->enum()->toArray(),
                 "creation_date" => $order->created_at,
                 "payment_date" => $order->payment_date,
-                "contact" => $order->contact->fullname,
+                "contact" => $order->contact ? $order->contact->fullname : null,
             ];
         });
 
