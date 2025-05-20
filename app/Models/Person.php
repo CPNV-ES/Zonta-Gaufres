@@ -87,6 +87,7 @@ class PersonCollection extends Collection
     public function generateSheetPDF()
     {
         $pdf = App::make('dompdf.wrapper');
+        $pdf->setPaper('A4', 'landscape');
 
         $html = '
         <head>
@@ -182,6 +183,9 @@ class PersonCollection extends Collection
 
             $company = $order->buyer->company;
             $buyer = $order->buyer->fullname;
+            if ($buyer == $company) {
+                $buyer = "";
+            }
             $address = $order->address->street . ' ' . $order->address->street_number . ', ' . $order->address->city->zip_code . ' ' . $order->address->city->name;
             $remark = $order->remark;
             $real_delivery_time = $order->real_delivery_time;
