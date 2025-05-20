@@ -587,7 +587,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                     >
                                     </Checkbox>
                                     </FormControl>
-                                    <FormMessage/>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
