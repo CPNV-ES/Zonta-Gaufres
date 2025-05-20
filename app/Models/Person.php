@@ -144,10 +144,7 @@ class PersonCollection extends Collection
                 <tr>
                     <th>Entreprise</th>
                     <th>Acheteur</th>
-                    <th>Personne de contact</th>
-                    <th>Adresse</th>
-                    <th>NPA</th>
-                    <th>Localité</th>
+                    <th colspan='3'>Adresse</th>
                     <th>Remarque</th>
                     <th>Hre livraison</th>
                     <th>Nbre gaufres</th>
@@ -185,10 +182,7 @@ class PersonCollection extends Collection
 
             $company = $order->buyer->company;
             $buyer = $order->buyer->fullname;
-            $contact = $order->contact->fullname;
-            $address = $order->address->street;
-            $zip_code = $order->address->city->zip_code;
-            $city = $order->address->city->name;
+            $address = $order->address->street . ' ' . $order->address->street_number . ', ' . $order->address->city->zip_code . ' ' . $order->address->city->name;
             $remark = $order->remark;
             $real_delivery_time = $order->real_delivery_time;
             $waffle_quantity = $order->waffle_quantity;
@@ -235,10 +229,7 @@ class PersonCollection extends Collection
                         <tr style='background-color: $background'>
                             <td>$company</td>
                             <td>$buyer</td>
-                            <td>$contact</td>
-                            <td>$address</td>
-                            <td>$zip_code</td>
-                            <td>$city</td>
+                            <td colspan='3'>$address</td>
                             <td>$remark</td>
                             <td>$real_delivery_time</td>
                             <td  style='color:$colorText'>$waffle_quantity</td>
@@ -254,16 +245,13 @@ class PersonCollection extends Collection
                     <tr>
                         <td> <b>Totaux : </b> </td>
                         <td> </td>
+                        <td colspan='3'> </td>
                         <td> </td>
                         <td> </td>
-                        <td> </td>
-                        <td> </td>
-                        <td> </td>
-                        <td> </td>
-                        <td style:colspan='3'><b>$countQuantity ($pricePerUnit)</b></td>
-                        <td style:colspan='3'><b>$totalPrice</b></td>
-                        <td style:colspan='3'></td>
-                        <td style:colspan='3'><b>$totalPriceToCash</b></td>
+                        <td><b>$countQuantity ($pricePerUnit)</b></td>
+                        <td><b>$totalPrice</b></td>
+                        <td></td>
+                        <td><b>$totalPriceToCash</b></td>
                     </tr>
                 </table>
                 </div>";
