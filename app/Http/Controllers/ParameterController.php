@@ -26,13 +26,27 @@ class ParameterController extends BaseController
         $destinationPath = $request->input("backupPath") . DIRECTORY_SEPARATOR . $backupFileName;
 
         $backup = new Backup();
-        $backup->store($destinationPath, $request->input("backupPath"));
+        if (!($backup->store($destinationPath, $request->input("backupPath")))) {
+            return response()->json([
+                'errors' => ["backupPath" => "Le chemin de sauvegarde spécifié n'existe pas ou n'est pas un répertoire valide."]
+            ], 422);
+        }
+        return response()->json([
+            'success' => "La sauvegarde a été effectuée avec succès dans : " . $destinationPath
+        ]);
     }
     public function restore()
     {
         $filePath = $_GET["path"];
 
         $backup = new Backup();
-        return $backup->restore($filePath);
+        if (!($backup->restore($filePath))) {
+            return response()->json([
+                'errors' => ["backupPath" => "Le fichier spécifié n'existe pas ou n'est pas un fichier SQLite valide."]
+            ], 422);
+        }
+        return response()->json([
+            'success' => "La restauration a été effectuée avec succès avec le fichier : " . $filePath
+        ]);
     }
 }

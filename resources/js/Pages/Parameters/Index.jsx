@@ -15,10 +15,12 @@ import {
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { usePage } from "@inertiajs/react";
+import { useState } from "react";
 
 const Index = () => {
     const { props } = usePage();
-    const { success, errors } = props;
+    const [success, setSuccess] = useState(props.success || "");
+    const [errors, setErrors] = useState({});
 
 const backupPathSchema = z
 .string()
@@ -79,14 +81,21 @@ const onSubmitBackup = () => {
     }
 
     axios
-        .post("/parameters", { backupPath })
-        .then((response) => {
-            console.log(response.data);
-            window.location.href = "/parameters";
-        })
-        .catch((error) => {
+    .post("/parameters", { backupPath })
+    .then((response) => {
+        if (response.data.success) {
+            setSuccess(response.data.success); // Update success state
+            setErrors({}); // Clear errors
+        }
+    })
+    .catch((error) => {
+        if (error.response && error.response.status === 422) {
+            setErrors(error.response.data.errors); // Ensure this is being called
+            setSuccess(""); // Clear success
+        } else {
             console.error(error);
-        });
+        }
+    });
 };
 
 const onSubmitRestore = () => {
@@ -98,7 +107,23 @@ const onSubmitRestore = () => {
         return;
     }
 
-    window.location.href = `/parameters/restore?path=${encodeURIComponent(restorePath)}`;
+
+    axios
+    .get(`/parameters/restore?path=${encodeURIComponent(restorePath)}`)
+    .then((response) => {
+        if (response.data.success) {
+            setSuccess(response.data.success); // Update success state
+            setErrors({}); // Clear errors
+        }
+    })
+    .catch((error) => {
+        if (error.response && error.response.status === 422) {
+            setErrors(error.response.data.errors); // Update errors state
+            setSuccess(""); // Clear success
+        } else {
+            console.error(error);
+        }
+    });
 };
 
 const backupPath = form.watch("backupPath");
@@ -110,17 +135,15 @@ const isRestorePathValid = !validateRestorePath(restorePath);
     return (
         <MainLayout color="purple" subject="Paramètres">
             <div className="p-1">
-                {/* Display success message */}
-                {success && (
+            {success && (
                     <div className="bg-green-100 text-green-800 p-4 rounded mb-4">
                         {success}
                     </div>
                 )}
-                {/* Display error messages */}
-                {errors && (
+                {errors && Object.keys(errors).length > 0 && (
                     <div className="bg-red-100 text-red-800 p-4 rounded mb-4">
                         {Object.values(errors).map((errorArray, index) => (
-                            <p key={index}>{errorArray[0]}</p>
+                            <p key={index}>{errorArray}</p>
                         ))}
                     </div>
                 )}
