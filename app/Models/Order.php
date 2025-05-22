@@ -106,7 +106,7 @@ class OrderCollection extends \Illuminate\Database\Eloquent\Collection
     private function generateLabel($order, $packet_index, $percent = 95)
     {
         $company = $order->buyer->company != null ? "<b>" . $order->buyer->company . '</b><br>' : '';
-        $fullname = $order->buyer->fullname;
+        $fullname = $order->buyer->company == $order->buyer->fullname ? "" : "<b>" . $order->buyer->fullname . "</b><br>";
         $address = $order->address->full;
         $gifted_by = $order->gifted_by;
         $waffle_quantity = $order->waffle_quantity;
@@ -116,12 +116,12 @@ class OrderCollection extends \Illuminate\Database\Eloquent\Collection
         return "
             <table style='width: $percent%;'>
                 <tr>
-                    <td style='width: 150px;'>
-                        <img src='/public/images/zonta_with_text.png' alt='Image' style='max-width: 165px;'>
+                    <td style='width: 120px;'>
+                        <img src='/public/images/zonta_with_text.png' alt='Image' style='max-width: 135px;'>
                     </td>
-                    <td colspan='3'>
+                    <td colspan='4'>
                         <p>$company
-                        <b>$fullname</b><br>
+                        $fullname
                         $address<br>
                         $gifted_by</p>
                     </td>
@@ -131,9 +131,8 @@ class OrderCollection extends \Illuminate\Database\Eloquent\Collection
                     <td style='text-align: right;' colspan='2'><b>$packet_index/$number_of_packet</b></td>
                 </tr>
                 <tr>
-                    <td style='width:160px;'><b>Merci de votre soutien !</b></td>
-                    <td style='text-align: right;'><img src='/public/images/social_network.png' alt='Image' style='max-width: 35px;'></td>
-                    <td style='text-align: right;' colspan='2'>Suivez-nous !</td>
+                    <td style='width:160px;' colspan='2'><b>Merci de votre soutien !</b></td>
+                    <td style='text-align: right;' colspan='3'><img src='/public/images/social_network.png' alt='Image' style='max-width: 25px;'>Suivez-nous !</td>
                 </tr>
             </table>
         ";
