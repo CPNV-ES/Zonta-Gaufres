@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\InvoiceStatusEnum;
+use App\Enums\PaymentTypesEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\App;
@@ -144,8 +146,10 @@ class OrderCollection extends \Illuminate\Database\Eloquent\Collection
         $html = '<body style="font-family: Arial, sans-serif; font-size:14px";>';
 
         foreach ($this as $invoice) {
-            $html .= $this->generateUpper($invoice, 50);
-            $html .= $this->generateLower($invoice, 50);
+            $html .= $invoice->paymentType->enum() != PaymentTypesEnum::INVOICE ? $this->generateUpperWithLogo($invoice) : "";
+            $html .= $this->generateUpper($invoice);
+            $html .= $invoice->paymentType->enum() == PaymentTypesEnum::INVOICE ? $this->generateLower($invoice) : "";
+            $html .= '<div style="page-break-after: always;"></div>';
         }
         $html .= '</body>';
 
@@ -154,7 +158,17 @@ class OrderCollection extends \Illuminate\Database\Eloquent\Collection
         return $pdf;
     }
 
-    private function generateUpper($invoice, $percent)
+    public function generateUpperWithLogo($invoice) 
+    {
+        return "
+            <div>
+                <img src='/public/images/zonta_with_text.png' alt='Image' style='max-width: 400px;'>
+                <hr>
+            </div>
+        ";
+    }
+
+    private function generateUpper($invoice)
     {
         $total = number_format($invoice->total_price(), 2, thousands_separator: ' ');
         $date = $invoice->creation_date;
@@ -164,6 +178,7 @@ class OrderCollection extends \Illuminate\Database\Eloquent\Collection
         $fullname = $invoice->buyer->fullname;
         $address = $invoice->address->street . ' ' . $invoice->address->number;
         $city =  $invoice->address->city->zip_code . ' ' . $invoice->address->city->name;
+        $is_facture = $invoice->paymentType->enum() == PaymentTypesEnum::INVOICE ? "Facture gaufres" : "Quittance";
 
 
         setlocale(LC_TIME, 'fr_FR.utf8', 'fra');
@@ -178,20 +193,19 @@ class OrderCollection extends \Illuminate\Database\Eloquent\Collection
                 $address<br>
                 $city
             </div>
-                <div style='padding-top:75px; padding-left:75px; float:left'>
-                    <p style='font-size:25px'>Facture gaufres - $dateformat</p>
-                    <p style='line-height:0.8'><b>Livraison de $quantity gaufres à CHF $pricePerUnit </b></p>
-                    <p style='line-height:3'><b><span><b>Un grand Merci de votre soutien </b></span> </b></p>
-                    <p>Avec nos meilleures salutations</p>
-                </div>
-                <div style='text-align:right; padding-right:115px; padding-top:170px; float:right '>
-                    <span><b>CHF $total</b></span>
-                </div>
-
+            <div style='padding-top:75px; padding-left:75px; float:left'>
+                <p style='font-size:25px'>$is_facture - $dateformat</p>
+                <p style='line-height:0.8'><b>Livraison de $quantity gaufres à CHF $pricePerUnit </b></p>
+                <p style='line-height:3'><b><span><b>Un grand Merci de votre soutien </b></span> </b></p>
+                <p>Avec nos meilleures salutations</p>
+            </div>
+            <div style='text-align:right; padding-right:115px; padding-top:170px; float:right '>
+                <span><b>CHF $total</b></span>
+            </div>
         ";
     }
 
-    private function generateLower($invoice, $percent)
+    private function generateLower($invoice)
     {
         $total = number_format($invoice->total_price(), 2, thousands_separator: ' ');
         $company = $invoice->buyer->company != null ? "<b>" . $invoice->buyer->company . '</b><br>' : '';
