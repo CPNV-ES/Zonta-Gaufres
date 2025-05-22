@@ -19,7 +19,7 @@ class DeliveryController extends Controller
         return Inertia::render(
             'Delivery/Index',
             [
-                'initDeliveries' => Order::whereNotNull('delivery_guy_id')->with('buyer', 'address.city', 'deliveryGuy')->get()
+                'initDeliveries' => Order::hasDeliveryGuy()->with('buyer', 'address.city', 'deliveryGuy')->get()
             ]
         );
     }
@@ -30,7 +30,7 @@ class DeliveryController extends Controller
     public function editAll()
     {
         return Inertia::render('Delivery/Edit', [
-            'initOrders' => Order::with('address.city', 'buyer')->whereNull("delivery_guy_id")->get(),
+            'initOrders' => Order::hasNoDeliveryGuy()->with('address.city', 'buyer')->get(),
             'deliveryGuys' => Person::hasType(PersonTypesEnum::DELIVERY_GUY)->with(['ordersToDeliver.address.city'])->get(),
         ]);
     }

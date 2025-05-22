@@ -77,18 +77,31 @@ const formSchema = z.object({
                 .optional(),
             lastname: z.string().optional(),
             firstname: z.string().optional(),
-            email: z
-                .string()
-                .email({
-                    message: "L'email doit être au format valide.",
-                })
-                .optional(),
             company: z.string().optional(),
+            email: z.string().email().optional(),
         })
-        .refine((data) => data.select_user !== "new" || data.email, {
-            message: "Les champs Email sont requis pour un nouvel utilisateur.",
-            path: ["email"], // Highlight the first missing field
-        }),
+        .refine(
+            (data) =>
+                data.select_user !== "new" ||
+                (!!data.firstname && !!data.lastname) ||
+                !!data.company,
+            {
+                message:
+                    "Le nom et prénom ou l'entreprise doivent être renseignés pour un nouvel utilisateur.",
+                path: ["firstname"],
+            }
+        )
+        .refine(
+            (data) =>
+                data.select_user !== "new" ||
+                !!data.email ||
+                !!data.phone_number,
+            {
+                message:
+                    "Le numéro de téléphone ou l'email doivent être renseignés pour un nouvel utilisateur.",
+                path: ["email"],
+            }
+        ),
     deliveryAddress: z.object({
         city: z.string({
             required_error: "Ce champ est requis.",
@@ -545,14 +558,13 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                                     Sur facture
                                                 </SelectItem>
                                                 <SelectItem value="UPSTREAM">
-                                                    Sur place
+                                                    Déjà encaissé
                                                 </SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
-
                             )}
                         />
                         <h1 className="text-2xl">Remarque sur la commande</h1>
@@ -575,23 +587,21 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                         <FormField
                             control={form.control}
                             name="order.free"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Commande gratuite ?   </FormLabel>
+                                    <FormLabel>Commande gratuite ? </FormLabel>
                                     <FormControl>
-                                    <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={(checked) => {
-                                            field.onChange(checked);
-                                        }}
-                                    >
-                                    </Checkbox>
+                                        <Checkbox
+                                            checked={field.value}
+                                            onCheckedChange={(checked) => {
+                                                field.onChange(checked);
+                                            }}
+                                        ></Checkbox>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
                         />
-
                     </div>
                 </div>
                 <div className="flex justify-end">
