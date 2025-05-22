@@ -1,16 +1,24 @@
-import React from "react";
+import React, { use, useState } from "react";
 import MainLayout from "../../Layouts/MainLayout";
 import DataTable from "@/Components/DataTable";
 
 import { ColumnBuilder } from "@/Builder/ColumnBuilder";
 import { Badge } from "@/Components/ui/badge";
+import Icon from "@/Components/Icon";
+import Dialog from "@/Components/Dialog";
+import {router} from "@inertiajs/react";
+import { set } from "date-fns";
 
-const Index = (orders) => {
+const Index = (base_orders) => {
+    const [orders, setOrders] = useState(base_orders.orders);
     const builder = new ColumnBuilder();
+    const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] =
+        useState(false);
+    const [currentDeleteOrder, setcurrentDeleteOrder] = useState(null);
 
     const statusAvailable = () => {
         let statuses = [];
-        orders.orders.forEach((order) => {
+        orders.forEach((order) => {
             if (!statuses.find((el) => el.key === order.status.key)) {
                 statuses.push({
                     key: order.status.key,
@@ -21,9 +29,19 @@ const Index = (orders) => {
         return statuses;
     };
 
+    const handleDelete = (order) => {
+        console.log(order);
+        console.log(order.invoice_id);
+        router.post(`/orders/${order.invoice_id}`, { _method: "DELETE" }, {
+            onSuccess: () => {
+                window.location.reload();
+            }
+        });
+    };
+
     const paymentTypesAvailable = () => {
         let paymentTypes = [];
-        orders.orders.forEach((order) => {
+        orders.forEach((order) => {
             if (!paymentTypes.find((el) => el.key === order.payment_type.key)) {
                 paymentTypes.push({
                     key: order.payment_type.key,
@@ -35,7 +53,6 @@ const Index = (orders) => {
     };
 
     const columnHeaders = [
-        { accessor: "invoice_id", header: "#", type: "number" },
         { accessor: "client", header: "Client", type: "string" },
         { accessor: "company", header: "Entreprise", type: "string" },
         { accessor: "address", header: "Adresse", type: "string" },
@@ -86,13 +103,48 @@ const Index = (orders) => {
             type: "multi",
             multi: paymentTypesAvailable(),
         },
+        {
+            accessor: "actions",
+            header: "Actions",
+            cell: (row) => (
+                <div className="flex gap-2">
+                    <button
+                        onClick={() => {
+                            setcurrentDeleteOrder(row.row.original);
+                            console.log(row.row.original);
+
+                            setIsDeleteConfirmationOpen(true);
+                            console.log(currentDeleteOrder);
+
+                        }}
+                    >
+                        <Icon name="trash" />
+                    </button>
+                </div>
+            ),
+        },
     ];
 
     const columns = builder.buildColumns(columnHeaders);
 
-    orders = orders.orders;
     return (
         <MainLayout color="green" subject="Commandes">
+            <Dialog
+                title="Êtes-vous sûr de vouloir annuler cette commande ?"
+                buttonLabel="Supprimer"
+                buttonVariant="red"
+                action={() => {
+                    setIsDeleteConfirmationOpen(false);
+                    handleDelete(currentDeleteOrder);
+                }}
+                isOpen={isDeleteConfirmationOpen}
+                setIsOpen={setIsDeleteConfirmationOpen}
+            >
+                <p className="text-sm text-gray-500">
+                    Cette action est définitive. Une fois annulée, cette
+                    commande ne pourra pas être récupérée. Si elle est associé à une facture, celle-ci sera également supprimé.
+                </p>
+            </Dialog>
             <DataTable
                 columns={columns}
                 inputData={orders}
@@ -103,7 +155,6 @@ const Index = (orders) => {
                     handler: (a) => (window.location.href = "/orders/create"),
                     alwaysOn: true,
                 }}
-                onClickHandler={(row) => console.log(row.id)}
             />
         </MainLayout>
     );
