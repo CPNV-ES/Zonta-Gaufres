@@ -120,6 +120,13 @@ const Index = (base_orders) => {
                     >
                         <Icon name="trash" />
                     </button>
+                    <button
+                        onClick={() => {
+                            window.location.href = `/orders/${row.row.original.invoice_id}/edit`;
+                        }}
+                    >
+                        <Icon name="pencil" />
+                    </button>
                 </div>
             ),
         },

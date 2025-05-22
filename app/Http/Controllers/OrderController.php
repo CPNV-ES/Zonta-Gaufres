@@ -106,6 +106,35 @@ class OrderController extends Controller
         return redirect()->route('orders.index');
     }
 
+
+    public function edit(string $id)
+    {
+        $order = Order::find($id);
+
+        $transformed = [
+            "waffle_quantity" => $order->waffle_quantity,
+            "date" => $order->date,
+            "select_user" => $order->buyer->fullname,
+            "contact" => $order->contact->fullname ?? '',
+            "gifted_by" => $order->gifted_by,
+            "street" => $order->address->street,
+            "street_number" => $order->address->street_number,
+            "complement" => $order->address->complement,
+            "npa" => $order->address->city->zip_code,
+            "start_delivery_time" => $order->start_delivery_time,
+            "end_delivery_time" => $order->end_delivery_time,
+            "payement" => $order->paymentType->name,
+            "remark" => $order->remark,
+            "free" => $order->free,
+        ];
+
+        return Inertia::render('Orders/Create', [
+            "contactPeopleNames" => $this->getContactPeopleNames(3),
+            "clientPeople" => $this->getContactPeopleNames(4),
+            "order" => $transformed,
+        ]);
+    }
+
     /**
      * Update the specified resource in storage.
      */

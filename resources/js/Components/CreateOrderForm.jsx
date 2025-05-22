@@ -106,7 +106,7 @@ const formSchema = z.object({
     }),
 });
 
-const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
+const CreateOrderForm = ({ contactPeopleNames, clientPeople, order = null  }) => {
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -136,6 +136,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
     };
 
     return (
+        console.log(order),
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -154,6 +155,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                         <Input
                                             type="number"
                                             placeholder="Nombre de gaufres"
+                                            defaultValue= {order?.waffle_quantity}
                                             {...field}
                                         />
                                     </FormControl>
@@ -172,7 +174,10 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                 <FormItem>
                                     <FormLabel>Date de la commande*</FormLabel>
                                     <FormControl>
-                                        <Input type="date" {...field} />
+                                        <Input
+                                            type="date" {...field}
+                                            defaultValue= {order?.date}
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -188,7 +193,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                     <FormControl>
                                         <Select
                                             onValueChange={field.onChange}
-                                            defaultValue={field.value}
+                                            defaultValue={order ? order.buyer_id : field.value}
                                         >
                                             <SelectTrigger>
                                                 <SelectValue placeholder="Choisir un utilisateur existant ou en créer un nouveau">
@@ -327,7 +332,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                     <FormControl>
                                         <Select
                                             onValueChange={field.onChange}
-                                            defaultValue={field.value}
+                                            defaultValue={order ? order.contact_id : field.value}
                                         >
                                             <SelectTrigger>
                                                 <SelectValue placeholder="Sélectionner votre personne de contact">
@@ -370,6 +375,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                         <Input
                                             placeholder="Prénom Nom ou entreprise"
                                             {...field}
+                                            defaultValue={order?.gifted_by}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -391,6 +397,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                                 <Input
                                                     placeholder="Rue"
                                                     {...field}
+                                                    defaultValue={order?.street}
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -409,6 +416,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                                     type="number"
                                                     placeholder="Numéro"
                                                     {...field}
+                                                    defaultValue={order?.street_number}
                                                 />
                                             </FormControl>
                                             <FormMessage />
@@ -427,6 +435,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                         <Input
                                             placeholder="Complément"
                                             {...field}
+                                            defaultValue={order?.complement}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -445,6 +454,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                                 type="number"
                                                 placeholder="npa"
                                                 {...field}
+                                                defaultValue={order?.npa}
                                             />
                                         </FormControl>
                                         <FormMessage />
@@ -460,6 +470,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                             <Input
                                                 placeholder="Localité"
                                                 {...field}
+                                                defaultValue={order?.city}
                                             />
                                         </FormControl>
                                         <FormMessage />
@@ -488,6 +499,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                                         );
                                                     }
                                                 }}
+                                                defaultValue={order?.start_delivery_time}
                                             />
                                         </FormControl>
                                         <FormDescription></FormDescription>
@@ -512,6 +524,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                                         );
                                                     }
                                                 }}
+                                                defaultValue={order?.end_delivery_time}
                                             />
                                         </FormControl>
                                         <FormDescription></FormDescription>
@@ -532,7 +545,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                     <FormControl>
                                         <Select
                                             onValueChange={field.onChange}
-                                            defaultValue={field.value}
+                                            defaultValue={order ? `"${order.payment}"` : field.value}
                                         >
                                             <SelectTrigger>
                                                 <SelectValue placeholder="Selectionner un mode de paiement" />
@@ -566,6 +579,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                         <Textarea
                                             placeholder="Ajouter des remarques si nécessaire"
                                             {...field}
+                                            defaultValue={order?.remark}
                                         />
                                     </FormControl>
                                     <FormMessage />
@@ -584,6 +598,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople }) => {
                                         onCheckedChange={(checked) => {
                                             field.onChange(checked);
                                         }}
+                                        defaultChecked={order?.free}
                                     >
                                     </Checkbox>
                                     </FormControl>
