@@ -413,7 +413,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople, order = null  }) =>
                                         <FormItem>
                                             <FormControl>
                                                 <Input
-                                                    type="number"
+                                                    type="text"
                                                     placeholder="Numéro"
                                                     {...field}
                                                     defaultValue={order?.street_number}
@@ -545,7 +545,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople, order = null  }) =>
                                     <FormControl>
                                         <Select
                                             onValueChange={field.onChange}
-                                            defaultValue={order ? `"${order.payment}"` : field.value}
+                                            defaultValue={order ? order.payment : field.value}
                                         >
                                             <SelectTrigger>
                                                 <SelectValue placeholder="Selectionner un mode de paiement" />

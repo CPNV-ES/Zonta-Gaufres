@@ -114,7 +114,7 @@ class OrderController extends Controller
         $transformed = [
             "waffle_quantity" => $order->waffle_quantity,
             "date" => $order->date,
-            "select_user" => $order->buyer->fullname,
+            "select_user" => $order->buyer->email,
             "contact" => $order->contact->fullname ?? '',
             "gifted_by" => $order->gifted_by,
             "street" => $order->address->street,
@@ -123,7 +123,7 @@ class OrderController extends Controller
             "npa" => $order->address->city->zip_code,
             "start_delivery_time" => $order->start_delivery_time,
             "end_delivery_time" => $order->end_delivery_time,
-            "payement" => $order->paymentType->name,
+            "payment" => $order->paymentType->name,
             "remark" => $order->remark,
             "free" => $order->free,
         ];
