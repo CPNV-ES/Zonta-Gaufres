@@ -25,6 +25,6 @@ class Address extends BaseModel
 
     public function getFullAttribute()
     {
-        return "{$this->street} {$this->number}, {$this->city->name}";
+        return "{$this->city->name} - {$this->street} {$this->street_number}";
     }
 }
