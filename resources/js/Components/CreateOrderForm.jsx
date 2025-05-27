@@ -131,26 +131,60 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople, order = null  }) =>
 
     const onSubmit = (data) => {
         data.order.date = format(new Date(data.order.date), "yyyy-MM-dd");
-        router.post(
-            "/orders",
-            {
-                ...data,
-                order: {
-                    ...data.order,
-                    start_delivery_time: data.order.start_delivery_time + ":00",
-                    end_delivery_time: data.order.end_delivery_time + ":00",
-                },
+
+        const payload = {
+            ...data,
+            order: {
+                ...data.order,
+                start_delivery_time: data.order.start_delivery_time + ":00",
+                end_delivery_time: data.order.end_delivery_time + ":00",
             },
-            {
+        };
+        console.log(data)
+
+        if (order.id) {
+            // Update existing order
+            router.put(`/orders/${order.id}`, payload, {
                 onSuccess: () => {
                     window.location.href = "/orders";
                 },
-            }
-        );
+            });
+        } else {
+            // Create new order
+            router.post("/orders", payload, {
+                onSuccess: () => {
+                    window.location.href = "/orders";
+                },
+            });
+        }
     };
-
+    useEffect(() => {
+        if (order) {
+            form.reset({
+                order: {
+                    waffle_quantity: order?.waffle_quantity || "",
+                    date: order?.date || "",
+                    contact: order?.contact_id ? String(order.contact_id) : "",
+                    remark: order?.remark || "",
+                    gifted_by: order?.gifted_by || "",
+                    start_delivery_time: order?.start_delivery_time || "",
+                    end_delivery_time: order?.end_delivery_time || "",
+                    payment: order?.payment || "",
+                },
+                person: {
+                    select_user:  order?.select_user_id ? String(order.select_user_id) : "",
+                },
+                deliveryAddress: {
+                    city: order?.city || "",
+                    street: order?.street || "",
+                    street_number: order?.street_number || "",
+                    complement: order?.complement || "",
+                    npa: order?.npa || "",
+                },
+            });
+        }
+    }, [order]);
     return (
-        console.log(order),
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}

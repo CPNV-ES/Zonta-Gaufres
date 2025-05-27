@@ -12,6 +12,7 @@ use App\Models\PersonType;
 use App\Enums\PersonTypesEnum;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Carbon\Carbon;
 
 
 class OrderController extends Controller
@@ -110,15 +111,19 @@ class OrderController extends Controller
         $order = Order::find($id);
 
         $transformed = [
+            "id" => $order->id,
             "waffle_quantity" => $order->waffle_quantity,
             "date" => $order->date,
-            "select_user" => $order->buyer->email,
-            "contact" => $order->contact->fullname ?? '',
+            "select_user_id" => $order->buyer->id,
+            "select_user_fullname" => $order->buyer->firstname . ' ' . $order->buyer->lastname,
+            "contact_id" => $order->contact->id ?? '',
+            "contact_fullname" => $order->contact->firstname . '' . $order->contact->lastname ?? '',
             "gifted_by" => $order->gifted_by,
             "street" => $order->address->street,
             "street_number" => $order->address->street_number,
             "complement" => $order->address->complement,
             "npa" => $order->address->city->zip_code,
+            "city" => $order->address->city->name,
             "start_delivery_time" => $order->start_delivery_time,
             "end_delivery_time" => $order->end_delivery_time,
             "payment" => $order->paymentType->name,
@@ -127,8 +132,8 @@ class OrderController extends Controller
         ];
 
         return Inertia::render('Orders/Create', [
-            "contactPeopleNames" => $this->getContactPeopleNames(3),
-            "clientPeople" => $this->getContactPeopleNames(4),
+            "contactPeopleNames" => $this->getPeopleNames(PersonTypesEnum::STAFF),
+            "clientPeople" => $this->getPeopleNames(PersonTypesEnum::CLIENT),
             "order" => $transformed,
         ]);
     }
@@ -138,8 +143,52 @@ class OrderController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $order = Order::find($id);
+        $order = Order::findOrFail($id);
+
         $order->update($request->all());
+
+        $orderData = $request->input('order');
+        $personData = $request->input('person');
+        $addressData = $request->input('deliveryAddress');
+
+        if (isset($orderData['start_delivery_time'])) {
+            $orderData['start_delivery_time'] = Carbon::parse($orderData['start_delivery_time'])->format('H:i');
+        }
+
+        if (isset($orderData['end_delivery_time'])) {
+            $orderData['end_delivery_time'] = Carbon::parse($orderData['end_delivery_time'])->format('H:i');
+        }
+
+        if ($personData['select_user'] === "new") {
+            $person = Person::create($personData);
+            $person->personType()->attach(PersonType::fromEnum(PersonTypesEnum::CLIENT)->first());
+        } else {
+            $person = Person::find($personData['select_user']);
+        }
+
+        $cityName = $addressData['city'];
+        $zip = $addressData['npa'];
+
+        $city = City::updateOrCreate([
+            'name' => $cityName,
+            'zip_code' => $zip
+        ]);
+        if (isset($orderData['contact'])) {
+            $order->contact_id = $orderData['contact'];
+        }
+        if (isset($person->id)) {
+            $order->buyer_id = $person->id;
+        }
+
+        $order->address->complement = $addressData['complement'] ?? '';
+        $addressData['city_id'] = $city->id;
+        unset($addressData['city'], $addressData['npa']);
+
+        $order->address()->updateOrCreate(['id' => $order->address->id], $addressData);
+        $order->update($orderData);
+
+
+        return redirect()->route('orders.index');
     }
 
     private function getPeopleNames(PersonTypesEnum $personType)
