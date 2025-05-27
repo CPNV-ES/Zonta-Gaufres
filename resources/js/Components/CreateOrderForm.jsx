@@ -142,7 +142,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople, order = null  }) =>
         };
         console.log(data)
 
-        if (order.id) {
+        if (order?.id) {
             // Update existing order
             router.put(`/orders/${order.id}`, payload, {
                 onSuccess: () => {
