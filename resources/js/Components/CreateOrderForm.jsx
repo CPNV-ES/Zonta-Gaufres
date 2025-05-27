@@ -25,6 +25,7 @@ import { Textarea } from "@/Components/ui/textarea";
 import { PHONENUMBER_REGEX } from "@/lib/regex";
 import { Checkbox } from "@/Components/ui/checkbox";
 import { router } from "@inertiajs/react";
+import { useEffect } from "react";
 
 const formSchema = z.object({
     order: z.object({
@@ -206,7 +207,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople, order = null  }) =>
                                     <FormControl>
                                         <Select
                                             onValueChange={field.onChange}
-                                            defaultValue={order ? order.buyer_id : field.value}
+                                            defaultValue={order ? order.select_user_id : field.value}
                                         >
                                             <SelectTrigger>
                                                 <SelectValue placeholder="Choisir un utilisateur existant ou en créer un nouveau">
@@ -217,9 +218,8 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople, order = null  }) =>
                                                                   String(
                                                                       person.id
                                                                   ) ===
-                                                                  String(
-                                                                      field.value
-                                                                  )
+                                                                  String(field.value ? field.value : order?.select_user_id)
+
                                                           )?.name ||
                                                           "Choisir un utilisateur existant ou en créer un nouveau"}
                                                 </SelectValue>
@@ -354,7 +354,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople, order = null  }) =>
                                                             String(
                                                                 person.id
                                                             ) ===
-                                                            String(field.value)
+                                                            String(field.value ? field.value : order?.contact_id)
                                                     )?.name ||
                                                         "Sélectionner votre personne de contact"}
                                                 </SelectValue>
