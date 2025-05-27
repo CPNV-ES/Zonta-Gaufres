@@ -145,48 +145,31 @@ class OrderController extends Controller
     {
         $order = Order::findOrFail($id);
 
-        $order->update($request->all());
-
+        // Extract data from the request
         $orderData = $request->input('order');
         $personData = $request->input('person');
         $addressData = $request->input('deliveryAddress');
 
-        if (isset($orderData['start_delivery_time'])) {
-            $orderData['start_delivery_time'] = Carbon::parse($orderData['start_delivery_time'])->format('H:i');
-        }
+        // Reformat delivery times
+        $this->formatDeliveryTimes($orderData);
 
-        if (isset($orderData['end_delivery_time'])) {
-            $orderData['end_delivery_time'] = Carbon::parse($orderData['end_delivery_time'])->format('H:i');
-        }
-
-        if ($personData['select_user'] === "new") {
-            $person = Person::create($personData);
-            $person->personType()->attach(PersonType::fromEnum(PersonTypesEnum::CLIENT)->first());
-        } else {
-            $person = Person::find($personData['select_user']);
-        }
-
-        $cityName = $addressData['city'];
-        $zip = $addressData['npa'];
-
-        $city = City::updateOrCreate([
-            'name' => $cityName,
-            'zip_code' => $zip
-        ]);
-        if (isset($orderData['contact'])) {
-            $order->contact_id = $orderData['contact'];
-        }
-        if (isset($person->id)) {
+        // Handle buyer (person)
+        $person = $this->handleBuyer($personData);
+        if ($person) {
             $order->buyer_id = $person->id;
         }
 
-        $order->address->complement = $addressData['complement'] ?? '';
-        $addressData['city_id'] = $city->id;
-        unset($addressData['city'], $addressData['npa']);
+        // Handle city and address
+        $city = $this->handleCity($addressData);
+        $this->handleAddress($order, $addressData, $city);
 
-        $order->address()->updateOrCreate(['id' => $order->address->id], $addressData);
+        // Update contact if provided
+        if (isset($orderData['contact'])) {
+            $order->contact_id = $orderData['contact'];
+        }
+
+        // Update the order
         $order->update($orderData);
-
 
         return redirect()->route('orders.index');
     }
@@ -214,5 +197,45 @@ class OrderController extends Controller
         $order->delete();
 
         return redirect()->route('orders.index');
+    }
+    private function formatDeliveryTimes(array &$orderData): void
+    {
+        if (isset($orderData['start_delivery_time'])) {
+            $orderData['start_delivery_time'] = Carbon::parse($orderData['start_delivery_time'])->format('H:i');
+        }
+
+        if (isset($orderData['end_delivery_time'])) {
+            $orderData['end_delivery_time'] = Carbon::parse($orderData['end_delivery_time'])->format('H:i');
+        }
+    }
+
+    private function handleBuyer(array $personData): ?Person
+    {
+        if ($personData['select_user'] === "new") {
+            $person = Person::create($personData);
+            $person->personType()->attach(PersonType::fromEnum(PersonTypesEnum::CLIENT)->first());
+            return $person;
+        }
+
+        return Person::find($personData['select_user']);
+    }
+
+    private function handleCity(array $addressData): City
+    {
+        return City::updateOrCreate([
+            'name' => $addressData['city'],
+            'zip_code' => $addressData['npa']
+        ]);
+    }
+
+    private function handleAddress(Order $order, array &$addressData, City $city): void
+    {
+        $addressData['city_id'] = $city->id;
+        unset($addressData['city'], $addressData['npa']);
+
+        $order->address()->updateOrCreate(
+            ['id' => $order->address->id ?? null],
+            array_merge($addressData, ['complement' => $addressData['complement'] ?? ''])
+        );
     }
 }
