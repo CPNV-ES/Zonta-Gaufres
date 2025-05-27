@@ -12,6 +12,7 @@ class Address extends BaseModel
         'street',
         'street_number',
         'city_id',
+        'complement',
     ];
 
     public function orders()
