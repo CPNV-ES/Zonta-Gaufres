@@ -77,12 +77,8 @@ class OrderController extends Controller
         $cityName = $addressData['city'];
         $zip = $addressData['npa'];
 
-        if ($personData['select_user'] === "new") {
-            $person = Person::create($personData);
-            $person->personType()->attach(PersonType::fromEnum(PersonTypesEnum::CLIENT)->first());
-        } else {
-            $person = Person::find($personData['select_user']);
-        }
+        $person = $this->handleBuyer($personData);
+
 
         $city = City::findOrCreate([
             'name' => $cityName,
@@ -160,8 +156,8 @@ class OrderController extends Controller
         }
 
         // Handle city and address
-        $city = $this->handleCity($addressData);
-        $this->handleAddress($order, $addressData, $city);
+        $city = $this->handleCityUpdate($addressData);
+        $this->handleAddressUpdate($order, $addressData, $city);
 
         // Update contact if provided
         if (isset($orderData['contact'])) {
@@ -220,7 +216,7 @@ class OrderController extends Controller
         return Person::find($personData['select_user']);
     }
 
-    private function handleCity(array $addressData): City
+    private function handleCityUpdate(array $addressData): City
     {
         return City::updateOrCreate([
             'name' => $addressData['city'],
@@ -228,7 +224,7 @@ class OrderController extends Controller
         ]);
     }
 
-    private function handleAddress(Order $order, array &$addressData, City $city): void
+    private function handleAddressUpdate(Order $order, array &$addressData, City $city): void
     {
         $addressData['city_id'] = $city->id;
         unset($addressData['city'], $addressData['npa']);
