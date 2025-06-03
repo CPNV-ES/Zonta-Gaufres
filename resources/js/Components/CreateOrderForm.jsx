@@ -136,8 +136,6 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople, order = null  }) =>
             ...data,
             order: {
                 ...data.order,
-                start_delivery_time: data.order.start_delivery_time + ":00",
-                end_delivery_time: data.order.end_delivery_time + ":00",
             },
         };
         console.log(data)
