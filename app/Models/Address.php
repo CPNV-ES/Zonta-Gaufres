@@ -12,6 +12,7 @@ class Address extends BaseModel
         'street',
         'street_number',
         'city_id',
+        'complement',
     ];
 
     public function orders()
@@ -25,6 +26,6 @@ class Address extends BaseModel
 
     public function getFullAttribute()
     {
-        return "{$this->street} {$this->number}, {$this->city->name}";
+        return "{$this->city->name} - {$this->street} {$this->street_number}";
     }
 }
