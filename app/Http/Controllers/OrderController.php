@@ -147,27 +147,32 @@ class OrderController extends Controller
         $addressData = $request->input('deliveryAddress');
 
         // Reformat delivery times
-        $this->formatDeliveryTimes($orderData);
 
         // Handle buyer (person)
-        $person = $this->handleBuyer($personData);
-        if ($person) {
-            $order->buyer_id = $person->id;
+        if ($personData) {
+            $person = $this->handleBuyer($personData);
+            if ($person) {
+                $order->buyer_id = $person->id;
+            }
         }
 
         // Handle city and address
-        $city = $this->handleCityUpdate($addressData);
-        $this->handleAddressUpdate($order, $addressData, $city);
+        if ($addressData) {
+            $city = $this->handleCityUpdate(addressData: $addressData);
+            $this->handleAddressUpdate($order, $addressData, $city);
+        }
 
         // Update contact if provided
         if (isset($orderData['contact'])) {
             $order->contact_id = $orderData['contact'];
         }
-
         // Update the order
-        $order->update($orderData);
-
-        return redirect()->route('orders.index');
+        if ($orderData) {
+            $this->formatDeliveryTimes($orderData);
+            $order->update($orderData);
+        } else {
+            $order->update($request->all());
+        }
     }
 
     private function getPeopleNames(PersonTypesEnum $personType)
