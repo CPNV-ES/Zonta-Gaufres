@@ -10,3 +10,6 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 }
+
+/*put -> post update order
+corr heure quand update par ajout de livreur*/
