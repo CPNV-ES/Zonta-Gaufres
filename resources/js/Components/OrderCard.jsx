@@ -17,7 +17,7 @@ const OrderCard = ({ order }) => {
                 <div className="flex gap-2">
                     <span className="material-symbols-outlined">quick_reorder</span>
                     <span>
-                        <span className="font-bold">{order.waffle_quantity}</span> paquets
+                        <span className="font-bold">{Math.ceil(order.waffle_quantity / 5)}</span> paquets
                     </span>
                 </div>
                 <div className="flex gap-2">
