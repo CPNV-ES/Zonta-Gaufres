@@ -2,6 +2,11 @@ import React from 'react';
 import Timetable from './Timetable';
 
 const DeliveryguysCard = ({ deliveryGuy, onClick, className="bg-white" }) => {
+    const totalPackage = deliveryGuy.orders_to_deliver // Access orders from the deliveryGuy object
+    .reduce((total, order) => total + Math.ceil(order.waffle_quantity / 5), 0);
+
+
+    const totalRoute = deliveryGuy.orders_to_deliver.length;
     return (
         <div onClick={onClick}
             className={`flex flex-col justify-between w-full pl-2 pr-2 rounded shadow-md cursor-pointer h-28 group min-w-72 ${className}`}>
@@ -16,11 +21,11 @@ const DeliveryguysCard = ({ deliveryGuy, onClick, className="bg-white" }) => {
                 <div className="flex flex-row gap-4">
                     <div className="flex gap-2">
                         <span className="material-symbols-outlined">quick_reorder</span>
-                        <span>{0}</span>
+                        <span>{totalPackage}</span>
                     </div>
                     <div className="flex gap-2">
                         <span className="material-symbols-outlined">route</span>
-                        <span>{0}</span>
+                        <span>{totalRoute}</span>
                     </div>
                 </div>
             </div>

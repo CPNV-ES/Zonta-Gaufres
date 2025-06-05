@@ -8,7 +8,7 @@ const DeliveryItem = ({ delivery, unlink }) => {
                 <div className="flex flex-1 p-3">
                     <span className="material-symbols-outlined">quick_reorder</span>
                     <span className="text-nowrap">
-                        <span className="font-bold">{delivery.waffle_quantity}</span> paquets
+                        <span className="font-bold">{Math.ceil(delivery.waffle_quantity / 5)}</span> paquets
                     </span>
                 </div>
                 <div className="flex flex-1 p-3 max-w-40">
