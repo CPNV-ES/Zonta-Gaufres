@@ -82,8 +82,13 @@ const Navbar = ({ color, subject }) => {
                 className="flex flex-col items-start justify-start gap-6 overflow-hidden transition-all duration-700 ease-in-out"
                 style={{ maxWidth: `${maxNavWidth}px` }}
             >
-                <NavIcon name="Paramètres" icon="[mdi--cog]" destination={"/parameters"} color="purple" />
-                </div>
+                <NavIcon
+                    name="Paramètres"
+                    icon="[mdi--cog]"
+                    destination={"/parameters"}
+                    color="purple"
+                />
+            </div>
         </nav>
     );
 };
