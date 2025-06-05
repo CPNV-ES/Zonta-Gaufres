@@ -63,11 +63,7 @@ const Navbar = ({ color, subject }) => {
                 className="flex flex-col items-start justify-start gap-6 overflow-hidden transition-all duration-700 ease-in-out"
                 style={{ maxWidth: `${maxNavWidth}px` }}
             >
-                <img className="w-10" src="/images/zonta.png" alt="Zonta"></img>
-                <NavIcon
-                    name="Recherche"
-                    icon="[material-symbols--search-rounded]"
-                />
+                <img className="w-10" src="/images/zonta.png" alt="Zonta" />
                 <hr className="w-full rotate-[2] border border-gray-400"></hr>
 
                 {NavIcons.map((icon, index) => {
