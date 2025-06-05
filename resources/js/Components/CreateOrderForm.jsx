@@ -45,9 +45,6 @@ const formSchema = z.object({
                     message: "Le champ doit être un nombre entier.",
                 })
         ),
-        contact: z.string({
-            required_error: "Ce champ est requis.",
-        }),
         remark: z.string().optional(),
         free: z.boolean().optional(),
         gifted_by: z.string().optional(),
@@ -373,7 +370,7 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople, order = null  }) =>
                             name="order.contact"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Personne de contact*</FormLabel>
+                                    <FormLabel>Personne de contact</FormLabel>
                                     <FormControl>
                                         <Select
                                             onValueChange={field.onChange}
