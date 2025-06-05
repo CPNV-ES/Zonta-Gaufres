@@ -95,7 +95,7 @@ class OrderController extends Controller
             'address_id' => $address->id,
             'buyer_id' => $person->id,
             'payment_type_id' => PaymentTypes::fromEnum(PaymentTypesEnum::fromCase($orderData['payment']))->first()->id,
-            'contact_id' => $orderData['contact'],
+            'contact_id' => $orderData['contact'] ?? null,
         ]));
 
         return redirect()->route('orders.index');
@@ -113,7 +113,7 @@ class OrderController extends Controller
             "select_user_id" => $order->buyer->id,
             "select_user_fullname" => $order->buyer->firstname . ' ' . $order->buyer->lastname,
             "contact_id" => $order->contact->id ?? '',
-            "contact_fullname" => $order->contact->firstname . '' . $order->contact->lastname ?? '',
+            "contact_fullname" => $order->contact ?  $order->contact->firstname . '' . $order->contact->lastname : '',
             "gifted_by" => $order->gifted_by,
             "street" => $order->address->street,
             "street_number" => $order->address->street_number,
