@@ -390,6 +390,9 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople, order = null  }) =>
                                                 </SelectValue>
                                             </SelectTrigger>
                                             <SelectContent>
+                                                <SelectItem>
+                                                    Aucune personne de contact
+                                                </SelectItem>
                                                 {contactPeopleNames.map(
                                                     (person, i) => (
                                                         <SelectItem

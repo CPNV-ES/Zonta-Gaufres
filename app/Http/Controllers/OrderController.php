@@ -163,9 +163,8 @@ class OrderController extends Controller
         }
 
         // Update contact if provided
-        if (isset($orderData['contact'])) {
-            $order->contact_id = $orderData['contact'];
-        }
+        $order->contact_id = $orderData['contact'];
+
         // Update the order
         if ($orderData) {
             $this->formatDeliveryTimes($orderData);
