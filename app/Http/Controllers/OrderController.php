@@ -162,17 +162,18 @@ class OrderController extends Controller
             $this->handleAddressUpdate($order, $addressData, $city);
         }
 
-        // Update contact if provided
-        if (isset($orderData['contact'])) {
-            $order->contact_id = $orderData['contact'];
-        }
         // Update the order
         if ($orderData) {
-            $this->formatDeliveryTimes($orderData);
-            $order->update($orderData);
+            $order->contact_id = $orderData['contact'];
+
+            $this->formatDeliveryTimes(orderData: $orderData);
+            $order->fill($orderData);
+            $order->payment_type_id = PaymentTypes::fromEnum(PaymentTypesEnum::fromCase($orderData['payment']))->first()->id;
         } else {
-            $order->update($request->all());
+            $order->fill($request->all());
         }
+
+        $order->saveOrFail();
     }
 
     private function getPeopleNames(PersonTypesEnum $personType)

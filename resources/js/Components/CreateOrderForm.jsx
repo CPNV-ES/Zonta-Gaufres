@@ -60,6 +60,7 @@ const formSchema = z.object({
         date: z.string({
             required_error: "Ce champ est requis.",
         }),
+        contact: z.string().optional(),
     }),
     person: z
         .object({
@@ -389,6 +390,9 @@ const CreateOrderForm = ({ contactPeopleNames, clientPeople, order = null  }) =>
                                                 </SelectValue>
                                             </SelectTrigger>
                                             <SelectContent>
+                                                <SelectItem>
+                                                    Aucune personne de contact
+                                                </SelectItem>
                                                 {contactPeopleNames.map(
                                                     (person, i) => (
                                                         <SelectItem
