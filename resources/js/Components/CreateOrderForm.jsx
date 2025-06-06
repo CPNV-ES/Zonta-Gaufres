@@ -60,6 +60,7 @@ const formSchema = z.object({
         date: z.string({
             required_error: "Ce champ est requis.",
         }),
+        contact: z.string().optional(),
     }),
     person: z
         .object({
