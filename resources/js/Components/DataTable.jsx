@@ -190,17 +190,28 @@ const DataTable = ({ inputData, columns, buttonsOptions, onClickHandler }) => {
                                     onClickHandler ? "cursor-pointer" : ""
                                 }
                             >
-                                {row.getVisibleCells().map((cell) => (
-                                    <TableCell
-                                        key={cell.id}
-                                        className="text-nowrap"
-                                    >
-                                        {flexRender(
-                                            cell.column.columnDef.cell,
-                                            cell.getContext()
-                                        )}
-                                    </TableCell>
-                                ))}
+                                {row.getVisibleCells().map((cell) => {
+                                    // Check if the column type is 'date'
+                                    const columnDef = cell.column.columnDef;
+                                    let value = flexRender(
+                                        columnDef.cell,
+                                        cell.getContext()
+                                    );
+                                    if (columnDef.type === "date" && value) {
+                                        const datetime = new Date(value);
+                                        value = isNaN(datetime)
+                                            ? value
+                                            : datetime.toLocaleString();
+                                    }
+                                    return (
+                                        <TableCell
+                                            key={cell.id}
+                                            className="text-nowrap"
+                                        >
+                                            {value}
+                                        </TableCell>
+                                    );
+                                })}
                             </TableRow>
                         ))}
                     </TableBody>
