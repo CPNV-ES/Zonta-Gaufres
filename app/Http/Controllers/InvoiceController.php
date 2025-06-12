@@ -23,7 +23,7 @@ class InvoiceController extends Controller
                 "client" => $order->buyer->fullname,
                 "total" => $order->total_price(),
                 "status" => $order->invoiceStatus->enum()->toArray(),
-                "creation_date" => $order->created_at,
+                "creation_date" => $order->created_at->format('Y-m-d H:i:s'),
                 "payment_date" => $order->payment_date,
                 "contact" => $order->contact ? $order->contact->fullname : null,
             ];
