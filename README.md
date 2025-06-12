@@ -48,12 +48,6 @@ Most of the project is still under development. You might want to switch to deve
 [![VSCode][VSCode]][VSCode-url]
 [![Windows][Windows]][Windows-url]
 
-# Getting Started
-
-=======
-
-
-
 ## Built With
 
 [![Laravel][Laravel.com]][Laravel-url]
@@ -177,133 +171,6 @@ The project uses [Vite][Vite-url] as a development server.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Directory structure
-
-```sh
-.
-├── artisan
-├── bootstrap
-│   └── app.php
-├── .editorconfig
-├── .gitattributes
-├── storage
-│   ├── app
-│   │   ├── .gitignore
-│   │   └── public
-│   │       ├── .gitignore
-│   │       └── zonta
-│   │           └── zonta-red-big.png
-│   └── logs
-│       ├── .gitignore
-│       └── laravel.log
-├── .env
-├── LICENSE.txt
-├── app
-│   ├── Console
-│   │   └── Kernel.php
-│   ├── Exceptions
-│   │   └── Handler.php
-│   ├── Enums
-│   │   ├── AddressTypesEnum.php
-│   │   └── OtherEnum.php
-│   ├── Http
-│   │   ├── Controllers
-│   │   │   ├── Controller.php
-│   │   │   ├── Auth
-│   │   │   │   ├── VerifyEmailController.php
-│   │   │   │   └── OtherAuthControllers.php
-│   │   │   ├── DeliveryController.php
-│   │   │   └── OtherController.php
-│   │   ├── Kernel.php
-│   │   ├── Middleware
-│   │   │   ├── Authenticate.php
-│   │   │   ├── EncryptCookies.php
-│   │   │   ├── PreventRequestsDuringMaintenance.php
-│   │   │   ├── RedirectIfAuthenticated.php
-│   │   │   ├── TrimStrings.php
-│   │   │   ├── TrustHosts.php
-│   │   │   ├── TrustProxies.php
-│   │   │   ├── ValidateSignature.php
-│   │   │   ├── VerifyCsrfToken.php
-│   │   │   └── HandleInertiaRequests.php
-│   │   └── Requests
-│   │       ├── Auth
-│   │       │   └── LoginRequest.php
-│   │       └── ProfileUpdateRequest.php
-│   ├── Models
-│   │   ├── Address.php
-│   │   └── OtherModels.php
-│   └── Providers
-│       ├── AuthServiceProvider.php
-│       └── OtherProviders.php
-├── components.json
-├── composer.json
-├── composer.lock
-├── config
-│   ├── auth.php
-│   └── OtherConfig.php
-├── database
-│   ├── .gitignore
-│   ├── factories
-│   │   ├── AddressFactory.php
-│   │   └── ModelFactory.php
-│   ├── migrations
-│   │   ├── 2024_02_04_225203_create_articles_table.php
-│   │   └── OthersMigrations.php
-│   └── seeders
-│       └── DatabaseSeeder.php
-├── .env.example
-├── .gitignore
-├── jsconfig.json
-├── package.json
-├── package-lock.json
-├── phpunit.xml
-├── postcss.config.js
-├── public
-│   ├── favicon.ico
-│   ├── .htaccess
-│   ├── index.php
-│   ├── robots.txt
-│   └── images
-│       └── zonta.png
-├── resources
-│   ├── css
-│   │   └── app.css
-│   ├── js
-│   │   ├── app.jsx
-│   │   ├── Builder
-│   │   │   └── ColumnBuilder.js
-│   │   ├── Components
-│   │   │   ├── DataTable.jsx
-│   │   │   ├── CustomComponents.jsx
-│   │   │   └── ui
-│   │   │       ├── badge.jsx
-│   │   │       └── componentsInstalledThroughShadcn.jsx
-│   │   ├── Layouts
-│   │   │   └── MainLayout.jsx
-│   │   ├── lib
-│   │   │   └── utils.js
-│   │   └── Pages
-│   │       ├── Delivery
-│   │       │   ├── Edit.jsx
-│   │       │   └── Index.jsx
-│   │       └── FeatureName
-│   │           └── Index.jsx
-│   └── views
-│       └── app.blade.php
-├── routes
-│   ├── api.php
-│   ├── channels.php
-│   ├── console.php
-│   ├── auth.php
-│   └── web.php
-├── tailwind.config.js
-├── vite.config.js
-└── README.md
-```
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ## License
 
 Distributed under the MIT License. See [`LICENSE.txt`][License-url] for more information.
@@ -314,6 +181,8 @@ Distributed under the MIT License. See [`LICENSE.txt`][License-url] for more inf
 
 | Developer        | Email                         |
 | ---------------- | ----------------------------- |
+| Ethann Schneider | <ethann.schneider@eduvaud.ch> |
+| Nathan Chauveau  | <nathan.chauveau@eduvaud.ch>  |
 | Noé Zwissig      | <noe.zwissig@eduvaud.ch>      |
 | Cyprien Jaquier  | <cyprien.jaquier@eduvaud.ch>  |
 | Noah Delgado     | <noah.delgado1@eduvaud.ch>    |
